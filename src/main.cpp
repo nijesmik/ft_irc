@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 
     try {
         Server server(argv[1], argv[2]);
+        server.start();
     } catch (std::exception &e) {
         std::cout << e.what() << std::endl;
         return 1;
