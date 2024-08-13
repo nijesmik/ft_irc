@@ -5,7 +5,7 @@
 #ifndef FT_IRC_USER_HPP
 #define FT_IRC_USER_HPP
 
-#include "util.hpp"
+#include "global.hpp"
 #include <netinet/in.h> // struct sockaddr_in
 #include <arpa/inet.h> // inet_ntoa
 #include <unistd.h> // socket close

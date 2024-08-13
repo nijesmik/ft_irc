@@ -5,17 +5,15 @@
 #ifndef FT_IRC_SERVER_HPP
 #define FT_IRC_SERVER_HPP
 
-#include "util.hpp"
+#include "global.hpp"
 #include "Parser.hpp"
 #include <sys/socket.h> // socket, bind, listen
 #include <stdexcept>
 #include <netinet/in.h> // struct sockaddr_in
 #include <unistd.h> // socket close
-#include <sys/event.h> // kqueue
+#include "EventListener.hpp"
 #include <map> // session
 #include "User.hpp"
-
-#define NEVENTS 64
 
 class Server {
 public:
@@ -25,11 +23,12 @@ public:
 
 private:
     std::string password;
-    fd_t listenFd; // wait for incoming connections
-    fd_t kqueueFd; // wait for events
+    fd_t serverFd; // wait for incoming connections
+    EventListener eventListener;
     std::map<fd_t, User *> session;
 
-    bool run();
+    void run();
+    void handleEvents(int nev);
     void acceptConnection();
 };
 
