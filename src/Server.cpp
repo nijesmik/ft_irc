@@ -12,6 +12,15 @@ Server::Server(char *port, char *password) :
         throw std::runtime_error("Error: socket creation failed");
     }
 
+    // set socket non-blocking
+    if (fcntl(serverSocket, F_SETFL, O_NONBLOCK) < 0) {
+        throw std::runtime_error("Error: socket non-blocking failed");
+    }
+
+    // set socket options
+    int optval = 1;
+    setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)); // allow reuse of address
+
     // bind socket to address
     struct sockaddr_in address;
     memset(&address, 0, sizeof(address));
@@ -21,10 +30,6 @@ Server::Server(char *port, char *password) :
     if (bind(serverSocket, (struct sockaddr *) &address, sizeof(address)) < 0) {
         throw std::runtime_error("Error: socket binding failed");
     }
-
-    // set socket options
-    int optval = 1;
-    setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)); // allow reuse of address
 
     // listen for incoming connections
     if (listen(serverSocket, SOMAXCONN) < 0) {
@@ -70,7 +75,18 @@ void Server::handleEvents(int nev) {
     for (int i = 0; i < nev; i++) {
         if (eventListener.isConnectionEvent(i)) {
             acceptConnection();
+        } else if (eventListener.canReadEvent(i)) {
+            readEventSocket(i);
         }
+    }
+}
+
+void Server::readEventSocket(int index) {
+    try {
+        fd_t client = eventListener.getEventSocket(index);
+        session[client]->read();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
 }
 

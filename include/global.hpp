@@ -6,6 +6,7 @@
 #define FT_IRC_GLOBAL_HPP
 
 #include <iostream>
+#include <stdexcept>
 
 typedef int fd_t;
 

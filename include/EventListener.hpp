@@ -7,7 +7,6 @@
 
 #include "global.hpp"
 #include <sys/event.h> // kqueue
-#include <stdexcept>
 #include <unistd.h> // close
 #include <cstddef> // NULL
 
@@ -16,7 +15,7 @@
 
 class EventListener {
 private:
-    fd_t server;
+    const fd_t server;
     fd_t kq;
     struct kevent *events;
 
@@ -26,6 +25,8 @@ public:
     bool listen(fd_t socket);
     int pollEvents();
     bool isConnectionEvent(int index);
+    bool canReadEvent(int index);
+    fd_t getEventSocket(int index);
 };
 
 #endif //FT_IRC_EVENTLISTENER_HPP

@@ -28,5 +28,13 @@ int EventListener::pollEvents() {
 }
 
 bool EventListener::isConnectionEvent(int index) {
-    return static_cast<int>(events[index].ident) == server;
+    return getEventSocket(index) == server;
+}
+
+fd_t EventListener::getEventSocket(int index) {
+    return static_cast<int>(events[index].ident);
+}
+
+bool EventListener::canReadEvent(int index) {
+    return events[index].filter == EVFILT_READ;
 }

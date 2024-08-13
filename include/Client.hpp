@@ -9,14 +9,18 @@
 #include <netinet/in.h> // struct sockaddr_in
 #include <arpa/inet.h> // inet_ntoa
 #include <unistd.h> // socket close
+#include <sys/socket.h> // recv
+#include <algorithm> // remove
 
 class Client {
 public:
     Client(fd_t fd, struct sockaddr_in const &addr);
     ~Client();
 
+    std::string read();
+
 private:
-    fd_t fd;
+    const fd_t fd;
 };
 
 #endif //FT_IRC_CLIENT_HPP

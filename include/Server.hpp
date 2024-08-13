@@ -8,12 +8,12 @@
 #include "global.hpp"
 #include "Parser.hpp"
 #include <sys/socket.h> // socket, bind, listen
-#include <stdexcept>
 #include <netinet/in.h> // struct sockaddr_in
 #include <unistd.h> // socket close
 #include "EventListener.hpp"
 #include <map> // session
 #include "Client.hpp"
+#include <fcntl.h> // non-blocking
 
 class Server {
 public:
@@ -28,8 +28,9 @@ private:
     std::map<fd_t, Client *> session;
 
     void run();
-    void handleEvents(int nev);
+    void handleEvents(int nev); // choose accept or read
     void acceptConnection();
+    void readEventSocket(int index);
 };
 
 #endif //FT_IRC_SERVER_HPP
