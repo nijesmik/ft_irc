@@ -6,7 +6,8 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        serverFd(socket(AF_INET, SOCK_STREAM, 0)) {
+        serverFd(socket(AF_INET, SOCK_STREAM, 0)),
+        eventListener(serverFd) {
     if (serverFd < 0) {
         throw std::runtime_error("Error: socket creation failed");
     }
@@ -67,9 +68,7 @@ void Server::run() {
 
 void Server::handleEvents(int nev) {
     for (int i = 0; i < nev; i++) {
-        struct kevent event = eventListener.getEvent(i);
-        fd_t eventFd = static_cast<int>(event.ident);
-        if (eventFd == serverFd) {
+        if (eventListener.isConnectionEvent(i)) {
             acceptConnection();
         }
     }

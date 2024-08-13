@@ -4,7 +4,7 @@
 
 #include "EventListener.hpp"
 
-EventListener::EventListener() : kq(kqueue()) {
+EventListener::EventListener(fd_t server) : server(server), kq(kqueue()), events(NULL) {
     if (kq < 0) {
         throw std::runtime_error("Error: kqueue creation failed");
     }
@@ -27,6 +27,6 @@ int EventListener::pollEvents() {
     return nev;
 }
 
-struct kevent EventListener::getEvent(int index) {
-    return events[index];
+bool EventListener::isConnectionEvent(int index) {
+    return static_cast<int>(events[index].ident) == server;
 }
