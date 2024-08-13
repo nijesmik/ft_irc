@@ -15,18 +15,18 @@
 
 class EventListener {
 private:
-    const fd_t server;
-    fd_t kq;
+    const t_socket serverConnection;
+    t_socket kq;
     struct kevent *events;
 
 public:
-    EventListener(fd_t server);
+    EventListener(t_socket serverConnection);
     ~EventListener();
-    bool listen(fd_t socket);
+    bool listen(t_socket socket);
     int pollEvents();
     bool isConnectionEvent(int index);
     bool canReadEvent(int index);
-    fd_t getEventSocket(int index);
+    t_socket getEventSocket(int index);
 };
 
 #endif //FT_IRC_EVENTLISTENER_HPP

@@ -8,6 +8,6 @@
 #include <iostream>
 #include <stdexcept>
 
-typedef int fd_t;
+typedef int t_socket;
 
 #endif //FT_IRC_GLOBAL_HPP

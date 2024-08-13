@@ -14,13 +14,13 @@
 
 class Client {
 public:
-    Client(fd_t fd, struct sockaddr_in const &addr);
+    Client(t_socket fd, struct sockaddr_in const &addr);
     ~Client();
 
     std::string read();
 
 private:
-    const fd_t fd;
+    const t_socket fd;
 };
 
 #endif //FT_IRC_CLIENT_HPP

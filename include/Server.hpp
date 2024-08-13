@@ -23,9 +23,9 @@ public:
 
 private:
     std::string password;
-    fd_t serverSocket; // wait for incoming connections
+    t_socket connection; // wait for incoming connections
     EventListener eventListener;
-    std::map<fd_t, Client *> session;
+    std::map<t_socket, Client *> session;
 
     void run();
     void handleEvents(int nev); // choose accept or read

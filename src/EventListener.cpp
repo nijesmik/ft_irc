@@ -4,7 +4,10 @@
 
 #include "EventListener.hpp"
 
-EventListener::EventListener(fd_t server) : server(server), kq(kqueue()), events(NULL) {
+EventListener::EventListener(t_socket serverConnection) :
+        serverConnection(serverConnection),
+        kq(kqueue()),
+        events(NULL) {
     if (kq < 0) {
         throw std::runtime_error("Error: kqueue creation failed");
     }
@@ -14,7 +17,7 @@ EventListener::~EventListener() {
     close(kq);
 }
 
-bool EventListener::listen(fd_t socket) {
+bool EventListener::listen(t_socket socket) {
     struct kevent changelist[NCHANGES];
     EV_SET(changelist, socket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
     return kevent(kq, changelist, NCHANGES, NULL, 0, NULL) >= 0;
@@ -28,10 +31,10 @@ int EventListener::pollEvents() {
 }
 
 bool EventListener::isConnectionEvent(int index) {
-    return getEventSocket(index) == server;
+    return getEventSocket(index) == serverConnection;
 }
 
-fd_t EventListener::getEventSocket(int index) {
+t_socket EventListener::getEventSocket(int index) {
     return static_cast<int>(events[index].ident);
 }
 
