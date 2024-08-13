@@ -4,8 +4,8 @@
 
 #include "EventListener.hpp"
 
-EventListener::EventListener(t_socket serverConnection) :
-        serverConnection(serverConnection),
+EventListener::EventListener(Socket const &serverConnection) :
+        serverConnection(serverConnection.getFd()),
         kq(kqueue()),
         events(NULL) {
     if (kq < 0) {
@@ -17,10 +17,12 @@ EventListener::~EventListener() {
     close(kq);
 }
 
-bool EventListener::listen(t_socket socket) {
+void EventListener::listen(Socket const &socket) {
     struct kevent changelist[NCHANGES];
-    EV_SET(changelist, socket, EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
-    return kevent(kq, changelist, NCHANGES, NULL, 0, NULL) >= 0;
+    EV_SET(changelist, socket.getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
+    if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
+        throw std::runtime_error("Error: event registration failed");
+    }
 }
 
 int EventListener::pollEvents() {
@@ -34,7 +36,7 @@ bool EventListener::isConnectionEvent(int index) {
     return getEventSocket(index) == serverConnection;
 }
 
-t_socket EventListener::getEventSocket(int index) {
+Socket::fd_t EventListener::getEventSocket(int index) {
     return static_cast<int>(events[index].ident);
 }
 

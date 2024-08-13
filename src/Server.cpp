@@ -6,44 +6,16 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        connection(socket(AF_INET, SOCK_STREAM, 0)),
         eventListener(connection) {
-    if (connection < 0) {
-        throw std::runtime_error("Error: socket creation failed");
-    }
-
-    // set socket non-blocking
-    if (fcntl(connection, F_SETFL, O_NONBLOCK) < 0) {
-        throw std::runtime_error("Error: socket non-blocking failed");
-    }
-
-    // set socket options
-    int optval = 1;
-    setsockopt(connection, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)); // allow reuse of address
-
-    // bind socket to address
-    struct sockaddr_in address;
-    memset(&address, 0, sizeof(address));
-    address.sin_family = AF_INET; // IPv4
-    address.sin_addr.s_addr = INADDR_ANY; // listen on all interfaces
-    address.sin_port = htons(Parser::parsePort(port)); // convert to network byte order and set port
-    if (bind(connection, (struct sockaddr *) &address, sizeof(address)) < 0) {
-        throw std::runtime_error("Error: socket binding failed");
-    }
-
-    // listen for incoming connections
-    if (listen(connection, SOMAXCONN) < 0) {
-        throw std::runtime_error("Error: socket listening failed");
-    }
-
-    if (!eventListener.listen(connection)) {
-        throw std::runtime_error("Error: event registration failed");
-    }
+    connection.setNonBlocking();
+    connection.allowReusePort();
+    connection.bind(Parser::parsePort(port));
+    connection.open();
+    eventListener.listen(connection);
 }
 
 Server::~Server() {
-    close(connection);
-    for (std::map<t_socket, Client *>::iterator it = session.begin(); it != session.end(); it++) {
+    for (std::map<Socket::fd_t, Client *>::iterator it = session.begin(); it != session.end(); it++) {
         delete it->second;
     }
 }
@@ -83,7 +55,7 @@ void Server::handleEvents(int nev) {
 
 void Server::readEventSocket(int index) {
     try {
-        t_socket client = eventListener.getEventSocket(index);
+        Socket::fd_t client = eventListener.getEventSocket(index);
         session[client]->read();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
@@ -91,17 +63,11 @@ void Server::readEventSocket(int index) {
 }
 
 void Server::acceptConnection() {
-    struct sockaddr_in address;
-    socklen_t addressLength = sizeof(address);
-    t_socket client = accept(connection, (struct sockaddr *) &address, &addressLength);
-    if (client < 0) {
-        std::cerr << "Error: connection accept failed" << std::endl;
-        return;
+    try {
+        Client *client = connection.accept();
+        eventListener.listen(*client);
+        session[client->getFd()] = client;
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
-    if (!eventListener.listen(client)) {
-        std::cerr << "Error: event registration failed" << std::endl;
-        close(client);
-        return;
-    }
-    session[client] = new Client(client, address);
 }

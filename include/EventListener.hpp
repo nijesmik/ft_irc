@@ -5,9 +5,9 @@
 #ifndef FT_IRC_EVENTLISTENER_HPP
 #define FT_IRC_EVENTLISTENER_HPP
 
-#include "global.hpp"
+#include "Socket.hpp"
 #include <sys/event.h> // kqueue
-#include <unistd.h> // close
+#include <unistd.h> // kqueue close
 #include <cstddef> // NULL
 
 #define NCHANGES 1
@@ -15,18 +15,18 @@
 
 class EventListener {
 private:
-    const t_socket serverConnection;
-    t_socket kq;
+    const Socket::fd_t serverConnection;
+    int kq;
     struct kevent *events;
 
 public:
-    EventListener(t_socket serverConnection);
+    EventListener(Socket const &serverConnection);
     ~EventListener();
-    bool listen(t_socket socket);
+    void listen(Socket const &socket);
     int pollEvents();
     bool isConnectionEvent(int index);
     bool canReadEvent(int index);
-    t_socket getEventSocket(int index);
+    Socket::fd_t getEventSocket(int index);
 };
 
 #endif //FT_IRC_EVENTLISTENER_HPP

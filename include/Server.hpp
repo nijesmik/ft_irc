@@ -5,15 +5,11 @@
 #ifndef FT_IRC_SERVER_HPP
 #define FT_IRC_SERVER_HPP
 
-#include "global.hpp"
 #include "Parser.hpp"
-#include <sys/socket.h> // socket, bind, listen
-#include <netinet/in.h> // struct sockaddr_in
-#include <unistd.h> // socket close
 #include "EventListener.hpp"
 #include <map> // session
 #include "Client.hpp"
-#include <fcntl.h> // non-blocking
+#include "Socket.hpp"
 
 class Server {
 public:
@@ -23,9 +19,9 @@ public:
 
 private:
     std::string password;
-    t_socket connection; // wait for incoming connections
+    Socket connection; // wait for incoming connections
     EventListener eventListener;
-    std::map<t_socket, Client *> session;
+    std::map<Socket::fd_t, Client *> session;
 
     void run();
     void handleEvents(int nev); // choose accept or read
