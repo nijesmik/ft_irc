@@ -37,7 +37,7 @@ Server::Server(char *port, char *password) :
 
 Server::~Server() {
     close(serverFd);
-    for (std::map<fd_t, User *>::iterator it = session.begin(); it != session.end(); it++) {
+    for (std::map<fd_t, Client *>::iterator it = session.begin(); it != session.end(); it++) {
         delete it->second;
     }
 }
@@ -88,5 +88,5 @@ void Server::acceptConnection() {
         close(clientFd);
         return;
     }
-    session[clientFd] = new User(clientFd, address);
+    session[clientFd] = new Client(clientFd, address);
 }

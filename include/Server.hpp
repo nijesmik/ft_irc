@@ -13,7 +13,7 @@
 #include <unistd.h> // socket close
 #include "EventListener.hpp"
 #include <map> // session
-#include "User.hpp"
+#include "Client.hpp"
 
 class Server {
 public:
@@ -25,7 +25,7 @@ private:
     std::string password;
     fd_t serverFd; // wait for incoming connections
     EventListener eventListener;
-    std::map<fd_t, User *> session;
+    std::map<fd_t, Client *> session;
 
     void run();
     void handleEvents(int nev);
