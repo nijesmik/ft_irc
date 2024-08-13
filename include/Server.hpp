@@ -23,7 +23,7 @@ public:
 
 private:
     std::string password;
-    fd_t serverFd; // wait for incoming connections
+    fd_t serverSocket; // wait for incoming connections
     EventListener eventListener;
     std::map<fd_t, Client *> session;
 

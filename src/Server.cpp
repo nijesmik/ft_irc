@@ -6,9 +6,9 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        serverFd(socket(AF_INET, SOCK_STREAM, 0)),
-        eventListener(serverFd) {
-    if (serverFd < 0) {
+        serverSocket(socket(AF_INET, SOCK_STREAM, 0)),
+        eventListener(serverSocket) {
+    if (serverSocket < 0) {
         throw std::runtime_error("Error: socket creation failed");
     }
 
@@ -18,26 +18,26 @@ Server::Server(char *port, char *password) :
     address.sin_family = AF_INET; // IPv4
     address.sin_addr.s_addr = INADDR_ANY; // listen on all interfaces
     address.sin_port = htons(Parser::parsePort(port)); // convert to network byte order and set port
-    if (bind(serverFd, (struct sockaddr *) &address, sizeof(address)) < 0) {
+    if (bind(serverSocket, (struct sockaddr *) &address, sizeof(address)) < 0) {
         throw std::runtime_error("Error: socket binding failed");
     }
 
     // set socket options
     int optval = 1;
-    setsockopt(serverFd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)); // allow reuse of address
+    setsockopt(serverSocket, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)); // allow reuse of address
 
     // listen for incoming connections
-    if (listen(serverFd, SOMAXCONN) < 0) {
+    if (listen(serverSocket, SOMAXCONN) < 0) {
         throw std::runtime_error("Error: socket listening failed");
     }
 
-    if (!eventListener.listen(serverFd)) {
+    if (!eventListener.listen(serverSocket)) {
         throw std::runtime_error("Error: event registration failed");
     }
 }
 
 Server::~Server() {
-    close(serverFd);
+    close(serverSocket);
     for (std::map<fd_t, Client *>::iterator it = session.begin(); it != session.end(); it++) {
         delete it->second;
     }
@@ -77,7 +77,7 @@ void Server::handleEvents(int nev) {
 void Server::acceptConnection() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
-    fd_t clientFd = accept(serverFd, (struct sockaddr *) &address, &addressLength);
+    fd_t clientFd = accept(serverSocket, (struct sockaddr *) &address, &addressLength);
     if (clientFd < 0) {
         std::cerr << "Error: connection accept failed" << std::endl;
         return;
