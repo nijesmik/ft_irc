@@ -6,9 +6,9 @@
 #define FT_IRC_SERVER_HPP
 
 #include "Parser.hpp"
-#include "EventListener.hpp"
-#include <map> // session
-#include "Client.hpp"
+#include "EventManager.hpp"
+#include <map> // sessions
+#include "Session.hpp"
 #include "Socket.hpp"
 
 class Server {
@@ -20,8 +20,8 @@ public:
 private:
     std::string password;
     Socket connection; // wait for incoming connections
-    EventListener eventListener;
-    std::map<Socket::fd_t, Client *> session;
+    EventManager eventManager;
+    std::map<Socket::fd_t, Session *> sessions;
 
     void run();
     void handleEvents(int nev); // choose accept or read

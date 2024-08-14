@@ -2,9 +2,9 @@
 // Created by 김세진 on 8/13/24.
 //
 
-#include "EventListener.hpp"
+#include "EventManager.hpp"
 
-EventListener::EventListener(Socket const &serverConnection) :
+EventManager::EventManager(Socket const &serverConnection) :
         serverConnection(serverConnection.getFd()),
         kq(kqueue()),
         events(NULL) {
@@ -13,11 +13,11 @@ EventListener::EventListener(Socket const &serverConnection) :
     }
 }
 
-EventListener::~EventListener() {
+EventManager::~EventManager() {
     close(kq);
 }
 
-void EventListener::listen(Socket const &socket) {
+void EventManager::listen(Socket const &socket) {
     struct kevent changelist[NCHANGES];
     EV_SET(changelist, socket.getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
@@ -25,21 +25,21 @@ void EventListener::listen(Socket const &socket) {
     }
 }
 
-int EventListener::pollEvents() {
+int EventManager::pollEvents() {
     struct kevent eventlist[NEVENTS];
     int nev = kevent(kq, NULL, 0, eventlist, NEVENTS, NULL);
     this->events = eventlist;
     return nev;
 }
 
-bool EventListener::isConnectionEvent(int index) {
+bool EventManager::isConnectionEvent(int index) {
     return getEventSocket(index) == serverConnection;
 }
 
-Socket::fd_t EventListener::getEventSocket(int index) {
+Socket::fd_t EventManager::getEventSocket(int index) {
     return static_cast<int>(events[index].ident);
 }
 
-bool EventListener::canReadEvent(int index) {
+bool EventManager::isReadableEvent(int index) {
     return events[index].filter == EVFILT_READ;
 }

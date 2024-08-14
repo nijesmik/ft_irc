@@ -15,7 +15,7 @@
 #include <arpa/inet.h> // inet_ntoa, htons
 #include <algorithm> // remove
 
-class Client;
+class Session;
 
 class Socket {
 public:
@@ -31,7 +31,7 @@ public:
     void allowReusePort();
     void bind(int port);
     void open();
-    Client *accept();
+    Session *accept();
     std::string read();
 
 private:

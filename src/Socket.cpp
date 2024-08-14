@@ -3,7 +3,7 @@
 //
 
 #include "Socket.hpp"
-#include "Client.hpp"
+#include "Session.hpp"
 
 Socket::Socket() : fd(socket(AF_INET, SOCK_STREAM, 0)) {
     if (fd < 0) {
@@ -51,7 +51,7 @@ void Socket::open() {
     }
 }
 
-Client *Socket::accept() {
+Session *Socket::accept() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
     fd_t client = ::accept(fd, (struct sockaddr *) &address, &addressLength);
@@ -61,7 +61,7 @@ Client *Socket::accept() {
     std::string ip = std::string(inet_ntoa(address.sin_addr));
     int port = ntohs(address.sin_port);
     std::cout << "New connection from " << ip << ":" << port << std::endl;
-    return new Client(client);
+    return new Session(client);
 }
 
 std::string Socket::read() {

@@ -6,16 +6,16 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        eventListener(connection) {
+        eventManager(connection) {
     connection.setNonBlocking();
     connection.allowReusePort();
     connection.bind(Parser::parsePort(port));
     connection.open();
-    eventListener.listen(connection);
+    eventManager.listen(connection);
 }
 
 Server::~Server() {
-    for (std::map<Socket::fd_t, Client *>::iterator it = session.begin(); it != session.end(); it++) {
+    for (std::map<Socket::fd_t, Session *>::iterator it = sessions.begin(); it != sessions.end(); it++) {
         delete it->second;
     }
 }
@@ -32,7 +32,7 @@ void Server::start() {
 }
 
 void Server::run() {
-    int nev = eventListener.pollEvents();
+    int nev = eventManager.pollEvents();
     switch (nev) {
         case -1: // error
             throw std::runtime_error("Error: event polling failed");
@@ -45,9 +45,9 @@ void Server::run() {
 
 void Server::handleEvents(int nev) {
     for (int i = 0; i < nev; i++) {
-        if (eventListener.isConnectionEvent(i)) {
+        if (eventManager.isConnectionEvent(i)) {
             acceptConnection();
-        } else if (eventListener.canReadEvent(i)) {
+        } else if (eventManager.isReadableEvent(i)) {
             readEventSocket(i);
         }
     }
@@ -55,8 +55,8 @@ void Server::handleEvents(int nev) {
 
 void Server::readEventSocket(int index) {
     try {
-        Socket::fd_t client = eventListener.getEventSocket(index);
-        session[client]->read();
+        Socket::fd_t sessionFd = eventManager.getEventSocket(index);
+        sessions[sessionFd]->read();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
@@ -64,9 +64,9 @@ void Server::readEventSocket(int index) {
 
 void Server::acceptConnection() {
     try {
-        Client *client = connection.accept();
-        eventListener.listen(*client);
-        session[client->getFd()] = client;
+        Session *session = connection.accept();
+        eventManager.listen(*session);
+        sessions[session->getFd()] = session;
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
