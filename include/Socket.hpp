@@ -14,6 +14,10 @@
 #include <cstring> // memset
 #include <arpa/inet.h> // inet_ntoa, htons
 #include <algorithm> // remove
+#include <sstream>
+
+#define CR '\r'
+#define LF '\n'
 
 class Session;
 
@@ -32,10 +36,12 @@ public:
     void bind(int port);
     void open();
     Session *accept();
-    std::string read();
+    Socket &read();
+    void operator>>(std::stringstream &stream);
 
 private:
     const fd_t fd;
+    std::stringstream readData;
 };
 
 #endif //FT_IRC_SOCKET_HPP

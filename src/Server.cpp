@@ -54,9 +54,11 @@ void Server::handleEvents(int nev) {
 }
 
 void Server::readEventSocket(int index) {
+    std::stringstream sstream;
+
     try {
         Socket::fd_t sessionFd = eventManager.getEventSocket(index);
-        sessions[sessionFd]->read();
+        sessions[sessionFd]->read() >> sstream;
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }

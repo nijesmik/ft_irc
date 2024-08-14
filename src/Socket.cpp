@@ -64,17 +64,31 @@ Session *Socket::accept() {
     return new Session(client);
 }
 
-std::string Socket::read() {
+Socket &Socket::read() {
     char buffer[BUFSIZ];
-    std::string result;
     ssize_t n;
     while ((n = recv(fd, buffer, BUFSIZ, 0)) > 0) {
-        result.append(buffer, n);
+        std::cout << "Received: " << buffer << std::endl;
+        readData.write(buffer, n);
     }
     if (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN) {
         throw std::runtime_error("Error: socket read failed");
     }
-    result.erase(std::remove(result.begin(), result.end(), '\n'), result.end());
-    std::cout << "Received: " << result << std::endl;
-    return result;
+    return *this;
+}
+
+void Socket::operator>>(std::stringstream &stream) {
+    std::string buffer;
+    while (std::getline(readData, buffer, CR)) {
+        stream << buffer;
+        if (readData.peek() == LF) {
+            readData.ignore(1, LF);
+            return;
+        }
+    }
+    if (readData.eof()) {
+        readData.clear();
+        return;
+    }
+    throw std::runtime_error("Error: stream extraction failed");
 }
