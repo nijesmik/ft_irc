@@ -7,7 +7,7 @@
 
 #include "Parser.hpp"
 #include "EventManager.hpp"
-#include <map> // sessions
+#include "SessionManager.hpp"
 #include "Session.hpp"
 #include "Socket.hpp"
 
@@ -21,12 +21,11 @@ private:
     std::string password;
     Socket connection; // wait for incoming connections
     EventManager eventManager;
-    std::map<Socket::fd_t, Session *> sessions;
+    SessionManager sessionManager;
 
     void run();
     void handleEvents(int nev); // choose accept or read
     void acceptConnection();
-    void readEventSocket(int index);
 };
 
 #endif //FT_IRC_SERVER_HPP

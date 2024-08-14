@@ -14,11 +14,7 @@ Server::Server(char *port, char *password) :
     eventManager.listen(connection);
 }
 
-Server::~Server() {
-    for (std::map<Socket::fd_t, Session *>::iterator it = sessions.begin(); it != sessions.end(); it++) {
-        delete it->second;
-    }
-}
+Server::~Server() {}
 
 void Server::start() {
     std::cout << "Server started" << std::endl;
@@ -48,19 +44,9 @@ void Server::handleEvents(int nev) {
         if (eventManager.isConnectionEvent(i)) {
             acceptConnection();
         } else if (eventManager.isReadableEvent(i)) {
-            readEventSocket(i);
+            Socket::fd_t sessionFd = eventManager.getEventSocket(i);
+            sessionManager.update(sessionFd);
         }
-    }
-}
-
-void Server::readEventSocket(int index) {
-    std::stringstream sstream;
-
-    try {
-        Socket::fd_t sessionFd = eventManager.getEventSocket(index);
-        sessions[sessionFd]->read() >> sstream;
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
     }
 }
 
@@ -68,7 +54,7 @@ void Server::acceptConnection() {
     try {
         Session *session = connection.accept();
         eventManager.listen(*session);
-        sessions[session->getFd()] = session;
+        sessionManager.add(session);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
