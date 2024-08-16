@@ -5,6 +5,7 @@
 #ifndef FT_IRC_SESSION_HPP
 #define FT_IRC_SESSION_HPP
 
+#include  <iostream>
 #include "Socket.hpp"
 #include "Message.hpp"
 #include "Parser.hpp"
@@ -16,6 +17,12 @@ public:
 
     Session &read();
     void operator>>(Message &message);
+
+    bool isRegistered() const;
+    void signUp();
+
+private:
+    bool registered;
 };
 
 #endif //FT_IRC_SESSION_HPP

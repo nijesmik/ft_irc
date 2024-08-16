@@ -11,7 +11,7 @@
 class Message {
 public:
     typedef enum command_e {
-        INVALID,
+        UNKNOWN,
         PASS,
     } command_t;
 
@@ -19,6 +19,9 @@ public:
     Message(command_t command, std::vector<std::string> const &params);
     ~Message();
     Message &operator=(Message const &other);
+
+    command_t getCommand() const;
+    std::string getParam(size_t index) const;
 
 private:
     command_t command;

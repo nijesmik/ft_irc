@@ -3,6 +3,7 @@
 //
 
 #include "Parser.hpp"
+#include <iostream>
 
 int Parser::parsePort(char *port) {
     char *end;
@@ -14,21 +15,26 @@ int Parser::parsePort(char *port) {
 }
 
 Message Parser::parseMessage(std::stringstream &stream) {
-    std::string command;
     std::string param;
     std::vector<std::string> params;
 
-    stream >> command;
-    while (!stream.eof()) {
-        stream >> param;
+    stream >> param;
+    std::cout << "command: '" << param << "'" << std::endl;
+    Message::command_t command = parseCommand(param);
+    if (command == Message::UNKNOWN) {
         params.push_back(param);
     }
-    return Message(parseCommand(command), params);
+
+    while (stream >> param) {
+        std::cout << "param: '" << param << "'" << std::endl;
+        params.push_back(param);
+    }
+    return Message(command, params);
 }
 
 Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "PASS") {
         return Message::PASS;
     }
-    return Message::INVALID;
+    return Message::UNKNOWN;
 }

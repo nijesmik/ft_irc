@@ -4,7 +4,8 @@
 
 #include "EventController.hpp"
 
-EventController::EventController(int port) :
+EventController::EventController(int port, std::string const &password) :
+        chatService(password),
         sessionService(port),
         kq(kqueue()),
         events(NULL) {
@@ -41,15 +42,33 @@ bool EventController::isReadableEvent(int index) {
     return events[index].filter == EVFILT_READ;
 }
 
-Session *EventController::getEventSession(int index) {
+void EventController::handleEvents(int nev) {
+    for (int i = 0; i < nev; i++) {
+        handleEvent(i);
+    }
+}
+
+void EventController::handleEvent(int index) {
+    Message message;
     Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
+
     if (isConnectionEvent(eventSocketFd)) {
         Session *session = sessionService.accept();
-        listen(*session);
-        return NULL;
+        return listen(*session);
     }
+
     if (isReadableEvent(index)) {
-        return sessionService.get(eventSocketFd);
+        Session *session = sessionService.get(eventSocketFd);
+        session->read() >> message;
+        handleMessages(*session, message);
     }
-    return NULL;
+}
+
+void EventController::handleMessages(Session &session, Message const &message) {
+    switch (message.getCommand()) {
+        case Message::UNKNOWN:
+            return chatService.unknown(session, message);
+        case Message::PASS:
+            return chatService.pass(session, message);
+    }
 }

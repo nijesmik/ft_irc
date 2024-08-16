@@ -10,25 +10,30 @@
 #include <unistd.h> // kqueue close
 #include <cstddef> // NULL
 #include "SessionService.hpp"
+#include "ChatService.hpp"
+#include "Message.hpp"
 
 #define NCHANGES 1
 #define NEVENTS 64
 
 class EventController {
 private:
+    ChatService chatService;
     SessionService sessionService;
     int kq;
     struct kevent *events;
 
     bool isConnectionEvent(Socket::fd_t eventSocketFd);
     bool isReadableEvent(int index);
+    void handleEvent(int index);
+    void handleMessages(Session &session, Message const &message);
 
 public:
-    EventController(int port);
+    EventController(int port, std::string const &password);
     ~EventController();
     void listen(Socket const &socket);
     int pollEvents();
-    Session *getEventSession(int index);
+    void handleEvents(int nev);
 };
 
 #endif //FT_IRC_EVENTCONTROLLER_HPP

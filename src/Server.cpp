@@ -5,8 +5,7 @@
 #include "Server.hpp"
 
 Server::Server(char *port, char *password) :
-        password(std::string(password)),
-        eventController(Parser::parsePort(port)) {}
+        eventController(Parser::parsePort(port), std::string(password)) {}
 
 Server::~Server() {}
 
@@ -29,16 +28,6 @@ void Server::run() {
         case 0: // no events
             return;
         default:
-            handleEvents(nev);
-    }
-}
-
-void Server::handleEvents(int nev) {
-    for (int i = 0; i < nev; i++) {
-        Session *session = eventController.getEventSession(i);
-        if (session) {
-            Message message;
-            session->read() >> message;
-        }
+            eventController.handleEvents(nev);
     }
 }

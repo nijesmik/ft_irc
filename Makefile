@@ -7,9 +7,7 @@ INCLUDE = ./include
 
 HEADER = $(wildcard $(INCLUDE)/*.hpp)
 
-SRC_DIR = ./src
-
-SRC = $(wildcard $(SRC_DIR)/*.cpp)
+SRC = $(wildcard ./src/*.cpp ./src/ChatService/*cpp)
 
 OBJ = $(SRC:%.cpp=%.o)
 
@@ -22,14 +20,14 @@ $(NAME) : $(OBJ)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE) -c $< -o $@
 
 clean :
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
 
 fclean :
-	make clean
-	rm -f $(NAME)
+	@make clean
+	@rm -f $(NAME)
 
 re :
-	make fclean
-	make all
+	@make fclean
+	@make all
 
 .PHONY : all clean fclean re

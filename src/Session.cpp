@@ -4,7 +4,9 @@
 
 #include "Session.hpp"
 
-Session::Session(Socket::fd_t fd) : Socket(fd) {}
+Session::Session(Socket::fd_t fd) :
+        Socket(fd),
+        registered(false) {}
 
 Session::~Session() {}
 
@@ -21,4 +23,12 @@ void Session::operator>>(Message &message) {
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
+}
+
+bool Session::isRegistered() const {
+    return this->registered;
+}
+
+void Session::signUp() {
+    this->registered = true;
 }
