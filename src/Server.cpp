@@ -6,13 +6,7 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        eventManager(connection) {
-    connection.setNonBlocking();
-    connection.allowReusePort();
-    connection.bind(Parser::parsePort(port));
-    connection.open();
-    eventManager.listen(connection);
-}
+        eventManager(Parser::parsePort(port)) {}
 
 Server::~Server() {}
 
@@ -41,22 +35,10 @@ void Server::run() {
 
 void Server::handleEvents(int nev) {
     for (int i = 0; i < nev; i++) {
-        if (eventManager.isConnectionEvent(i)) {
-            acceptConnection();
-        } else if (eventManager.isReadableEvent(i)) {
-            Socket::fd_t sessionFd = eventManager.getEventSocket(i);
+        Session *session = eventManager.getEventSession(i);
+        if (session) {
             Message message;
-            sessionManager.get(sessionFd)->read() >> message;
+            session->read() >> message;
         }
-    }
-}
-
-void Server::acceptConnection() {
-    try {
-        Session *session = connection.accept();
-        eventManager.listen(*session);
-        sessionManager.add(session);
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
     }
 }

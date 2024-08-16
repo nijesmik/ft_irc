@@ -6,14 +6,16 @@
 #define FT_IRC_SESSIONMANAGER_HPP
 
 #include <map>
+#include <arpa/inet.h> // inet_ntoa, htons
+#include "Socket.hpp"
 #include "Session.hpp"
 
-class SessionManager {
+class SessionManager : public Socket {
 public:
-    SessionManager();
+    SessionManager(int port);
     ~SessionManager();
 
-    void add(Session *session);
+    Session *accept();
     Session *get(Socket::fd_t sessionFd);
 
 private:

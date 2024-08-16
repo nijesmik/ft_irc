@@ -12,14 +12,10 @@
 #include <fcntl.h> // non-blocking
 #include <netinet/in.h> // struct sockaddr_in
 #include <cstring> // memset
-#include <arpa/inet.h> // inet_ntoa, htons
-#include <algorithm> // remove
 #include <sstream>
 
 #define CR '\r'
 #define LF '\n'
-
-class Session;
 
 class Socket {
 public:
@@ -35,12 +31,13 @@ public:
     void allowReusePort();
     void bind(int port);
     void open();
-    Session *accept();
     virtual Socket &read();
     void operator>>(std::stringstream &stream);
 
-private:
+protected:
     const fd_t fd;
+
+private:
     std::stringstream readData;
 };
 

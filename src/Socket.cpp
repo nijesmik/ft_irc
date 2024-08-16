@@ -51,19 +51,6 @@ void Socket::open() {
     }
 }
 
-Session *Socket::accept() {
-    struct sockaddr_in address;
-    socklen_t addressLength = sizeof(address);
-    fd_t client = ::accept(fd, (struct sockaddr *) &address, &addressLength);
-    if (client < 0) {
-        throw std::runtime_error("Error: connection accept failed");
-    }
-    std::string ip = std::string(inet_ntoa(address.sin_addr));
-    int port = ntohs(address.sin_port);
-    std::cout << "New connection from " << ip << ":" << port << std::endl;
-    return new Session(client);
-}
-
 Socket &Socket::read() {
     char buffer[BUFSIZ];
     ssize_t n;

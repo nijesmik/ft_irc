@@ -9,24 +9,26 @@
 #include <sys/event.h> // kqueue
 #include <unistd.h> // kqueue close
 #include <cstddef> // NULL
+#include "SessionManager.hpp"
 
 #define NCHANGES 1
 #define NEVENTS 64
 
 class EventManager {
 private:
-    const Socket::fd_t serverConnection;
+    SessionManager sessionManager;
     int kq;
     struct kevent *events;
 
+    bool isConnectionEvent(Socket::fd_t eventSocketFd);
+    bool isReadableEvent(int index);
+
 public:
-    EventManager(Socket const &serverConnection);
+    EventManager(int port);
     ~EventManager();
     void listen(Socket const &socket);
     int pollEvents();
-    bool isConnectionEvent(int index);
-    bool isReadableEvent(int index);
-    Socket::fd_t getEventSocket(int index);
+    Session *getEventSession(int index);
 };
 
 #endif //FT_IRC_EVENTMANAGER_HPP

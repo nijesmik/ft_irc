@@ -4,13 +4,14 @@
 
 #include "EventManager.hpp"
 
-EventManager::EventManager(Socket const &serverConnection) :
-        serverConnection(serverConnection.getFd()),
+EventManager::EventManager(int port) :
+        sessionManager(port),
         kq(kqueue()),
         events(NULL) {
     if (kq < 0) {
         throw std::runtime_error("Error: kqueue creation failed");
     }
+    listen(sessionManager);
 }
 
 EventManager::~EventManager() {
@@ -32,14 +33,23 @@ int EventManager::pollEvents() {
     return nev;
 }
 
-bool EventManager::isConnectionEvent(int index) {
-    return getEventSocket(index) == serverConnection;
-}
-
-Socket::fd_t EventManager::getEventSocket(int index) {
-    return static_cast<int>(events[index].ident);
+bool EventManager::isConnectionEvent(Socket::fd_t eventSocketFd) {
+    return eventSocketFd == sessionManager.getFd();
 }
 
 bool EventManager::isReadableEvent(int index) {
     return events[index].filter == EVFILT_READ;
+}
+
+Session *EventManager::getEventSession(int index) {
+    Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
+    if (isConnectionEvent(eventSocketFd)) {
+        Session *session = sessionManager.accept();
+        listen(*session);
+        return NULL;
+    }
+    if (isReadableEvent(index)) {
+        return sessionManager.get(eventSocketFd);
+    }
+    return NULL;
 }
