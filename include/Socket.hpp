@@ -5,7 +5,6 @@
 #ifndef FT_IRC_SOCKET_HPP
 #define FT_IRC_SOCKET_HPP
 
-#include <iostream>
 #include <stdexcept>
 #include <sys/socket.h> // socket, bind, open, recv
 #include <unistd.h> // socket close
@@ -33,6 +32,7 @@ public:
     void open();
     virtual Socket &read();
     void operator>>(std::stringstream &stream);
+    void operator<<(std::string const &message);
 
 protected:
     const fd_t fd;

@@ -3,7 +3,6 @@
 //
 
 #include "Socket.hpp"
-#include "Session.hpp"
 
 Socket::Socket() : fd(socket(AF_INET, SOCK_STREAM, 0)) {
     if (fd < 0) {
@@ -55,7 +54,6 @@ Socket &Socket::read() {
     char buffer[BUFSIZ];
     ssize_t n;
     while ((n = recv(fd, buffer, BUFSIZ, 0)) > 0) {
-        std::cout << "Received: " << buffer << std::endl;
         readData.write(buffer, n);
     }
     if (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN) {
@@ -79,4 +77,10 @@ void Socket::operator>>(std::stringstream &stream) {
         return;
     }
     throw std::runtime_error("Error: stream extraction failed");
+}
+
+void Socket::operator<<(std::string const &message) {
+    if (send(fd, message.c_str(), message.size(), 0) < 0) {
+        throw std::runtime_error("Error: socket write failed");
+    }
 }
