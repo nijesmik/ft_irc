@@ -6,7 +6,7 @@
 #define FT_IRC_SERVER_HPP
 
 #include "Parser.hpp"
-#include "EventManager.hpp"
+#include "EventController.hpp"
 #include "Session.hpp"
 #include "Socket.hpp"
 
@@ -18,7 +18,7 @@ public:
 
 private:
     std::string password;
-    EventManager eventManager;
+    EventController eventController;
 
     void run();
     void handleEvents(int nev); // choose accept or read

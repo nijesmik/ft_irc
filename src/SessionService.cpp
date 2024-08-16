@@ -2,22 +2,22 @@
 // Created by 김세진 on 8/14/24.
 //
 
-#include "SessionManager.hpp"
+#include "SessionService.hpp"
 
-SessionManager::SessionManager(int port) {
+SessionService::SessionService(int port) {
     setNonBlocking();
     allowReusePort();
     bind(port);
     open();
 }
 
-SessionManager::~SessionManager() {
-    for (SessionManager::iterator it = sessions.begin(); it != sessions.end(); it++) {
+SessionService::~SessionService() {
+    for (SessionService::iterator it = sessions.begin(); it != sessions.end(); it++) {
         delete it->second;
     }
 }
 
-Session *SessionManager::accept() {
+Session *SessionService::accept() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
 
@@ -38,6 +38,6 @@ Session *SessionManager::accept() {
     return session;
 }
 
-Session *SessionManager::get(Socket::fd_t sessionFd) {
+Session *SessionService::get(Socket::fd_t sessionFd) {
     return sessions[sessionFd];
 }

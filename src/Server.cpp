@@ -6,7 +6,7 @@
 
 Server::Server(char *port, char *password) :
         password(std::string(password)),
-        eventManager(Parser::parsePort(port)) {}
+        eventController(Parser::parsePort(port)) {}
 
 Server::~Server() {}
 
@@ -22,7 +22,7 @@ void Server::start() {
 }
 
 void Server::run() {
-    int nev = eventManager.pollEvents();
+    int nev = eventController.pollEvents();
     switch (nev) {
         case -1: // error
             throw std::runtime_error("Error: event polling failed");
@@ -35,7 +35,7 @@ void Server::run() {
 
 void Server::handleEvents(int nev) {
     for (int i = 0; i < nev; i++) {
-        Session *session = eventManager.getEventSession(i);
+        Session *session = eventController.getEventSession(i);
         if (session) {
             Message message;
             session->read() >> message;
