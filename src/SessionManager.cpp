@@ -16,12 +16,6 @@ void SessionManager::add(Session *session) {
     sessions[session->getFd()] = session;
 }
 
-void SessionManager::update(Socket::fd_t sessionFd) {
-    Session *session = sessions[sessionFd];
-    std::stringstream sstream;
-    try {
-        session->read() >> sstream;
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
-    }
+Session *SessionManager::get(Socket::fd_t sessionFd) {
+    return sessions[sessionFd];
 }

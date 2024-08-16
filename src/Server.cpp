@@ -45,7 +45,8 @@ void Server::handleEvents(int nev) {
             acceptConnection();
         } else if (eventManager.isReadableEvent(i)) {
             Socket::fd_t sessionFd = eventManager.getEventSocket(i);
-            sessionManager.update(sessionFd);
+            Message message;
+            sessionManager.get(sessionFd)->read() >> message;
         }
     }
 }

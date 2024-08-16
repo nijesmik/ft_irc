@@ -7,12 +7,14 @@
 
 #include <cstdlib>
 #include <stdexcept>
+#include <sstream>
 #include "Message.hpp"
 
 class Parser {
 public:
     static int parsePort(char *port);
-    static Message parseMessage(std::string const &raw);
+    static Message parseMessage(std::stringstream &stream);
+    static Message::command_t parseCommand(std::string const &command);
 };
 
 #endif //FT_IRC_PARSER_HPP

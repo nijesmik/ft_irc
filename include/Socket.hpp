@@ -27,7 +27,7 @@ public:
 
     Socket();
     Socket(fd_t fd);
-    ~Socket();
+    virtual ~Socket();
     Socket(const Socket &other);
 
     const fd_t &getFd() const;
@@ -36,7 +36,7 @@ public:
     void bind(int port);
     void open();
     Session *accept();
-    Socket &read();
+    virtual Socket &read();
     void operator>>(std::stringstream &stream);
 
 private:

@@ -6,11 +6,16 @@
 #define FT_IRC_SESSION_HPP
 
 #include "Socket.hpp"
+#include "Message.hpp"
+#include "Parser.hpp"
 
 class Session : public Socket {
 public:
     Session(Socket::fd_t fd);
     ~Session();
+
+    Session &read();
+    void operator>>(Message &message);
 };
 
 #endif //FT_IRC_SESSION_HPP

@@ -85,6 +85,7 @@ void Socket::operator>>(std::stringstream &stream) {
             readData.ignore(1, LF);
             return;
         }
+        stream << CR;
     }
     if (readData.eof()) {
         readData.clear();

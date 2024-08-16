@@ -14,7 +14,7 @@ public:
     ~SessionManager();
 
     void add(Session *session);
-    void update(Socket::fd_t sessionFd);
+    Session *get(Socket::fd_t sessionFd);
 
 private:
     std::map<Socket::fd_t, Session *> sessions;

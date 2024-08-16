@@ -12,3 +12,23 @@ int Parser::parsePort(char *port) {
     }
     return static_cast<int>(parsed);
 }
+
+Message Parser::parseMessage(std::stringstream &stream) {
+    std::string command;
+    std::string param;
+    std::vector<std::string> params;
+
+    stream >> command;
+    while (!stream.eof()) {
+        stream >> param;
+        params.push_back(param);
+    }
+    return Message(parseCommand(command), params);
+}
+
+Message::command_t Parser::parseCommand(std::string const &command) {
+    if (command == "PASS") {
+        return Message::PASS;
+    }
+    return Message::INVALID;
+}
