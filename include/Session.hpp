@@ -19,7 +19,7 @@ public:
     void operator>>(Message &message);
 
     bool isRegistered() const;
-    void signUp();
+    void updateRegister();
 
 private:
     bool registered;

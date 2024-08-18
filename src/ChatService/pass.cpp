@@ -15,5 +15,5 @@ void ChatService::pass(Session &session, const Message &message) {
     if (session.isRegistered()) {
         return session << NumericReply::get(ERR_ALREADYREGISTRED);
     }
-    session.signUp();
+    session.updateRegister();
 }

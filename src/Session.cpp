@@ -29,6 +29,6 @@ bool Session::isRegistered() const {
     return this->registered;
 }
 
-void Session::signUp() {
+void Session::updateRegister() {
     this->registered = true;
 }
