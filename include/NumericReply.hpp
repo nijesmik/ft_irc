@@ -12,6 +12,18 @@
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 
+#define ERR_NONICKNAMEGIVEN 431
+#define ERR_NONICKNAMEGIVEN_MESSAGE "No nickname given"
+
+#define ERR_ERRONEUSNICKNAME 432
+#define ERR_ERRONEUSNICKNAME_MESSAGE "Erroneous nickname"
+
+#define ERR_NICKNAMEINUSE 433
+#define ERR_NICKNAMEINUSE_MESSAGE "Nickname is already in use"
+
+#define ERR_NOTREGISTERED 451
+#define ERR_NOTREGISTERED_MESSAGE "You have not registered"
+
 #define ERR_NEEDMOREPARAMS 461
 #define ERR_NEEDMOREPARAMS_MESSAGE "Not enough parameters"
 

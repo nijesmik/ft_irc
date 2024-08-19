@@ -8,6 +8,14 @@ std::string NumericReply::message(int code) {
     switch (code) {
         case ERR_UNKNOWNCOMMAND: // 421
             return ERR_UNKNOWNCOMMAND_MESSAGE;
+        case ERR_NONICKNAMEGIVEN: // 431
+            return ERR_NONICKNAMEGIVEN_MESSAGE;
+        case ERR_ERRONEUSNICKNAME: // 432
+            return ERR_ERRONEUSNICKNAME_MESSAGE;
+        case ERR_NICKNAMEINUSE: // 433
+            return ERR_NICKNAMEINUSE_MESSAGE;
+        case ERR_NOTREGISTERED: // 451
+            return ERR_NOTREGISTERED_MESSAGE;
         case ERR_NEEDMOREPARAMS: // 461
             return ERR_NEEDMOREPARAMS_MESSAGE;
         case ERR_ALREADYREGISTRED: // 462
