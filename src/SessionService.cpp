@@ -52,6 +52,6 @@ Session *SessionService::accept() {
     return session;
 }
 
-Session *SessionService::get(Socket::fd_t sessionFd) {
+Session *SessionService::find(Socket::fd_t sessionFd) {
     return sessions[sessionFd];
 }

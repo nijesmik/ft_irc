@@ -60,7 +60,7 @@ void EventController::handleEvent(int index) {
     }
 
     if (isReadableEvent(index)) {
-        Session *session = sessionService->get(eventSocketFd);
+        Session *session = sessionService->find(eventSocketFd);
         session->read() >> message;
         handleMessages(*session, message);
     }

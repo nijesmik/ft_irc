@@ -18,7 +18,7 @@ public:
     ~SessionService();
 
     Session *accept();
-    Session *get(Socket::fd_t sessionFd);
+    Session *find(Socket::fd_t sessionFd);
 
 private:
     SessionService(int port);
