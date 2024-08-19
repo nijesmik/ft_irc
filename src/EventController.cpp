@@ -6,7 +6,7 @@
 
 EventController::EventController(int port, std::string const &password) :
         chatService(password),
-        sessionService(port),
+        sessionService(SessionService::init(port)),
         kq(kqueue()),
         events(NULL) {
     if (kq < 0) {
@@ -17,11 +17,13 @@ EventController::EventController(int port, std::string const &password) :
 
 EventController::~EventController() {
     close(kq);
+    delete sessionService;
+    sessionService = NULL;
 }
 
-void EventController::listen(Socket const &socket) {
+void EventController::listen(Socket *socket) {
     struct kevent changelist[NCHANGES];
-    EV_SET(changelist, socket.getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
+    EV_SET(changelist, socket->getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
         throw std::runtime_error("Error: event registration failed");
     }
@@ -35,7 +37,7 @@ int EventController::pollEvents() {
 }
 
 bool EventController::isConnectionEvent(Socket::fd_t eventSocketFd) {
-    return eventSocketFd == sessionService.getFd();
+    return eventSocketFd == sessionService->getFd();
 }
 
 bool EventController::isReadableEvent(int index) {
@@ -53,12 +55,12 @@ void EventController::handleEvent(int index) {
     Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
 
     if (isConnectionEvent(eventSocketFd)) {
-        Session *session = sessionService.accept();
-        return listen(*session);
+        Session *session = sessionService->accept();
+        return listen(session);
     }
 
     if (isReadableEvent(index)) {
-        Session *session = sessionService.get(eventSocketFd);
+        Session *session = sessionService->get(eventSocketFd);
         session->read() >> message;
         handleMessages(*session, message);
     }

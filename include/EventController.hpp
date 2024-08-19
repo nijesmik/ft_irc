@@ -19,7 +19,7 @@
 class EventController {
 private:
     ChatService chatService;
-    SessionService sessionService;
+    SessionService *sessionService;
     int kq;
     struct kevent *events;
 
@@ -31,7 +31,8 @@ private:
 public:
     EventController(int port, std::string const &password);
     ~EventController();
-    void listen(Socket const &socket);
+
+    void listen(Socket *socket);
     int pollEvents();
     void handleEvents(int nev);
 };

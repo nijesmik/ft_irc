@@ -12,13 +12,20 @@
 
 class SessionService : public Socket {
 public:
-    SessionService(int port);
+    static SessionService *init(int port);
+    static SessionService *instance();
+
     ~SessionService();
 
     Session *accept();
     Session *get(Socket::fd_t sessionFd);
 
 private:
+    SessionService(int port);
+    SessionService(SessionService const &other);
+    SessionService &operator=(SessionService const &other);
+
+    static SessionService *singleton;
     std::map<Socket::fd_t, Session *> sessions;
 
     typedef std::map<Socket::fd_t, Session *>::iterator iterator;

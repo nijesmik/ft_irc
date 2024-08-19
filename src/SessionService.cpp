@@ -4,6 +4,8 @@
 
 #include "SessionService.hpp"
 
+SessionService *SessionService::singleton = NULL;
+
 SessionService::SessionService(int port) {
     setNonBlocking();
     allowReusePort();
@@ -15,6 +17,18 @@ SessionService::~SessionService() {
     for (SessionService::iterator it = sessions.begin(); it != sessions.end(); it++) {
         delete it->second;
     }
+}
+
+SessionService *SessionService::init(int port) {
+    if (singleton == NULL) {
+        singleton = new SessionService(port);
+        return singleton;
+    }
+    return NULL;
+}
+
+SessionService *SessionService::instance() {
+    return singleton;
 }
 
 Session *SessionService::accept() {
