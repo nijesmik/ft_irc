@@ -32,3 +32,11 @@ bool Session::isRegistered() const {
 void Session::updateRegister() {
     this->registered = true;
 }
+
+std::string const &Session::getNickname() const {
+    return this->nickname;
+}
+
+void Session::updateNickname(std::string const &nickname) {
+    this->nickname = nickname;
+}

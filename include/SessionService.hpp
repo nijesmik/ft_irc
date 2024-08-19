@@ -19,6 +19,7 @@ public:
 
     Session *accept();
     Session *find(Socket::fd_t sessionFd);
+    Session *find(std::string const &nickname);
 
 private:
     SessionService(int port);

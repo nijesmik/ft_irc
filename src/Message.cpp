@@ -32,3 +32,7 @@ std::string Message::getParam(size_t index) const {
     }
     return this->params[index];
 }
+
+std::string Message::getParam() const {
+    return this->getParam(0);
+}

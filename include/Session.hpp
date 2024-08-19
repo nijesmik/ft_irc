@@ -19,10 +19,14 @@ public:
     void operator>>(Message &message);
 
     bool isRegistered() const;
+    std::string const &getNickname() const;
+
     void updateRegister();
+    void updateNickname(std::string const &nickname);
 
 private:
     bool registered;
+    std::string nickname;
 };
 
 #endif //FT_IRC_SESSION_HPP

@@ -55,3 +55,12 @@ Session *SessionService::accept() {
 Session *SessionService::find(Socket::fd_t sessionFd) {
     return sessions[sessionFd];
 }
+
+Session *SessionService::find(std::string const &nickname) {
+    for (SessionService::iterator it = sessions.begin(); it != sessions.end(); it++) {
+        if (it->second->getNickname() == nickname) {
+            return it->second;
+        }
+    }
+    return NULL;
+}

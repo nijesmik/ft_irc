@@ -13,6 +13,7 @@ public:
     typedef enum command_e {
         UNKNOWN,
         PASS,
+        NICK,
     } command_t;
 
     Message();
@@ -22,6 +23,7 @@ public:
 
     command_t getCommand() const;
     std::string getParam(size_t index) const;
+    std::string getParam() const;
 
 private:
     command_t command;
