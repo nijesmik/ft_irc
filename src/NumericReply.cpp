@@ -39,8 +39,8 @@ std::string NumericReply::message(int code, Session const &session) {
     }
 }
 
-void NumericReply::append(std::stringstream &ss, int num) {
-    ss << num << DELIMITER;
+void NumericReply::append(std::stringstream &ss, int code) {
+    ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }
 
 void NumericReply::append(std::stringstream &ss, std::string const &str) {

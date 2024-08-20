@@ -40,6 +40,7 @@
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
 #include <sstream>
+#include <iomanip>
 #include "Session.hpp"
 
 class NumericReply {
@@ -51,7 +52,7 @@ public:
 private:
     static std::string message(int code);
     static std::string message(int code, Session const &session);
-    static void append(std::stringstream &ss, int num);
+    static void append(std::stringstream &ss, int code);
     static void append(std::stringstream &ss, std::string const &str);
     static void appendMessage(std::stringstream &ss, std::string const &message);
 };
