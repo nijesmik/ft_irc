@@ -11,6 +11,8 @@
 
 class Server {
 public:
+    static const std::string NETWORK_NAME;
+
     Server(char *port, char *password);
     ~Server();
     void start();

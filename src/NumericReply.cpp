@@ -3,6 +3,7 @@
 //
 
 #include "NumericReply.hpp"
+#include "Server.hpp"
 
 std::string NumericReply::message(int code) {
     switch (code) {
@@ -24,6 +25,15 @@ std::string NumericReply::message(int code) {
             return ERR_PASSWDMISMATCH_MESSAGE;
         default:
             return "";
+    }
+}
+
+std::string NumericReply::message(int code, Session const &session) {
+    switch (code) {
+        case RPL_WELCOME: // 001
+            return RPL_WELCOME_MESSAGE(Server::NETWORK_NAME, session.getAddress());
+        default:
+            throw std::runtime_error("Error: Invalid numeric reply code");
     }
 }
 
@@ -51,5 +61,13 @@ std::string NumericReply::get(int code, std::string const &param) {
     append(ss, code);
     append(ss, param);
     appendMessage(ss, message(code));
+    return ss.str();
+}
+
+std::string NumericReply::get(int code, Session const &session) {
+    std::stringstream ss;
+    append(ss, code);
+    append(ss, session.getNickname());
+    appendMessage(ss, message(code, session));
     return ss.str();
 }

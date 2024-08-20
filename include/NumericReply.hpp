@@ -9,6 +9,9 @@
 #define MESSAGE_PREFIX ":"
 #define CRLF "\r\n"
 
+#define RPL_WELCOME 1
+#define RPL_WELCOME_MESSAGE(networkName, clientAddress) ("Welcome to the " + networkName + " Network, " + clientAddress)
+
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 
@@ -34,14 +37,17 @@
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
 #include <sstream>
+#include "Session.hpp"
 
 class NumericReply {
 public:
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
+    static std::string get(int code, Session const &session);
 
 private:
     static std::string message(int code);
+    static std::string message(int code, Session const &session);
     static void append(std::stringstream &ss, int num);
     static void append(std::stringstream &ss, std::string const &str);
     static void appendMessage(std::stringstream &ss, std::string const &message);

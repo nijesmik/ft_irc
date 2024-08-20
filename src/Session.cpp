@@ -37,6 +37,14 @@ std::string const &Session::getNickname() const {
     return this->nickname;
 }
 
+std::string const &Session::getUsername() const {
+    return this->username;
+}
+
+std::string Session::getAddress() const {
+    return nickname + "!" + username + "@" + hostname;
+}
+
 void Session::updateNickname(std::string const &nickname) {
     this->nickname = nickname;
 }

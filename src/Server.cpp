@@ -4,6 +4,8 @@
 
 #include "Server.hpp"
 
+const std::string Server::NETWORK_NAME = "ft_irc";
+
 Server::Server(char *port, char *password) :
         eventController(Parser::parsePort(port), std::string(password)) {}
 
