@@ -15,6 +15,9 @@
 #define RPL_YOURHOST 2
 #define RPL_YOURHOST_MESSAGE(serverName, version) ("Your host is " + serverName + ", running version " + version)
 
+#define RPL_CREATED 3
+#define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
+
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 

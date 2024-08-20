@@ -35,6 +35,7 @@ void ChatService::nick(Session &session, const Message &message) {
     } else if (!session.getUsername().empty()) {
         session << NumericReply::get(RPL_WELCOME, session);
         session << NumericReply::get(RPL_YOURHOST, session);
+        session << NumericReply::get(RPL_CREATED, session);
     }
 
     session.updateNickname(nickname);
