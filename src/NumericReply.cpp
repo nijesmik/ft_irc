@@ -35,14 +35,14 @@ void NumericReply::append(std::stringstream &ss, std::string const &str) {
     ss << str << DELIMITER;
 }
 
-void NumericReply::appendMessage(std::stringstream &ss, int code) {
-    ss << MESSAGE_PREFIX << message(code) << CRLF;
+void NumericReply::appendMessage(std::stringstream &ss, std::string const &message) {
+    ss << MESSAGE_PREFIX << message << CRLF;
 }
 
 std::string NumericReply::get(int code) {
     std::stringstream ss;
     append(ss, code);
-    appendMessage(ss, code);
+    appendMessage(ss, message(code));
     return ss.str();
 }
 
@@ -50,6 +50,6 @@ std::string NumericReply::get(int code, std::string const &param) {
     std::stringstream ss;
     append(ss, code);
     append(ss, param);
-    appendMessage(ss, code);
+    appendMessage(ss, message(code));
     return ss.str();
 }

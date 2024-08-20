@@ -44,7 +44,7 @@ private:
     static std::string message(int code);
     static void append(std::stringstream &ss, int num);
     static void append(std::stringstream &ss, std::string const &str);
-    static void appendMessage(std::stringstream &ss, int code);
+    static void appendMessage(std::stringstream &ss, std::string const &message);
 };
 
 #endif //FT_IRC_NUMERICREPLY_HPP
