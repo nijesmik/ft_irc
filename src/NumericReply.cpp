@@ -32,6 +32,8 @@ std::string NumericReply::message(int code, Session const &session) {
     switch (code) {
         case RPL_WELCOME: // 001
             return RPL_WELCOME_MESSAGE(Server::NETWORK_NAME, session.getAddress());
+        case RPL_YOURHOST: // 002
+            return RPL_YOURHOST_MESSAGE(session.getServername(), Server::VERSION);
         default:
             throw std::runtime_error("Error: Invalid numeric reply code");
     }

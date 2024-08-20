@@ -21,6 +21,7 @@ public:
     bool isRegistered() const;
     std::string const &getNickname() const;
     std::string const &getUsername() const;
+    std::string const &getServername() const;
     std::string getAddress() const;
 
     void updateRegister();
@@ -31,6 +32,7 @@ private:
     std::string nickname;
     std::string username;
     std::string hostname;
+    std::string servername;
 };
 
 #endif //FT_IRC_SESSION_HPP

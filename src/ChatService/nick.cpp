@@ -34,6 +34,7 @@ void ChatService::nick(Session &session, const Message &message) {
         session << RPL_NICKNAMECHANGED_MESSAGE(session.getNickname(), nickname);
     } else if (!session.getUsername().empty()) {
         session << NumericReply::get(RPL_WELCOME, session);
+        session << NumericReply::get(RPL_YOURHOST, session);
     }
 
     session.updateNickname(nickname);

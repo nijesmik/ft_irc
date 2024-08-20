@@ -41,6 +41,10 @@ std::string const &Session::getUsername() const {
     return this->username;
 }
 
+std::string const &Session::getServername() const {
+    return this->servername;
+}
+
 std::string Session::getAddress() const {
     return nickname + "!" + username + "@" + hostname;
 }
