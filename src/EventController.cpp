@@ -74,5 +74,7 @@ void EventController::handleMessages(Session &session, Message const &message) {
             return chatService.pass(session, message);
         case Message::NICK:
             return chatService.nick(session, message);
+        case Message::PING:
+            return chatService.ping(session, message);
     }
 }

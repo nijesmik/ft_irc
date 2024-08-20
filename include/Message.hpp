@@ -14,6 +14,7 @@ public:
         UNKNOWN,
         PASS,
         NICK,
+        PING,
     } command_t;
 
     Message();
