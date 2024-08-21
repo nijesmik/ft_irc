@@ -61,3 +61,11 @@ std::string Session::getAddress() const {
 void Session::updateNickname(std::string const &nickname) {
     this->nickname = nickname;
 }
+
+void Session::updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
+                         std::string const &realname) {
+    this->username = username;
+    this->hostname = hostname;
+    this->servername = servername;
+    this->realname = realname;
+}

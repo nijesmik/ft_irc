@@ -28,6 +28,8 @@ public:
     void setPassed();
     void setRegistered();
     void updateNickname(std::string const &nickname);
+    void updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
+                    std::string const &realname);
 
 private:
     bool passed;
@@ -36,6 +38,7 @@ private:
     std::string username;
     std::string hostname;
     std::string servername;
+    std::string realname;
 };
 
 #endif //FT_IRC_SESSION_HPP

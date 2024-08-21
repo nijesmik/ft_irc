@@ -39,6 +39,9 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "NICK") {
         return Message::NICK;
     }
+    if (command == "USER") {
+        return Message::USER;
+    }
     if (command == "PING") {
         return Message::PING;
     }
