@@ -16,6 +16,7 @@ public:
         NICK,
         USER,
         PING,
+        QUIT,
         JOIN,
     } command_t;
 

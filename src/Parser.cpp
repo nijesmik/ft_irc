@@ -45,6 +45,9 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "PING") {
         return Message::PING;
     }
+    if (command == "QUIT") {
+        return Message::QUIT;
+    }
     if (command == "JOIN") {
         return Message::JOIN;
     }
