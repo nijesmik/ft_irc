@@ -13,4 +13,6 @@ void ChatService::quit(Session &session, const Message &message) {
     //  session에서 Client 정보를 가져와 Channel들의 해당 Client 삭제
     //  Channel의 다른 Client 에게 Quit-message 전송
     //  만약 Channel에 속한 인원이 0명이면 Channel 삭제
+
+    (void) session;
 }

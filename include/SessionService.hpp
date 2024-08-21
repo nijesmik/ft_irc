@@ -20,7 +20,7 @@ public:
     Session *accept();
     Session *find(Socket::fd_t sessionFd);
     Session *find(std::string const &nickname);
-    void closeSession(Session *session);
+    void closeSession(Socket::fd_t sessionFd);
 
 private:
     SessionService(int port);

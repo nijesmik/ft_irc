@@ -33,7 +33,7 @@ public:
     ~EventController();
 
     void listen(Socket *socket);
-    void unlisten(Session *session);
+    void unlisten(Session &session);
     int pollEvents();
     void handleEvents(int nev);
 };

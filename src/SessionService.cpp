@@ -65,17 +65,17 @@ Session *SessionService::find(std::string const &nickname) {
     return NULL;
 }
 
-void SessionService::closeSession(Session *session) {
-    if (close(session->getFd()) < 0) {
+void SessionService::closeSession(Socket::fd_t sessionFd) {
+    if (close(sessionFd) < 0) {
       throw std::runtime_error("Error: session close failed");
     }
 
-    std::map<Socket::fd_t, Session*>::iterator it = sessions.find(session->getFd());
+    std::map<Socket::fd_t, Session*>::iterator it = sessions.find(sessionFd);
     if (it != sessions.end()) {
         sessions.erase(it);
     } else {
         throw std::runtime_error("Error: session close failed");
     }
 
-    delete session;
+    delete it->second;
 }
