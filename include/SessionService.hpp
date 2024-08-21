@@ -17,10 +17,10 @@ public:
 
     ~SessionService();
 
-    Session *accept();
+    Session *connect();
     Session *find(Socket::fd_t sessionFd);
     Session *find(std::string const &nickname);
-    void closeSession(Socket::fd_t sessionFd);
+    void disconnect(Socket::fd_t sessionFd);
 
 private:
     SessionService(int port);

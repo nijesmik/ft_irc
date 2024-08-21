@@ -31,7 +31,7 @@ SessionService *SessionService::instance() {
     return singleton;
 }
 
-Session *SessionService::accept() {
+Session *SessionService::connect() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
 
@@ -65,7 +65,7 @@ Session *SessionService::find(std::string const &nickname) {
     return NULL;
 }
 
-void SessionService::closeSession(Socket::fd_t sessionFd) {
+void SessionService::disconnect(Socket::fd_t sessionFd) {
     if (close(sessionFd) < 0) {
       throw std::runtime_error("Error: session close failed");
     }

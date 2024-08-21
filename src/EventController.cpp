@@ -36,7 +36,7 @@ void EventController::unlisten(Session &session) {
       throw std::runtime_error("Error: event delete failed");
     }
 
-    sessionService->closeSession(session.getFd());
+    sessionService->disconnect(session.getFd());
 }
 
 int EventController::pollEvents() {
@@ -65,7 +65,7 @@ void EventController::handleEvent(int index) {
     Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
 
     if (isConnectionEvent(eventSocketFd)) {
-        Session *session = sessionService->accept();
+        Session *session = sessionService->connect();
         return listen(session);
     }
 
