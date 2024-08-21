@@ -29,6 +29,16 @@ void EventController::listen(Socket *socket) {
     }
 }
 
+void EventController::unlisten(Session &session) {
+    struct kevent changelist[NCHANGES];
+    EV_SET(changelist, session.getFd(), EVFILT_READ, EV_DELETE, 0, 0, NULL);
+    if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
+      throw std::runtime_error("Error: event delete failed");
+    }
+
+    sessionService->disconnect(session.getFd());
+}
+
 int EventController::pollEvents() {
     struct kevent eventlist[NEVENTS];
     int nev = kevent(kq, NULL, 0, eventlist, NEVENTS, NULL);
@@ -55,7 +65,7 @@ void EventController::handleEvent(int index) {
     Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
 
     if (isConnectionEvent(eventSocketFd)) {
-        Session *session = sessionService->accept();
+        Session *session = sessionService->connect();
         return listen(session);
     }
 
@@ -78,5 +88,8 @@ void EventController::handleMessages(Session &session, Message const &message) {
             return chatService.user(session, message);
         case Message::PING:
             return chatService.ping(session, message);
+        case Message::QUIT:
+            chatService.quit(session, message);
+            return unlisten(session);
     }
 }
