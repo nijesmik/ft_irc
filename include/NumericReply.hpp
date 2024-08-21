@@ -21,6 +21,9 @@
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
 
+#define ERR_TOOMANYCHANNELS 405
+#define ERR_TOOMANYCHANNEL_MESSAGE "You have joined too many channels"
+
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 
@@ -50,6 +53,18 @@
 
 #define ERR_PASSWDMISMATCH 464
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
+
+#define ERR_CHANNELISFULL 471
+#define ERR_CHANNELISFULL_MESSAGE "Cannot join channel (+l)"
+
+#define ERR_INVITEONLYCHAN 473
+#define ERR_INVITEONLYCHAN_MESSAGE "Cannot join channel (+i)"
+
+#define ERR_BANNEDFROMCHAN 474
+#define ERR_BANNEDFROMCHAN_MESSAGE "Cannot join channel (+b)"
+
+#define ERR_BADCHANNELKEY 475
+#define ERR_BADCHANNELKEY_MESSAGE "Cannot join channel (+k)"
 
 #define ERR_BADCHANMASK 476
 #define ERR_BADCHANMASK_MESSAGE "Bad Channel Mask"
