@@ -21,10 +21,12 @@ public:
     bool isRegistered() const;
     std::string const &getNickname() const;
 
-    void updateRegister();
+    void setPassed();
+    void setRegistered();
     void updateNickname(std::string const &nickname);
 
 private:
+    bool passed;
     bool registered;
     std::string nickname;
 };

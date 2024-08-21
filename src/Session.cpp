@@ -6,6 +6,7 @@
 
 Session::Session(Socket::fd_t fd) :
         Socket(fd),
+        passed(false),
         registered(false) {}
 
 Session::~Session() {}
@@ -29,7 +30,11 @@ bool Session::isRegistered() const {
     return this->registered;
 }
 
-void Session::updateRegister() {
+void Session::setPassed() {
+    this->passed = true;
+}
+
+void Session::setRegistered() {
     this->registered = true;
 }
 
