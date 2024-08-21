@@ -5,7 +5,7 @@
 #ifndef FT_IRC_MESSAGE_HPP
 #define FT_IRC_MESSAGE_HPP
 
-#include <string>
+#include <sstream>
 #include <vector>
 
 class Message {
@@ -14,6 +14,7 @@ public:
         UNKNOWN,
         PASS,
         NICK,
+        USER,
         PING,
     } command_t;
 
@@ -25,6 +26,7 @@ public:
     command_t getCommand() const;
     std::string getParam(size_t index) const;
     std::string getParam() const;
+    std::string getParamsAll(int index, char ignore = 0) const;
 
 private:
     command_t command;

@@ -13,7 +13,7 @@ bool isNicknameValid(std::string const &nickname);
 bool isNicknameDuplicate(std::string const &nickname);
 
 void ChatService::nick(Session &session, const Message &message) {
-    if (!session.isRegistered()) {
+    if (!session.isPassed()) {
         return session << NumericReply::get(ERR_NOTREGISTERED);
     }
 
@@ -32,10 +32,8 @@ void ChatService::nick(Session &session, const Message &message) {
 
     if (!session.getNickname().empty()) {
         session << RPL_NICKNAMECHANGED_MESSAGE(session.getNickname(), nickname);
-    } else if (!session.getUsername().empty()) {
-        session << NumericReply::get(RPL_WELCOME, session);
-        session << NumericReply::get(RPL_YOURHOST, session);
-        session << NumericReply::get(RPL_CREATED, session);
+    } else if (!session.isRegistered() && !session.getUsername().empty()) {
+        _register(session);
     }
 
     session.updateNickname(nickname);

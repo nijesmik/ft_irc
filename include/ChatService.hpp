@@ -18,10 +18,13 @@ public:
     void unknown(Session &session, Message const &message);
     void pass(Session &session, Message const &message);
     void nick(Session &session, Message const &message);
+    void user(Session &session, Message const &message);
     void ping(Session &session, Message const &message);
 
 private:
     std::string password;
+
+    void _register(Session &session);
 };
 
 #endif //FT_IRC_CHATSERVICE_HPP
