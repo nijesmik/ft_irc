@@ -51,6 +51,9 @@
 #define ERR_PASSWDMISMATCH 464
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
+#define ERR_BADCHANMASK 476
+#define ERR_BADCHANMASK_MESSAGE "Bad Channel Mask"
+
 #define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
 #define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
 
