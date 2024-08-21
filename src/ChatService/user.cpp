@@ -16,6 +16,8 @@ void ChatService::user(Session &session, Message const &message) {
     if (realname.empty()) {
         return session << NumericReply::get(ERR_NEEDMOREPARAMS, "USER");
     }
+    if (!session.getNickname().empty()) {
+        _register(session);
+    }
     session.updateUser(message.getParam(0), message.getParam(1), message.getParam(2), realname);
-    _register(session);
 }
