@@ -7,6 +7,8 @@
 
 std::string NumericReply::message(int code) {
     switch (code) {
+        case ERR_NOSUCHCHANNEL: // 403
+            return ERR_NOSUCHCHANNEL_MESSAGE;
         case ERR_UNKNOWNCOMMAND: // 421
             return ERR_UNKNOWNCOMMAND_MESSAGE;
         case ERR_NONICKNAMEGIVEN: // 431
@@ -15,6 +17,8 @@ std::string NumericReply::message(int code) {
             return ERR_ERRONEUSNICKNAME_MESSAGE;
         case ERR_NICKNAMEINUSE: // 433
             return ERR_NICKNAMEINUSE_MESSAGE;
+        case ERR_NOTONCHANNEL: // 442
+            return ERR_NOTONCHANNEL_MESSAGE;
         case ERR_NOTREGISTERED: // 451
             return ERR_NOTREGISTERED_MESSAGE;
         case ERR_NEEDMOREPARAMS: // 461
@@ -73,5 +77,14 @@ std::string NumericReply::get(int code, Session const &session) {
     append(ss, code);
     append(ss, session.getNickname());
     appendMessage(ss, message(code, session));
+    return ss.str();
+}
+
+std::string NumericReply::channelReply(int code, std::string const &nickname, std::string const &channelName) {
+    std::stringstream ss;
+    append(ss, code);
+    append(ss, nickname);
+    append(ss, channelName);
+    appendMessage(ss, message(code));
     return ss.str();
 }

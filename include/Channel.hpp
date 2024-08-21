@@ -5,19 +5,23 @@
 #ifndef FT_IRC_CHANNEL_HPP
 #define FT_IRC_CHANNEL_HPP
 
-#include <vector>
+#include <set>
 #include "Session.hpp"
 
 class Channel {
 private:
+    typedef std::set<Session *> Sessions;
+
     const std::string name;
-    std::vector<Session> participants;
+    Sessions participants;
 
 public:
     Channel(std::string const &name);
     ~Channel();
 
-    void join(Session const &session);
+    void broadcast(std::string const &message);
+    void join(Session *session);
+    void part(Session *session);
 };
 
 #endif //FT_IRC_CHANNEL_HPP

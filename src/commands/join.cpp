@@ -7,5 +7,5 @@
 void ChannelService::join(Session &session, const Message &message) {
     std::string channelName = message.getParam();
     Channel *channel = getChannel(channelName);
-    channel->join(session);
+    channel->join(&session);
 }

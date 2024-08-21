@@ -8,6 +8,16 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-void Channel::join(Session const &session) {
-    participants.push_back(session);
+void Channel::join(Session *session) {
+    participants.insert(session);
+}
+
+void Channel::part(Session *session) {
+    participants.erase(session);
+}
+
+void Channel::broadcast(std::string const &message) {
+    for (Sessions::iterator it = participants.begin(); it != participants.end(); it++) {
+        (*it)->operator<<(message);
+    }
 }

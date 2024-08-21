@@ -52,3 +52,14 @@ std::string Message::getParamsAll(int index, char ignore) const {
 
     return ss.str();
 }
+
+std::vector<std::string> Message::getSplitedParam(int index, char delimiter) const {
+    std::vector<std::string> splited;
+    std::stringstream ss(getParam(index));
+    std::string str;
+
+    while (std::getline(ss, str, delimiter)) {
+        splited.push_back(str);
+    }
+    return splited;
+}

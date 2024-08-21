@@ -5,10 +5,13 @@
 #ifndef FT_IRC_SESSION_HPP
 #define FT_IRC_SESSION_HPP
 
-#include  <iostream>
+#include <iostream>
+#include <map>
 #include "Socket.hpp"
 #include "Message.hpp"
 #include "Parser.hpp"
+
+class Channel;
 
 class Session : public Socket {
 public:
@@ -17,6 +20,7 @@ public:
 
     Session &read();
     void operator>>(Message &message);
+    bool operator==(Session const &other);
 
     bool isPassed() const;
     bool isRegistered() const;
@@ -31,7 +35,12 @@ public:
     void updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
                     std::string const &realname);
 
+    Channel *findJoinedChannel(std::string const &name) const;
+    void leaveChannel(std::string const &name);
+
 private:
+    typedef std::map<std::string, Channel *> Channels;
+
     bool passed;
     bool registered;
     std::string nickname;
@@ -39,6 +48,7 @@ private:
     std::string hostname;
     std::string servername;
     std::string realname;
+    Channels channels;
 };
 
 #endif //FT_IRC_SESSION_HPP

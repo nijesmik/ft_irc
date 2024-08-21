@@ -18,6 +18,9 @@
 #define RPL_CREATED 3
 #define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
 
+#define ERR_NOSUCHCHANNEL 403
+#define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
+
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 
@@ -29,6 +32,9 @@
 
 #define ERR_NICKNAMEINUSE 433
 #define ERR_NICKNAMEINUSE_MESSAGE "Nickname is already in use"
+
+#define ERR_NOTONCHANNEL 442
+#define ERR_NOTONCHANNEL_MESSAGE "You're not on that channel"
 
 #define ERR_NOTREGISTERED 451
 #define ERR_NOTREGISTERED_MESSAGE "You have not registered"
@@ -51,6 +57,7 @@ public:
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
     static std::string get(int code, Session const &session);
+    static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
 
 private:
     static std::string message(int code);

@@ -26,6 +26,10 @@ void Session::operator>>(Message &message) {
     }
 }
 
+bool Session::operator==(Session const &other) {
+    return this->getFd() == other.getFd();
+}
+
 bool Session::isPassed() const {
     return this->passed;
 }
@@ -68,4 +72,17 @@ void Session::updateUser(std::string const &username, std::string const &hostnam
     this->hostname = hostname;
     this->servername = servername;
     this->realname = realname;
+}
+
+Channel *Session::findJoinedChannel(std::string const &name) const {
+    Channels::const_iterator it = channels.find(name);
+    if (it == channels.end()) {
+        return NULL;
+    }
+    return it->second;
+}
+
+void Session::leaveChannel(std::string const &name) {
+    Channels::iterator it = channels.find(name);
+    channels.erase(it);
 }
