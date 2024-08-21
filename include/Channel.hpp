@@ -27,7 +27,8 @@ public:
     void operator<<(std::string const &message);
 
     void broadcast(std::string const &message);
-    void join(Session *session);
+    void join(Session *session, const std::string &key);
+    void part(Session *session);
     int remove(Session *session);
 };
 

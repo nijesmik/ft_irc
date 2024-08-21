@@ -8,7 +8,7 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-void Channel::join(Session *session) {
+void Channel::join(Session *session, const std::string &key) {
     participants.insert(session);
 }
 
