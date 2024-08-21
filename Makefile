@@ -7,7 +7,7 @@ INCLUDE = ./include
 
 HEADER = $(wildcard $(INCLUDE)/*.hpp)
 
-SRC = $(wildcard ./src/*.cpp ./src/ChatService/*cpp)
+SRC = $(wildcard ./src/*.cpp ./src/commands/*.cpp)
 
 OBJ = $(SRC:%.cpp=%.o)
 
