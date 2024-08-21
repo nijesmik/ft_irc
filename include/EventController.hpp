@@ -11,6 +11,7 @@
 #include <cstddef> // NULL
 #include "SessionService.hpp"
 #include "ChatService.hpp"
+#include "ChannelService.hpp"
 #include "Message.hpp"
 
 #define NCHANGES 1
@@ -20,6 +21,8 @@ class EventController {
 private:
     ChatService chatService;
     SessionService *sessionService;
+    ChannelService channelService;
+
     int kq;
     struct kevent *events;
 

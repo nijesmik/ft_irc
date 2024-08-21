@@ -17,6 +17,7 @@ public:
         USER,
         PING,
         QUIT,
+        JOIN,
     } command_t;
 
     Message();
