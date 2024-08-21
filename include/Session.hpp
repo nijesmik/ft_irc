@@ -18,6 +18,7 @@ public:
     Session &read();
     void operator>>(Message &message);
 
+    bool isPassed() const;
     bool isRegistered() const;
     std::string const &getNickname() const;
     std::string const &getUsername() const;

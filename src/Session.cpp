@@ -26,6 +26,10 @@ void Session::operator>>(Message &message) {
     }
 }
 
+bool Session::isPassed() const {
+    return this->passed;
+}
+
 bool Session::isRegistered() const {
     return this->registered;
 }

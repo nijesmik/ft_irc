@@ -22,6 +22,8 @@ public:
 
 private:
     std::string password;
+
+    void _register(Session &session);
 };
 
 #endif //FT_IRC_CHATSERVICE_HPP
