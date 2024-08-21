@@ -3,6 +3,7 @@
 //
 
 #include "NumericReply.hpp"
+#include "Server.hpp"
 
 std::string NumericReply::message(int code) {
     switch (code) {
@@ -27,22 +28,35 @@ std::string NumericReply::message(int code) {
     }
 }
 
-void NumericReply::append(std::stringstream &ss, int num) {
-    ss << num << DELIMITER;
+std::string NumericReply::message(int code, Session const &session) {
+    switch (code) {
+        case RPL_WELCOME: // 001
+            return RPL_WELCOME_MESSAGE(Server::NETWORK_NAME, session.getAddress());
+        case RPL_YOURHOST: // 002
+            return RPL_YOURHOST_MESSAGE(session.getServername(), Server::VERSION);
+        case RPL_CREATED: // 003
+            return RPL_CREATED_MESSAGE(Server::CREATED_TIME);
+        default:
+            throw std::runtime_error("Error: Invalid numeric reply code");
+    }
+}
+
+void NumericReply::append(std::stringstream &ss, int code) {
+    ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }
 
 void NumericReply::append(std::stringstream &ss, std::string const &str) {
     ss << str << DELIMITER;
 }
 
-void NumericReply::appendMessage(std::stringstream &ss, int code) {
-    ss << MESSAGE_PREFIX << message(code) << CRLF;
+void NumericReply::appendMessage(std::stringstream &ss, std::string const &message) {
+    ss << MESSAGE_PREFIX << message << CRLF;
 }
 
 std::string NumericReply::get(int code) {
     std::stringstream ss;
     append(ss, code);
-    appendMessage(ss, code);
+    appendMessage(ss, message(code));
     return ss.str();
 }
 
@@ -50,6 +64,14 @@ std::string NumericReply::get(int code, std::string const &param) {
     std::stringstream ss;
     append(ss, code);
     append(ss, param);
-    appendMessage(ss, code);
+    appendMessage(ss, message(code));
+    return ss.str();
+}
+
+std::string NumericReply::get(int code, Session const &session) {
+    std::stringstream ss;
+    append(ss, code);
+    append(ss, session.getNickname());
+    appendMessage(ss, message(code, session));
     return ss.str();
 }

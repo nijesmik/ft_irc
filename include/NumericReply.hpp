@@ -9,6 +9,15 @@
 #define MESSAGE_PREFIX ":"
 #define CRLF "\r\n"
 
+#define RPL_WELCOME 1
+#define RPL_WELCOME_MESSAGE(networkName, clientAddress) ("Welcome to the " + networkName + " Network, " + clientAddress)
+
+#define RPL_YOURHOST 2
+#define RPL_YOURHOST_MESSAGE(serverName, version) ("Your host is " + serverName + ", running version " + version)
+
+#define RPL_CREATED 3
+#define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
+
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
 
@@ -34,17 +43,21 @@
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
 #include <sstream>
+#include <iomanip>
+#include "Session.hpp"
 
 class NumericReply {
 public:
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
+    static std::string get(int code, Session const &session);
 
 private:
     static std::string message(int code);
-    static void append(std::stringstream &ss, int num);
+    static std::string message(int code, Session const &session);
+    static void append(std::stringstream &ss, int code);
     static void append(std::stringstream &ss, std::string const &str);
-    static void appendMessage(std::stringstream &ss, int code);
+    static void appendMessage(std::stringstream &ss, std::string const &message);
 };
 
 #endif //FT_IRC_NUMERICREPLY_HPP

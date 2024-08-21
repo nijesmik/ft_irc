@@ -5,6 +5,8 @@
 #include "ChatService.hpp"
 #include "SessionService.hpp"
 
+#define RPL_NICKNAMECHANGED_MESSAGE(oldNick, newNick) (":" + oldNick + " NICK " + newNick + CRLF)
+
 typedef std::string::const_iterator str_iter;
 bool isCharacterValid(char c);
 bool isNicknameValid(std::string const &nickname);
@@ -26,6 +28,14 @@ void ChatService::nick(Session &session, const Message &message) {
 
     if (isNicknameDuplicate(nickname)) {
         return session << NumericReply::get(ERR_NICKNAMEINUSE, nickname);
+    }
+
+    if (!session.getNickname().empty()) {
+        session << RPL_NICKNAMECHANGED_MESSAGE(session.getNickname(), nickname);
+    } else if (!session.getUsername().empty()) {
+        session << NumericReply::get(RPL_WELCOME, session);
+        session << NumericReply::get(RPL_YOURHOST, session);
+        session << NumericReply::get(RPL_CREATED, session);
     }
 
     session.updateNickname(nickname);
