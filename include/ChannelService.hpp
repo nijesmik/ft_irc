@@ -5,12 +5,11 @@
 #ifndef FT_IRC_CHANNELSERVICE_HPP
 #define FT_IRC_CHANNELSERVICE_HPP
 
-#endif //FT_IRC_CHANNELSERVICE_HPP
-
 #include <map>
 #include "Channel.hpp"
 #include "Session.hpp"
 #include "Message.hpp"
+#include "NumericReply.hpp"
 
 class ChannelService {
 private:
@@ -22,9 +21,14 @@ private:
     Channel *findChannel(std::string const &name);
     Channel *getChannel(std::string const &name);
 
+    void part(Session &session, std::string const &channelName, std::string const &reason);
+
 public:
     ChannelService();
     ~ChannelService();
 
     void join(Session &session, Message const &message);
+    void part(Session &session, Message const &message);
 };
+
+#endif //FT_IRC_CHANNELSERVICE_HPP

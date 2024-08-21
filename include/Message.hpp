@@ -29,6 +29,7 @@ public:
     std::string getParam(size_t index) const;
     std::string getParam() const;
     std::string getParamsAll(int index, char ignore = 0) const;
+    std::vector<std::string> getSplitedParam(int index, char delimiter) const;
 
 private:
     command_t command;
