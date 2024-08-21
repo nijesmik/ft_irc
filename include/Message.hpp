@@ -16,6 +16,7 @@ public:
         NICK,
         USER,
         PING,
+        JOIN,
     } command_t;
 
     Message();

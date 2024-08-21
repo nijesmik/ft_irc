@@ -78,5 +78,7 @@ void EventController::handleMessages(Session &session, Message const &message) {
             return chatService.user(session, message);
         case Message::PING:
             return chatService.ping(session, message);
+        case Message::JOIN:
+            return channelService.join(session, message);
     }
 }
