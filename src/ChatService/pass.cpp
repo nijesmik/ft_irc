@@ -5,7 +5,7 @@
 #include "ChatService.hpp"
 
 void ChatService::pass(Session &session, const Message &message) {
-    std::string pw = message.getParam(0);
+    std::string pw = message.getParam();
     if (pw.empty()) {
         return session << NumericReply::get(ERR_NEEDMOREPARAMS, "PASS");
     }
@@ -15,5 +15,5 @@ void ChatService::pass(Session &session, const Message &message) {
     if (session.isRegistered()) {
         return session << NumericReply::get(ERR_ALREADYREGISTRED);
     }
-    session.updateRegister();
+    session.setPassed();
 }

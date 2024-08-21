@@ -24,10 +24,12 @@ public:
     std::string const &getServername() const;
     std::string getAddress() const;
 
-    void updateRegister();
+    void setPassed();
+    void setRegistered();
     void updateNickname(std::string const &nickname);
 
 private:
+    bool passed;
     bool registered;
     std::string nickname;
     std::string username;
