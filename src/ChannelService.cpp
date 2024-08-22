@@ -33,3 +33,11 @@ Channel *ChannelService::getChannel(const std::string &name) {
     }
     return createChannel(name);
 }
+
+void ChannelService::deleteChannel(const std::string &name) {
+    Channels::iterator it = channels.find(name);
+    if (it != channels.end()) {
+        channels.erase(it);
+        delete it->second;
+    }
+}

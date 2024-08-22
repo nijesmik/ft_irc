@@ -12,8 +12,10 @@ void Channel::join(Session *session) {
     participants.insert(session);
 }
 
-void Channel::part(Session *session) {
+int Channel::remove(Session *session) {
+    session->leaveChannel(name);
     participants.erase(session);
+    return participants.size();
 }
 
 void Channel::broadcast(std::string const &message) {

@@ -21,7 +21,7 @@ public:
 
     void broadcast(std::string const &message);
     void join(Session *session);
-    void part(Session *session);
+    int remove(Session *session);
 };
 
 #endif //FT_IRC_CHANNEL_HPP
