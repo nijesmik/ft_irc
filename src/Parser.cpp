@@ -51,5 +51,8 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "JOIN") {
         return Message::JOIN;
     }
+    if (command == "PART") {
+        return Message::PART;
+    }
     return Message::UNKNOWN;
 }

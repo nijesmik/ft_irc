@@ -12,12 +12,15 @@ class Message {
 public:
     typedef enum command_e {
         UNKNOWN,
+        // connection message
         PASS,
         NICK,
         USER,
         PING,
         QUIT,
+        // channel operation
         JOIN,
+        PART,
     } command_t;
 
     Message();
