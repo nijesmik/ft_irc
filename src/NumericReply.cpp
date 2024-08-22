@@ -17,6 +17,8 @@ std::string NumericReply::message(int code) {
             return ERR_ERRONEUSNICKNAME_MESSAGE;
         case ERR_NICKNAMEINUSE: // 433
             return ERR_NICKNAMEINUSE_MESSAGE;
+        case ERR_USERNOTINCHANNEL: // 441
+            return ERR_USERNOTINCHANNEL_MESSAGE;
         case ERR_NOTONCHANNEL: // 442
             return ERR_NOTONCHANNEL_MESSAGE;
         case ERR_NOTREGISTERED: // 451
@@ -27,6 +29,8 @@ std::string NumericReply::message(int code) {
             return ERR_ALREADYREGISTRED_MESSAGE;
         case ERR_PASSWDMISMATCH: // 464
             return ERR_PASSWDMISMATCH_MESSAGE;
+        case ERR_CHANOPRIVSNEEDED: // 482
+            return ERR_CHANOPRIVSNEEDED_MESSAGE;
         default:
             return "";
     }

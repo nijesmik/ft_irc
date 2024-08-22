@@ -33,6 +33,9 @@
 #define ERR_NICKNAMEINUSE 433
 #define ERR_NICKNAMEINUSE_MESSAGE "Nickname is already in use"
 
+#define ERR_USERNOTINCHANNEL 441 // "<client> <nick> <channel> :They aren't on that channel"
+#define ERR_USERNOTINCHANNEL_MESSAGE "They aren't on that channel"
+
 #define ERR_NOTONCHANNEL 442
 #define ERR_NOTONCHANNEL_MESSAGE "You're not on that channel"
 
@@ -47,6 +50,9 @@
 
 #define ERR_PASSWDMISMATCH 464
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
+
+#define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
+#define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
 
 #include <sstream>
 #include <iomanip>
