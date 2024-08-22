@@ -72,6 +72,19 @@ std::string NumericReply::message(int code, std::string const &param) {
     }
 }
 
+std::string NumericReply::message(const int code, const std::string& nickname, const std::string& channelName, const std::string& param) {
+    switch (code) {
+        case RPL_TOPIC: // 332
+            return RPL_TOPIC_MESSAGE(nickname, channelName, param);
+        case RPL_NAMREPLY: // 353
+            return RPL_NAMREPLY_MESSAGE(nickname, channelName, param);
+        case RPL_ENDOFNAMES: //366
+            return RPL_ENDOFNAMES_MESSAGE(nickname, channelName, param);
+        default:
+            throw std::runtime_error("Error: Invalid numeric reply code");
+    }
+}
+
 void NumericReply::append(std::stringstream &ss, int code) {
     ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }
@@ -158,4 +171,14 @@ void NumericReply::operator>>(Channel &channel) {
 
 void NumericReply::operator>>(Channel *channel) {
     operator>>(*channel);
+}
+
+std::string NumericReply::channelReply(int code, std::string const &nickname, std::string const &channelName, std::string const &param) {
+    std::stringstream ss;
+    append(ss, code);
+    append(ss, nickname);
+    append(ss, channelName);
+    append(ss, param);
+    appendMessage(ss, message(code));
+    return ss.str();
 }
