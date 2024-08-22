@@ -29,6 +29,16 @@ std::string NumericReply::message(int code) {
             return ERR_ALREADYREGISTRED_MESSAGE;
         case ERR_PASSWDMISMATCH: // 464
             return ERR_PASSWDMISMATCH_MESSAGE;
+        case ERR_CHANNELISFULL: // 471
+            return ERR_CHANNELISFULL_MESSAGE;
+        case ERR_INVITEONLYCHAN: // 473
+            return ERR_INVITEONLYCHAN_MESSAGE;
+        case ERR_BANNEDFROMCHAN: // 474
+            return ERR_BANNEDFROMCHAN_MESSAGE;
+        case ERR_BADCHANNELKEY: // 475
+            return ERR_BADCHANNELKEY_MESSAGE;
+        case ERR_BADCHANMASK: // 476
+            return ERR_BADCHANMASK_MESSAGE;
         case ERR_CHANOPRIVSNEEDED: // 482
             return ERR_CHANOPRIVSNEEDED_MESSAGE;
         default:
