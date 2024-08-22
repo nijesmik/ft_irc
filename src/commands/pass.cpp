@@ -12,7 +12,7 @@ void ChatService::pass(Session &session, const Message &message) {
     if (pw != this->password) {
         return session << NumericReply::get(ERR_PASSWDMISMATCH);
     }
-    if (session.isRegistered()) {
+    if (session.isPassed()) {
         return session << NumericReply::get(ERR_ALREADYREGISTRED);
     }
     session.setPassed();

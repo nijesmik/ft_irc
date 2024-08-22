@@ -32,11 +32,12 @@ void ChatService::nick(Session &session, const Message &message) {
 
     if (!session.getNickname().empty()) {
         session << RPL_NICKNAMECHANGED_MESSAGE(session.getNickname(), nickname);
-    } else if (!session.isRegistered() && !session.getUsername().empty()) {
-        _register(session);
     }
 
     session.updateNickname(nickname);
+    if (!session.isRegistered() && !session.getUsername().empty()) {
+        _register(session);
+    }
 }
 
 bool isNicknameValid(std::string const &nickname) {
