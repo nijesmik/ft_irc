@@ -25,7 +25,7 @@ void ChannelService::part(Session &session, const Message &message) {
 }
 
 void ChannelService::part(Session &session, std::string const &channelName, std::string const &reason) {
-    if (findChannel(channelName)) {
+    if (!findChannel(channelName)) {
         return session << NumericReply::channelReply(ERR_NOSUCHCHANNEL, session.getNickname(), channelName);
     }
 
