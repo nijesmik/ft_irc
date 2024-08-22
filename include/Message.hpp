@@ -21,6 +21,7 @@ public:
         // channel operation
         JOIN,
         PART,
+        TOPIC,
     } command_t;
 
     Message();
