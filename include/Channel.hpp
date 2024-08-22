@@ -14,6 +14,7 @@ private:
 
     const std::string name;
     Sessions operators;
+    std::string topic;
     Sessions participants;
 
 public:
