@@ -60,12 +60,23 @@
 
 class NumericReply {
 public:
+    NumericReply(int code);
+
+    NumericReply &operator<<(std::string const &str);
+    NumericReply &operator<<(Session const &session);
+    NumericReply &operator<<(Session *session);
+    void operator>>(Socket &socket);
+    void operator>>(Socket *socket);
+
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
     static std::string get(int code, Session const &session);
     static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
 
 private:
+    const std::string _message;
+    std::stringstream _ss;
+
     static std::string message(int code);
     static std::string message(int code, Session const &session);
     static void append(std::stringstream &ss, int code);

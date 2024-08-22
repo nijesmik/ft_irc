@@ -92,3 +92,29 @@ std::string NumericReply::channelReply(int code, std::string const &nickname, st
     appendMessage(ss, message(code));
     return ss.str();
 }
+
+NumericReply::NumericReply(int code) : _message(message(code)) {
+    _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
+}
+
+NumericReply &NumericReply::operator<<(std::string const &str) {
+    _ss << str << DELIMITER;
+    return *this;
+}
+
+NumericReply &NumericReply::operator<<(Session const &session) {
+    return operator<<(session.getNickname());
+}
+
+NumericReply &NumericReply::operator<<(Session *session) {
+    return operator<<(*session);
+}
+
+void NumericReply::operator>>(Socket &socket) {
+    _ss << MESSAGE_PREFIX << _message << CRLF;
+    socket << _ss.str();
+}
+
+void NumericReply::operator>>(Socket *socket) {
+    operator>>(*socket);
+}
