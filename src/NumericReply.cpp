@@ -59,6 +59,19 @@ std::string NumericReply::message(int code, Session const &session) {
     }
 }
 
+std::string NumericReply::message(int code, std::string const &param) {
+    switch (code) {
+        case RPL_TOPIC: // 331
+            return RPL_TOPIC_MESSAGE(param);
+        case RPL_NAMREPLY: // 353
+            return RPL_NAMREPLY_MESSAGE(param);
+        case RPL_ENDOFNAMES: //366
+            return RPL_ENDOFNAMES_MESSAGE(param);
+        default:
+            throw std::runtime_error("Error: Invalid numeric reply code");
+    }
+}
+
 void NumericReply::append(std::stringstream &ss, int code) {
     ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }
@@ -103,8 +116,27 @@ std::string NumericReply::channelReply(int code, std::string const &nickname, st
     return ss.str();
 }
 
+std::string NumericReply::channelReply(int code, std::string const &nickname, std::string const &channelName, std::string const &param) {
+    std::stringstream ss;
+    append(ss, code);
+    append(ss, nickname);
+    append(ss, channelName);
+    append(ss, param);
+    appendMessage(ss, message(code));
+    return ss.str();
+}
+
 NumericReply::NumericReply(int code) : _message(message(code)) {
     _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
+}
+
+NumericReply::NumericReply(int code, std::string const  &param) : _message(message(code, param)) {
+    _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
+}
+
+NumericReply &NumericReply::operator<<(char const *str) {
+    _ss << str << DELIMITER;
+    return *this;
 }
 
 NumericReply &NumericReply::operator<<(std::string const &str) {
@@ -127,4 +159,13 @@ void NumericReply::operator>>(Socket &socket) {
 
 void NumericReply::operator>>(Socket *socket) {
     operator>>(*socket);
+}
+
+void NumericReply::operator>>(Channel &channel) {
+    _ss << MESSAGE_PREFIX << _message << CRLF;
+    channel << _ss.str();
+}
+
+void NumericReply::operator>>(Channel *channel) {
+    operator>>(*channel);
 }
