@@ -17,6 +17,10 @@ private:
     Sessions operators;
     std::string topic;
     Sessions participants;
+    bool inviteOnly;
+    bool topicRestricted;
+    std::string key;
+    int limit;
 
 public:
     Channel(std::string const &name);
