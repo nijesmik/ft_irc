@@ -29,6 +29,7 @@ public:
     ~Message();
     Message &operator=(Message const &other);
 
+    size_t getParamSize() const;
     command_t getCommand() const;
     std::string getParam(size_t index) const;
     std::string getParam() const;
