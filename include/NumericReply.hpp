@@ -31,13 +31,13 @@
 #define RPL_ENDOFNAMES_MESSAGE(param) (param)
 
 #define RPL_TOPIC 332
-#define RPL_TOPIC_MESSAGE(nickname, channelName, channelTopic) (nickname + " " + channelName + " :" + channelTopic)
+#define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
 
 #define RPL_NAMREPLY 353
-#define RPL_NAMREPLY_MESSAGE(nickname, channelName, userList) (nickname + " " + channelName + " :" + userList)
+#define RPL_NAMREPLY_MESSAGE(userList) (userList)
 
 #define RPL_ENDOFNAMES 366
-#define RPL_ENDOFNAMES_MESSAGE(nickname, channelName, param) (nickname + " " + channelName + " :" + param)
+#define RPL_ENDOFNAMES_MESSAGE(param) (param)
 
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
@@ -115,8 +115,6 @@ public:
     static std::string get(int code, std::string const &param);
     static std::string get(int code, Session const &session);
     static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
-    static std::string channelReply(int code, std::string const &nickname, std::string const &channelName,
-                             std::string const &param);
 
 private:
     const std::string _message;

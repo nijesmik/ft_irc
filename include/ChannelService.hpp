@@ -30,7 +30,6 @@ public:
     ChannelService();
     ~ChannelService();
 
-    static bool isValidChannel(const std::string &channel);
     void join(Session &session, Message const &message);
     void part(Session &session, Message const &message);
     void kick(Session *session, Message const &message);
