@@ -4,6 +4,13 @@
 
 #include "ChannelService.hpp"
 
+static bool isValidChannel(const std::string &channel) {
+    if (channel.length() < 2 || channel.size() > CHANNELLEN) {
+        return false;
+    }
+    return (channel[0] == '#' || channel[0] == '&');
+}
+
 void ChannelService::join(Session &session, const Message &message) {
     if (!session.isRegistered()) {
         return session << NumericReply::get(ERR_NOTREGISTERED);
