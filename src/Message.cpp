@@ -22,6 +22,11 @@ Message &Message::operator=(Message const &other) {
     return *this;
 }
 
+size_t Message::getParamSize() const {
+    return this->params.size();
+}
+
+
 Message::command_t Message::getCommand() const {
     return this->command;
 }

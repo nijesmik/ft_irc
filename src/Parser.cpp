@@ -54,5 +54,8 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "PART") {
         return Message::PART;
     }
+    if (command == "TOPIC") {
+        return Message::TOPIC;
+    }
     return Message::UNKNOWN;
 }

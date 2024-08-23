@@ -29,6 +29,16 @@ std::string NumericReply::message(int code) {
             return ERR_ALREADYREGISTRED_MESSAGE;
         case ERR_PASSWDMISMATCH: // 464
             return ERR_PASSWDMISMATCH_MESSAGE;
+        case ERR_CHANNELISFULL: // 471
+            return ERR_CHANNELISFULL_MESSAGE;
+        case ERR_INVITEONLYCHAN: // 473
+            return ERR_INVITEONLYCHAN_MESSAGE;
+        case ERR_BANNEDFROMCHAN: // 474
+            return ERR_BANNEDFROMCHAN_MESSAGE;
+        case ERR_BADCHANNELKEY: // 475
+            return ERR_BADCHANNELKEY_MESSAGE;
+        case ERR_BADCHANMASK: // 476
+            return ERR_BADCHANMASK_MESSAGE;
         case ERR_CHANOPRIVSNEEDED: // 482
             return ERR_CHANOPRIVSNEEDED_MESSAGE;
         default:
@@ -44,6 +54,19 @@ std::string NumericReply::message(int code, Session const &session) {
             return RPL_YOURHOST_MESSAGE(session.getServername(), Server::VERSION);
         case RPL_CREATED: // 003
             return RPL_CREATED_MESSAGE(Server::CREATED_TIME);
+        default:
+            throw std::runtime_error("Error: Invalid numeric reply code");
+    }
+}
+
+std::string NumericReply::message(int code, std::string const &param) {
+    switch (code) {
+        case RPL_TOPIC: // 331
+            return RPL_TOPIC_MESSAGE(param);
+        case RPL_NAMREPLY: // 353
+            return RPL_NAMREPLY_MESSAGE(param);
+        case RPL_ENDOFNAMES: //366
+            return RPL_ENDOFNAMES_MESSAGE(param);
         default:
             throw std::runtime_error("Error: Invalid numeric reply code");
     }
@@ -97,6 +120,15 @@ NumericReply::NumericReply(int code) : _message(message(code)) {
     _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }
 
+NumericReply::NumericReply(int code, std::string const  &param) : _message(message(code, param)) {
+    _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
+}
+
+NumericReply &NumericReply::operator<<(char const *str) {
+    _ss << str << DELIMITER;
+    return *this;
+}
+
 NumericReply &NumericReply::operator<<(std::string const &str) {
     _ss << str << DELIMITER;
     return *this;
@@ -117,4 +149,13 @@ void NumericReply::operator>>(Socket &socket) {
 
 void NumericReply::operator>>(Socket *socket) {
     operator>>(*socket);
+}
+
+void NumericReply::operator>>(Channel &channel) {
+    _ss << MESSAGE_PREFIX << _message << CRLF;
+    channel << _ss.str();
+}
+
+void NumericReply::operator>>(Channel *channel) {
+    operator>>(*channel);
 }

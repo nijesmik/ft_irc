@@ -7,6 +7,7 @@
 
 #include <set>
 #include "Session.hpp"
+#include "NumericReply.hpp"
 
 class Channel {
 private:
@@ -14,6 +15,7 @@ private:
 
     const std::string name;
     Sessions operators;
+    std::string topic;
     Sessions participants;
 
 public:
@@ -29,6 +31,8 @@ public:
     void broadcast(std::string const &message);
     void join(Session *session);
     int remove(Session *session);
+    void setTopic(std::string const &topicName);
+    void displayTopic(Session *session);
 };
 
 #endif //FT_IRC_CHANNEL_HPP

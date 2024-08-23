@@ -18,8 +18,23 @@
 #define RPL_CREATED 3
 #define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
 
+#define RPL_NOTOPIC 331
+#define RPL_NOTOPIC_MESSAGE "No topic is set"
+
+#define RPL_TOPIC 332
+#define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
+
+#define RPL_NAMREPLY 353
+#define RPL_NAMREPLY_MESSAGE(userList) (userList)
+
+#define RPL_ENDOFNAMES 366
+#define RPL_ENDOFNAMES_MESSAGE(param) (param)
+
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
+
+#define ERR_TOOMANYCHANNELS 405
+#define ERR_TOOMANYCHANNEL_MESSAGE "You have joined too many channels"
 
 #define ERR_UNKNOWNCOMMAND 421
 #define ERR_UNKNOWNCOMMAND_MESSAGE "Unknown command"
@@ -51,6 +66,21 @@
 #define ERR_PASSWDMISMATCH 464
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
+#define ERR_CHANNELISFULL 471
+#define ERR_CHANNELISFULL_MESSAGE "Cannot join channel (+l)"
+
+#define ERR_INVITEONLYCHAN 473
+#define ERR_INVITEONLYCHAN_MESSAGE "Cannot join channel (+i)"
+
+#define ERR_BANNEDFROMCHAN 474
+#define ERR_BANNEDFROMCHAN_MESSAGE "Cannot join channel (+b)"
+
+#define ERR_BADCHANNELKEY 475
+#define ERR_BADCHANNELKEY_MESSAGE "Cannot join channel (+k)"
+
+#define ERR_BADCHANMASK 476
+#define ERR_BADCHANMASK_MESSAGE "Bad Channel Mask"
+
 #define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
 #define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
 
@@ -61,12 +91,16 @@
 class NumericReply {
 public:
     NumericReply(int code);
+    NumericReply(int code, std::string const  &param);
 
+    NumericReply &operator<<(char const *str);
     NumericReply &operator<<(std::string const &str);
     NumericReply &operator<<(Session const &session);
     NumericReply &operator<<(Session *session);
     void operator>>(Socket &socket);
     void operator>>(Socket *socket);
+    void operator>>(Channel &channel);
+    void operator>>(Channel *channel);
 
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
@@ -79,6 +113,7 @@ private:
 
     static std::string message(int code);
     static std::string message(int code, Session const &session);
+    std::string message(int code, std::string const &param);
     static void append(std::stringstream &ss, int code);
     static void append(std::stringstream &ss, std::string const &str);
     static void appendMessage(std::stringstream &ss, std::string const &message);
