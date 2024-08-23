@@ -8,10 +8,6 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-void Channel::join(Session *session) {
-    participants.insert(session);
-}
-
 int Channel::remove(Session *session) {
     session->leaveChannel(name);
     operators.erase(session);
@@ -49,6 +45,7 @@ Session *Channel::getParticipant(std::string const &nickname) const {
 void Channel::setTopic(std::string const &topicName) {
     // TODO: t 옵션일 시 operator 인지 확인하기
 
+    // TODO: Channel 전체 client에게 message 보낼 때, <바꾼 client> <channel> : <topic>
     this->topic = topicName;
     NumericReply(RPL_TOPIC, this->topic) >> this;
 }

@@ -30,6 +30,15 @@
 #define RPL_ENDOFNAMES 366
 #define RPL_ENDOFNAMES_MESSAGE(param) (param)
 
+#define RPL_TOPIC 332
+#define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
+
+#define RPL_NAMREPLY 353
+#define RPL_NAMREPLY_MESSAGE(userList) (userList)
+
+#define RPL_ENDOFNAMES 366
+#define RPL_ENDOFNAMES_MESSAGE(param) (param)
+
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
 

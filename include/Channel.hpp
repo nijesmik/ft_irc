@@ -29,7 +29,7 @@ public:
     void operator<<(std::string const &message);
 
     void broadcast(std::string const &message);
-    void join(Session *session);
+    void join(Session *session, const std::string &key);
     int remove(Session *session);
     void setTopic(std::string const &topicName);
     void displayTopic(Session *session);

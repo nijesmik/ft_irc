@@ -11,6 +11,8 @@
 #include "Message.hpp"
 #include "NumericReply.hpp"
 
+#define CHANNELLEN 50
+
 class ChannelService {
 private:
     typedef std::map<std::string, Channel *> Channels;
