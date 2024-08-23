@@ -31,6 +31,8 @@ public:
     void join(Session *session, const std::string &key);
     void part(Session *session);
     int remove(Session *session);
+    void setTopic(std::string const &topicName);
+    void displayTopic(Session *session);
 };
 
 #endif //FT_IRC_CHANNEL_HPP
