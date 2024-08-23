@@ -11,8 +11,6 @@
 #include "Message.hpp"
 #include "NumericReply.hpp"
 
-#define CHANNELLEN 50
-
 class ChannelService {
 private:
     typedef std::map<std::string, Channel *> Channels;
@@ -30,7 +28,6 @@ public:
     ChannelService();
     ~ChannelService();
 
-    static bool isValidChannel(const std::string &channel);
     void join(Session &session, Message const &message);
     void part(Session &session, Message const &message);
     void kick(Session *session, Message const &message);

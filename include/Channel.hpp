@@ -7,6 +7,7 @@
 
 #include <set>
 #include "Session.hpp"
+#include "NumericReply.hpp"
 
 class Channel {
 private:
@@ -28,8 +29,7 @@ public:
     void operator<<(std::string const &message);
 
     void broadcast(std::string const &message);
-    void join(Session *session, const std::string &key);
-    void part(Session *session);
+    void join(Session *session);
     int remove(Session *session);
     void setTopic(std::string const &topicName);
     void displayTopic(Session *session);

@@ -116,16 +116,6 @@ std::string NumericReply::channelReply(int code, std::string const &nickname, st
     return ss.str();
 }
 
-std::string NumericReply::channelReply(int code, std::string const &nickname, std::string const &channelName, std::string const &param) {
-    std::stringstream ss;
-    append(ss, code);
-    append(ss, nickname);
-    append(ss, channelName);
-    append(ss, param);
-    appendMessage(ss, message(code));
-    return ss.str();
-}
-
 NumericReply::NumericReply(int code) : _message(message(code)) {
     _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
 }

@@ -106,8 +106,6 @@ public:
     static std::string get(int code, std::string const &param);
     static std::string get(int code, Session const &session);
     static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
-    static std::string channelReply(int code, std::string const &nickname, std::string const &channelName,
-                             std::string const &param);
 
 private:
     const std::string _message;
@@ -116,7 +114,6 @@ private:
     static std::string message(int code);
     static std::string message(int code, Session const &session);
     std::string message(int code, std::string const &param);
-    static std::string message(int code, const std::string& nickname, const std::string& channelName, const std::string& param);
     static void append(std::stringstream &ss, int code);
     static void append(std::stringstream &ss, std::string const &str);
     static void appendMessage(std::stringstream &ss, std::string const &message);
