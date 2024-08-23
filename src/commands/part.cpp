@@ -25,7 +25,7 @@ void ChannelService::part(Session &session, const Message &message) {
 }
 
 void ChannelService::part(Session &session, std::string const &channelName, std::string const &reason) {
-    if (findChannel(channelName)) {
+    if (!findChannel(channelName)) {
         return session << NumericReply::channelReply(ERR_NOSUCHCHANNEL, session.getNickname(), channelName);
     }
 
@@ -34,9 +34,11 @@ void ChannelService::part(Session &session, std::string const &channelName, std:
         return session << NumericReply::channelReply(ERR_NOTONCHANNEL, session.getNickname(), channelName);
     }
 
-    session.leaveChannel(channelName);
-    channel->part(&session);
+    int remain = channel->remove(&session);
     std::string reply = RPL_CHANNELPART(session.getAddress(), channelName, reason);
-    channel->broadcast(reply);
     session << reply;
+    if (remain) {
+        return channel->broadcast(reply);
+    }
+    deleteChannel(channelName);
 }

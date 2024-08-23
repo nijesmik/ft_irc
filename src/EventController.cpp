@@ -33,7 +33,7 @@ void EventController::unlisten(Session &session) {
     struct kevent changelist[NCHANGES];
     EV_SET(changelist, session.getFd(), EVFILT_READ, EV_DELETE, 0, 0, NULL);
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
-      throw std::runtime_error("Error: event delete failed");
+        throw std::runtime_error("Error: event delete failed");
     }
 
     sessionService->disconnect(session.getFd());
@@ -93,5 +93,7 @@ void EventController::handleMessages(Session &session, Message const &message) {
             return unlisten(session);
         case Message::JOIN:
             return channelService.join(session, message);
+        case Message::PART:
+            return channelService.part(session, message);
     }
 }
