@@ -33,6 +33,9 @@
 #define ERR_NICKNAMEINUSE 433
 #define ERR_NICKNAMEINUSE_MESSAGE "Nickname is already in use"
 
+#define ERR_USERNOTINCHANNEL 441 // "<client> <nick> <channel> :They aren't on that channel"
+#define ERR_USERNOTINCHANNEL_MESSAGE "They aren't on that channel"
+
 #define ERR_NOTONCHANNEL 442
 #define ERR_NOTONCHANNEL_MESSAGE "You're not on that channel"
 
@@ -48,18 +51,32 @@
 #define ERR_PASSWDMISMATCH 464
 #define ERR_PASSWDMISMATCH_MESSAGE "Password incorrect"
 
+#define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
+#define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
+
 #include <sstream>
 #include <iomanip>
 #include "Session.hpp"
 
 class NumericReply {
 public:
+    NumericReply(int code);
+
+    NumericReply &operator<<(std::string const &str);
+    NumericReply &operator<<(Session const &session);
+    NumericReply &operator<<(Session *session);
+    void operator>>(Socket &socket);
+    void operator>>(Socket *socket);
+
     static std::string get(int code);
     static std::string get(int code, std::string const &param);
     static std::string get(int code, Session const &session);
     static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
 
 private:
+    const std::string _message;
+    std::stringstream _ss;
+
     static std::string message(int code);
     static std::string message(int code, Session const &session);
     static void append(std::stringstream &ss, int code);

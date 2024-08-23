@@ -30,6 +30,7 @@ public:
 
     void join(Session &session, Message const &message);
     void part(Session &session, Message const &message);
+    void kick(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP

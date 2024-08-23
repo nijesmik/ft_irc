@@ -17,6 +17,8 @@ std::string NumericReply::message(int code) {
             return ERR_ERRONEUSNICKNAME_MESSAGE;
         case ERR_NICKNAMEINUSE: // 433
             return ERR_NICKNAMEINUSE_MESSAGE;
+        case ERR_USERNOTINCHANNEL: // 441
+            return ERR_USERNOTINCHANNEL_MESSAGE;
         case ERR_NOTONCHANNEL: // 442
             return ERR_NOTONCHANNEL_MESSAGE;
         case ERR_NOTREGISTERED: // 451
@@ -27,6 +29,8 @@ std::string NumericReply::message(int code) {
             return ERR_ALREADYREGISTRED_MESSAGE;
         case ERR_PASSWDMISMATCH: // 464
             return ERR_PASSWDMISMATCH_MESSAGE;
+        case ERR_CHANOPRIVSNEEDED: // 482
+            return ERR_CHANOPRIVSNEEDED_MESSAGE;
         default:
             return "";
     }
@@ -87,4 +91,30 @@ std::string NumericReply::channelReply(int code, std::string const &nickname, st
     append(ss, channelName);
     appendMessage(ss, message(code));
     return ss.str();
+}
+
+NumericReply::NumericReply(int code) : _message(message(code)) {
+    _ss << std::setw(3) << std::setfill('0') << code << DELIMITER;
+}
+
+NumericReply &NumericReply::operator<<(std::string const &str) {
+    _ss << str << DELIMITER;
+    return *this;
+}
+
+NumericReply &NumericReply::operator<<(Session const &session) {
+    return operator<<(session.getNickname());
+}
+
+NumericReply &NumericReply::operator<<(Session *session) {
+    return operator<<(*session);
+}
+
+void NumericReply::operator>>(Socket &socket) {
+    _ss << MESSAGE_PREFIX << _message << CRLF;
+    socket << _ss.str();
+}
+
+void NumericReply::operator>>(Socket *socket) {
+    operator>>(*socket);
 }
