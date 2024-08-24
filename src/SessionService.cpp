@@ -31,7 +31,7 @@ SessionService *SessionService::instance() {
     return singleton;
 }
 
-Session &SessionService::connect() {
+Session *SessionService::connect() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
 
@@ -49,7 +49,7 @@ Session &SessionService::connect() {
     // register new session
     Session *session = new Session(socket);
     sessions[socket] = session;
-    return *session;
+    return session;
 }
 
 Session *SessionService::getSession(Socket::fd_t sessionFd) {

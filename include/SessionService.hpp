@@ -17,7 +17,7 @@ public:
 
     ~SessionService();
 
-    Session &connect();  // Could remain as Session* if failure is possible
+    Session *connect();  // Could remain as Session* if failure is possible
     bool hasSession(fd_t sessionFd);
     Session *getSession(Socket::fd_t sessionFd);
     Session *getSession(std::string const &nickname);
