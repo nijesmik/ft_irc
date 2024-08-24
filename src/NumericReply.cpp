@@ -48,7 +48,7 @@ std::string NumericReply::message(int code) {
         case ERR_CHANOPRIVSNEEDED: // 482
             return ERR_CHANOPRIVSNEEDED_MESSAGE;
         default:
-            return "";
+            return std::string();
     }
 }
 
@@ -72,7 +72,10 @@ void NumericReply::appendCode(int code) {
 }
 
 void NumericReply::appendMessage() {
-    _ss << MESSAGE_PREFIX << _message << CRLF;
+    if (!_message.empty()) {
+        _ss << MESSAGE_PREFIX << _message;
+    }
+    _ss << CRLF;
 }
 
 NumericReply::NumericReply(int code) : _message(message(code)) {

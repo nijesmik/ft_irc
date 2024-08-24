@@ -44,6 +44,7 @@ public:
     void displayTopic(Session *session);
 
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
+    std::string getModeInfo() const;
     void setInviteOnly(Channel::mode_t mode);
     void setTopicRestricted(Channel::mode_t mode);
     int setKey(Channel::mode_t mode, std::string const &key);

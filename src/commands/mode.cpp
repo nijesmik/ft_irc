@@ -21,8 +21,7 @@ void ChannelService::mode(Session *session, const Message &message) {
 
     std::string const &modestring = message.getParam(1);
     if (modestring.empty()) {
-        // RPL_CHANNELMODEIS
-        return;
+        return NumericReply(RPL_CHANNELMODEIS) << session << channel->getModeInfo() >> session;
     }
     if (!channel->isOperator(session)) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;
@@ -85,4 +84,19 @@ bool isValidModeString(std::string const &modestring, Session *session) {
         }
     }
     return true;
+}
+
+std::string Channel::getModeInfo() const {
+    std::stringstream info;
+    info << name << DELIMITER << "+";
+    if (inviteOnly) {
+        info << "i";
+    }
+    if (topicRestricted) {
+        info << "t";
+    }
+    if (limit) {
+        info << "l" << DELIMITER << limit;
+    }
+    return info.str();
 }

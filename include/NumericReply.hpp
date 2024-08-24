@@ -18,6 +18,8 @@
 #define RPL_CREATED 3
 #define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
 
+#define RPL_CHANNELMODEIS 324 // "<client> <channel> <modestring> <mode arguments>..."
+
 #define RPL_NOTOPIC 331
 #define RPL_NOTOPIC_MESSAGE "No topic is set"
 
