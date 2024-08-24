@@ -23,6 +23,11 @@ private:
     int limit;
 
 public:
+    typedef enum mode_e {
+        ADD, // +
+        REMOVE, // -
+    } mode_t;
+
     Channel(std::string const &name);
     ~Channel();
 
@@ -37,6 +42,13 @@ public:
     int remove(Session *session);
     void setTopic(std::string const &topicName);
     void displayTopic(Session *session);
+
+    int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
+    void setInviteOnly(Channel::mode_t mode);
+    void setTopicRestricted(Channel::mode_t mode);
+    int setKey(Channel::mode_t mode, std::string const &key);
+    int setLimit(Channel::mode_t mode, std::string const &limit, Session *session);
+    int setOperator(Channel::mode_t mode, std::string const &nickname, Session *session);
 };
 
 #endif //FT_IRC_CHANNEL_HPP

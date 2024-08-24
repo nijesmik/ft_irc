@@ -13,6 +13,7 @@
 class Parser {
 public:
     static int parsePort(char *port);
+    static int parseLimit(std::string const &limit);
     static Message parseMessage(std::stringstream &stream);
     static Message::command_t parseCommand(std::string const &command);
 };

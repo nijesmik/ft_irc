@@ -59,3 +59,12 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     }
     return Message::UNKNOWN;
 }
+
+int Parser::parseLimit(std::string const &limit) {
+    char *end;
+    long parsed = std::strtol(limit.c_str(), &end, 10);
+    if (*end != '\0' || parsed < 0 || parsed > std::numeric_limits<int>::max()) {
+        throw std::invalid_argument("Error: invalid limit");
+    }
+    return static_cast<int>(parsed);
+}
