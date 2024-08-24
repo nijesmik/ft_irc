@@ -34,6 +34,7 @@ public:
     bool isOperator(Session *session) const;
     bool isParticipant(Session *session) const;
     Session *getParticipant(std::string const &nickname) const;
+    std::string getOperatorList() const;
 
     void operator<<(std::string const &message);
 

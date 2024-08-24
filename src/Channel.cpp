@@ -42,6 +42,14 @@ Session *Channel::getParticipant(std::string const &nickname) const {
     return NULL;
 }
 
+std::string Channel::getOperatorList() const {
+    std::stringstream list;
+    for (Sessions::const_iterator it = operators.begin(); it != operators.end(); it++) {
+        list << OPERATOR_PREFIX << (*it)->getNickname() << DELIMITER;
+    }
+    return list.str();
+}
+
 void Channel::setTopic(std::string const &topicName) {
     // TODO: t 옵션일 시 operator 인지 확인하기
 
@@ -95,7 +103,8 @@ int Channel::setLimit(Channel::mode_t mode, std::string const &limit, Session *s
 
 int Channel::setOperator(Channel::mode_t mode, const std::string &nickname, Session *session) {
     if (nickname.empty()) {
-        // the contents of the list MUST be sent to the user
+        NumericReply(RPL_NAMREPLY, getOperatorList()) << session << PUBLIC_CHANNEL_SYMBOL << name >> session;
+        NumericReply(RPL_ENDOFNAMES) << session << name >> session;
         return 0;
     }
     Session *participant = getParticipant(nickname);

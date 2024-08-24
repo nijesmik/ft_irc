@@ -7,6 +7,8 @@
 
 #define DELIMITER " "
 #define MESSAGE_PREFIX ":"
+#define OPERATOR_PREFIX "@"
+#define PUBLIC_CHANNEL_SYMBOL "="
 #define CRLF "\r\n"
 
 #define RPL_WELCOME 1
