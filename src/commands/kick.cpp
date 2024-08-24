@@ -14,7 +14,7 @@ void ChannelService::kick(Session *session, const Message &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> users = message.getSplitedParam(1, ',');
+    std::vector<std::string> users = message.splitParam(1, ',');
     if (users.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "KICK" >> session;
     }
@@ -31,7 +31,7 @@ void ChannelService::kick(Session *session, const Message &message) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;
     }
 
-    std::string const &comment = message.getParamsAll(2);
+    std::string const &comment = message.joinParams(2);
     for (str_iter user = users.begin(); user != users.end(); user++) {
         Session *participant = channel->getParticipant(*user);
         if (!participant) {

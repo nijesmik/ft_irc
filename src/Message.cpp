@@ -26,14 +26,13 @@ size_t Message::getParamSize() const {
     return this->params.size();
 }
 
-
 Message::command_t Message::getCommand() const {
     return this->command;
 }
 
 std::string Message::getParam(size_t index) const {
     if (index >= this->params.size()) {
-        return "";
+        return std::string();
     }
     return this->params[index];
 }
@@ -42,13 +41,16 @@ std::string Message::getParam() const {
     return this->getParam(0);
 }
 
-std::string Message::getParamsAll(int index, char ignore) const {
+std::string Message::joinParams(size_t startIndex, char ignore) const {
+    if (startIndex >= params.size()) {
+        return std::string();
+    }
+
     std::stringstream ss;
     std::string param;
 
-    while (!(param = getParam(index)).empty()) {
-        ss << param;
-        index++;
+    for (size_t i = startIndex; i < params.size(); i++) {
+        ss << params[i];
     }
 
     if (ignore && ss.peek() == ignore) {
@@ -58,7 +60,11 @@ std::string Message::getParamsAll(int index, char ignore) const {
     return ss.str();
 }
 
-std::vector<std::string> Message::getSplitedParam(int index, char delimiter) const {
+std::string Message::joinParams() const {
+    return joinParams(0, 0);
+}
+
+std::vector<std::string> Message::splitParam(int index, char delimiter) const {
     std::vector<std::string> splited;
     std::stringstream ss(getParam(index));
     std::string str;

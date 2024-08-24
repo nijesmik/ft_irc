@@ -13,8 +13,8 @@ void ChannelService::part(Session &session, const Message &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> channels = message.getSplitedParam(0, ',');
-    std::string const &reason = message.getParamsAll(1);
+    std::vector<std::string> channels = message.splitParam(0, ',');
+    std::string const &reason = message.joinParams(1);
     if (channels.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "PART" >> session;
     }

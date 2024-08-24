@@ -12,12 +12,12 @@ void ChannelService::join(Session &session, const Message &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> channels = message.getSplitedParam(0, ',');
+    std::vector<std::string> channels = message.splitParam(0, ',');
     if (channels.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "JOIN" >> session;
     }
 
-    std::vector<std::string> keys = message.getSplitedParam(1, ',');
+    std::vector<std::string> keys = message.splitParam(1, ',');
     std::vector<std::string>::iterator keyIt = keys.begin();
     for (std::vector<std::string>::iterator channelIt = channels.begin(); channelIt != channels.end(); ++channelIt) {
         if (!isValidChannel(*channelIt)) {

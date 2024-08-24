@@ -13,7 +13,7 @@ void ChannelService::topic(Session &session, const Message &message) {
     }
 
     std::string channelName = message.getParam();
-    std::string topicName = message.getParamsAll(1, ':');
+    std::string topicName = message.joinParams(1, ':');
     bool newTopic = message.getParamSize() > 1;
     Channel *channel = findChannel(channelName);
 
