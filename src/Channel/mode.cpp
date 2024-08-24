@@ -4,18 +4,21 @@
 
 #include "Channel.hpp"
 
+std::string RPL_MODE(Session *session, std::string const &channelName, std::string const &modestring,
+                     std::string const &param);
+
 int Channel::mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session) {
     switch (modeChar) {
         case 'i':
-            return (setInviteOnly(mode), 0);
+            return (setInviteOnly(session, mode), 0);
         case 't':
-            return (setTopicRestricted(mode), 0);
+            return (setTopicRestricted(session, mode), 0);
         case 'k':
-            return setKey(mode, param);
+            return setKey(session, mode, param);
         case 'l':
-            return setLimit(mode, param, session);
+            return setLimit(session, mode, param);
         case 'o':
-            return setOperator(mode, param, session);
+            return setOperator(session, mode, param);
         default:
             return 0;
     }
@@ -36,29 +39,48 @@ std::string Channel::getModeInfo() const {
     return info.str();
 }
 
-void Channel::setInviteOnly(Channel::mode_t mode) {
-    inviteOnly = mode == ADD;
+void Channel::setInviteOnly(Session *session, Channel::mode_t mode) {
+    if (mode == ADD && !inviteOnly) {
+        inviteOnly = true;
+        broadcast(RPL_MODE(session, name, "+i", ""));
+    }
+    if (mode == REMOVE && inviteOnly) {
+        inviteOnly = false;
+        broadcast(RPL_MODE(session, name, "-i", ""));
+    }
 }
 
-void Channel::setTopicRestricted(Channel::mode_t mode) {
-    topicRestricted = mode == ADD;
+void Channel::setTopicRestricted(Session *session, Channel::mode_t mode) {
+    if (mode == ADD && !topicRestricted) {
+        topicRestricted = true;
+        broadcast(RPL_MODE(session, name, "+t", ""));
+    }
+    if (mode == REMOVE && topicRestricted) {
+        topicRestricted = false;
+        broadcast(RPL_MODE(session, name, "-t", ""));
+    }
 }
 
-int Channel::setKey(Channel::mode_t mode, std::string const &key) {
+int Channel::setKey(Session *session, Channel::mode_t mode, std::string const &key) {
     if (key.empty()) {
         return 0;
     }
     if (mode == ADD) {
         this->key = key;
+        broadcast(RPL_MODE(session, name, "+k", key));
         return 1;
     }
-    this->key.clear();
+    if (!this->key.empty()) {
+        this->key.clear();
+        broadcast(RPL_MODE(session, name, "-k", ""));
+    }
     return 0;
 }
 
-int Channel::setLimit(Channel::mode_t mode, std::string const &limit, Session *session) {
+int Channel::setLimit(Session *session, Channel::mode_t mode, std::string const &limit) {
     if (mode == REMOVE) {
         this->limit = 0;
+        broadcast(RPL_MODE(session, name, "-l", ""));
         return 0;
     }
     if (limit.empty()) {
@@ -66,13 +88,14 @@ int Channel::setLimit(Channel::mode_t mode, std::string const &limit, Session *s
     }
     try {
         this->limit = Parser::parseLimit(limit);
+        broadcast(RPL_MODE(session, name, "+l", limit));
     } catch (std::exception &e) {
         NumericReply(ERR_INVALIDMODEPARAM) << session << name << "+l" << limit >> session;
     }
     return 1;
 }
 
-int Channel::setOperator(Channel::mode_t mode, const std::string &nickname, Session *session) {
+int Channel::setOperator(Session *session, Channel::mode_t mode, const std::string &nickname) {
     if (nickname.empty()) {
         NumericReply(RPL_NAMREPLY, getOperatorList()) << session << PUBLIC_CHANNEL_SYMBOL << name >> session;
         NumericReply(RPL_ENDOFNAMES) << session << name >> session;
@@ -83,10 +106,27 @@ int Channel::setOperator(Channel::mode_t mode, const std::string &nickname, Sess
         NumericReply(ERR_USERNOTINCHANNEL) << session << nickname << name >> session;
         return 1;
     }
-    if (mode == ADD) {
+    if (mode == ADD && !isOperator(participant)) {
         operators.insert(participant);
-    } else {
+        broadcast(RPL_MODE(session, name, "+o", nickname));
+    }
+    if (mode == REMOVE && isOperator(participant)) { ;
         operators.erase(participant);
+        broadcast(RPL_MODE(session, name, "-o", nickname));
     }
     return 1;
+}
+
+std::string RPL_MODE(Session *session, std::string const &channelName, std::string const &modestring,
+                     std::string const &param) {
+    std::stringstream ss;
+    ss << MESSAGE_PREFIX << session->getAddress() << DELIMITER
+       << "MODE" << DELIMITER
+       << channelName << DELIMITER
+       << modestring;
+    if (!param.empty()) {
+        ss << DELIMITER << param;
+    }
+    ss << CRLF;
+    return ss.str();
 }

@@ -47,11 +47,11 @@ public:
     // Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
     std::string getModeInfo() const;
-    void setInviteOnly(Channel::mode_t mode);
-    void setTopicRestricted(Channel::mode_t mode);
-    int setKey(Channel::mode_t mode, std::string const &key);
-    int setLimit(Channel::mode_t mode, std::string const &limit, Session *session);
-    int setOperator(Channel::mode_t mode, std::string const &nickname, Session *session);
+    void setInviteOnly(Session *session, Channel::mode_t mode);
+    void setTopicRestricted(Session *session, Channel::mode_t mode);
+    int setKey(Session *session, Channel::mode_t mode, std::string const &key);
+    int setLimit(Session *session, Channel::mode_t mode, std::string const &limit);
+    int setOperator(Session *session, Channel::mode_t mode, std::string const &nickname);
 };
 
 #endif //FT_IRC_CHANNEL_HPP
