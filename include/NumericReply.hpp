@@ -69,6 +69,9 @@
 #define ERR_CHANNELISFULL 471
 #define ERR_CHANNELISFULL_MESSAGE "Cannot join channel (+l)"
 
+#define ERR_UNKNOWNMODE 472 // "<client> <modechar> :is unknown setMode char to me"
+#define ERR_UNKNOWNMODE_MESSAGE "is unknown setMode char to me"
+
 #define ERR_INVITEONLYCHAN 473
 #define ERR_INVITEONLYCHAN_MESSAGE "Cannot join channel (+i)"
 

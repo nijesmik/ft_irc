@@ -35,6 +35,8 @@ std::string NumericReply::message(int code) {
             return ERR_PASSWDMISMATCH_MESSAGE;
         case ERR_CHANNELISFULL: // 471
             return ERR_CHANNELISFULL_MESSAGE;
+        case ERR_UNKNOWNMODE: // 472
+            return ERR_UNKNOWNMODE_MESSAGE;
         case ERR_INVITEONLYCHAN: // 473
             return ERR_INVITEONLYCHAN_MESSAGE;
         case ERR_BANNEDFROMCHAN: // 474
