@@ -74,11 +74,13 @@ void Session::updateUser(std::string const &username, std::string const &hostnam
     this->realname = realname;
 }
 
-Channel *Session::findJoinedChannel(std::string const &name) const {
-    Channels::const_iterator it = channels.find(name);
-    if (it == channels.end()) {
-        return NULL;
-    }
+bool Session::hasChannel(std::string const &channelName) const {
+    Channels::const_iterator it = channels.find(channelName);
+    return it != channels.end();
+}
+
+Channel &Session::getChannel(std::string const &channelName) {
+    Channels::const_iterator it = channels.find(channelName);
     return it->second;
 }
 

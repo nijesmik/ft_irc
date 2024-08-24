@@ -35,11 +35,12 @@ public:
     void updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
                     std::string const &realname);
 
-    Channel *findJoinedChannel(std::string const &name) const;
+    bool hasChannel(std::string const &channelName) const;
+    Channel &getChannel(std::string const &channelName);
     void leaveChannel(std::string const &name);
 
 private:
-    typedef std::map<std::string, Channel *> Channels;
+    typedef std::map<std::string, Channel &> Channels;
 
     bool passed;
     bool registered;
