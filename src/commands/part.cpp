@@ -34,7 +34,7 @@ void ChannelService::part(Session &session, std::string const &channelName, std:
     }
 
     Channel channel = session.getChannel(channelName);
-    const int remain = channel.remove(&session);
+    const int remain = channel.remove(session);
     std::string reply = RPL_CHANNELPART(session.getAddress(), channelName, reason);
     session << reply;
     if (remain) {

@@ -26,7 +26,7 @@ void ChannelService::join(Session &session, const Message &message) {
         }
 
         Channel *channel = getChannel(*channelIt);
-        channel->join(&session, keyIt != keys.end() ? *keyIt : std::string());
+        channel->join(session, keyIt != keys.end() ? *keyIt : std::string());
 
         if (keyIt != keys.end()) {
             ++keyIt;
@@ -34,7 +34,8 @@ void ChannelService::join(Session &session, const Message &message) {
     }
 }
 
-void Channel::join(Session *session, const std::string &key) {
+// 이거
+void Channel::join(Session &session, const std::string &key) {
     (void) key;
     // TODO: Channel에 session이 있는지 확인 (hasSession)
     //  MODE 설정 되어있는지 확인 (각 MODE에 따라 예외)
@@ -46,7 +47,7 @@ void Channel::join(Session *session, const std::string &key) {
     //  Channel 이 UserList를 들고 display
 
     // TODO: 나중에 방의 옵션(#, &)을 달아줘야 함
-    *this << RPL_JOIN_CHANNEL(session->getNickname(), name);
+    *this << RPL_JOIN_CHANNEL(session.getNickname(), name);
     if (!topic.empty()) {
         NumericReply(RPL_TOPIC, this->topic) << session << name >> session;
     }

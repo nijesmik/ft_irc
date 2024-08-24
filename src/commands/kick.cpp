@@ -6,11 +6,11 @@
 
 typedef std::vector<std::string>::const_iterator str_iter;
 
-std::string RPL_CHANNELKICK(Session *_operator, std::string const &channel, std::string const &user,
+std::string RPL_CHANNELKICK(Session _operator, std::string const &channel, std::string const &user,
                             std::string const &comment);
 
-void ChannelService::kick(Session *session, const Message &message) {
-    if (!session->isRegistered()) {
+void ChannelService::kick(Session &session, const Message &message) {
+    if (!session.isRegistered()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
@@ -31,22 +31,21 @@ void ChannelService::kick(Session *session, const Message &message) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;
     }
 
-    std::string comment = message.getParamsAll(2);
-    for (str_iter user = users.begin(); user != users.end(); user++) {
-        Session *participant = channel->getParticipant(*user);
-        if (!participant) {
+    const std::string comment = message.getParamsAll(2);
+    for (str_iter user = users.begin(); user != users.end(); ++user) {
+        if (!channel->hasParticipant(*user)) {
             NumericReply(ERR_USERNOTINCHANNEL) << session << *user << channelName >> session;
-        } else {
-            *channel << RPL_CHANNELKICK(session, channelName, *user, comment);
-            channel->remove(participant);
         }
+        Session participant = channel->getParticipant(*user);
+        *channel << RPL_CHANNELKICK(session, channelName, *user, comment);
+        channel->remove(participant);
     }
 }
 
-std::string RPL_CHANNELKICK(Session *_operator, std::string const &channel, std::string const &user,
+std::string RPL_CHANNELKICK(Session _operator, std::string const &channel, std::string const &user,
                             std::string const &comment) {
     std::stringstream ss;
-    ss << MESSAGE_PREFIX << _operator->getAddress() << DELIMITER
+    ss << MESSAGE_PREFIX << _operator.getAddress() << DELIMITER
        << "KICK" << DELIMITER
        << channel << DELIMITER
        << user << DELIMITER
