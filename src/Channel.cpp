@@ -88,7 +88,7 @@ int Channel::setLimit(Channel::mode_t mode, std::string const &limit, Session *s
     try {
         this->limit = Parser::parseLimit(limit);
     } catch (std::exception &e) {
-        // ERR_INVALIDMODEPARAM
+        NumericReply(ERR_INVALIDMODEPARAM) << session << name << "+l" << limit >> session;
     }
     return 1;
 }

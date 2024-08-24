@@ -47,6 +47,8 @@ std::string NumericReply::message(int code) {
             return ERR_BADCHANMASK_MESSAGE;
         case ERR_CHANOPRIVSNEEDED: // 482
             return ERR_CHANOPRIVSNEEDED_MESSAGE;
+        case ERR_INVALIDMODEPARAM: // 696
+            return ERR_INVALIDMODEPARAM_MESSAGE;
         default:
             return std::string();
     }

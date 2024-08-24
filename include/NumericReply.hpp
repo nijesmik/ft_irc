@@ -89,6 +89,9 @@
 #define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
 #define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
 
+#define ERR_INVALIDMODEPARAM 696 // "<client> <target chan/user> <mode char> <parameter> :<description>"
+#define ERR_INVALIDMODEPARAM_MESSAGE "Invalid parameter for mode"
+
 #include <sstream>
 #include <iomanip>
 #include "Session.hpp"
