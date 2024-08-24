@@ -10,18 +10,6 @@
 #include "NumericReply.hpp"
 
 class Channel {
-private:
-    typedef std::set<Session *> Sessions;
-
-    const std::string name;
-    Sessions operators;
-    std::string topic;
-    Sessions participants;
-    bool inviteOnly;
-    bool topicRestricted;
-    std::string key;
-    int limit;
-
 public:
     typedef enum mode_e {
         ADD, // +
@@ -47,6 +35,20 @@ public:
     // Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
     std::string getModeInfo() const;
+
+private:
+    typedef std::set<Session *> Sessions;
+
+    const std::string name;
+    Sessions operators;
+    std::string topic;
+    Sessions participants;
+    bool inviteOnly;
+    bool topicRestricted;
+    std::string key;
+    int limit;
+
+    // Channel/mode.cpp
     void setInviteOnly(Session *session, Channel::mode_t mode);
     void setTopicRestricted(Session *session, Channel::mode_t mode);
     int setKey(Session *session, Channel::mode_t mode, std::string const &key);
