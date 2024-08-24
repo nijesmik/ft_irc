@@ -67,5 +67,5 @@ bool isCharacterValid(char c) {
 }
 
 bool isNicknameDuplicate(std::string const &nickname) {
-    return SessionService::instance()->find(nickname) != NULL;
+    return SessionService::instance()->getSession(nickname) != NULL;
 }
