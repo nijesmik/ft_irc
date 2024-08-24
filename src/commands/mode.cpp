@@ -46,23 +46,6 @@ void ChannelService::mode(Session *session, const Message &message) {
     }
 }
 
-int Channel::mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session) {
-    switch (modeChar) {
-        case 'i':
-            return (setInviteOnly(mode), 0);
-        case 't':
-            return (setTopicRestricted(mode), 0);
-        case 'k':
-            return setKey(mode, param);
-        case 'l':
-            return setLimit(mode, param, session);
-        case 'o':
-            return setOperator(mode, param, session);
-        default:
-            return 0;
-    }
-}
-
 bool isPlusMinus(char c) {
     return c == '+' || c == '-';
 }
@@ -84,19 +67,4 @@ bool isValidModeString(std::string const &modestring, Session *session) {
         }
     }
     return true;
-}
-
-std::string Channel::getModeInfo() const {
-    std::stringstream info;
-    info << name << DELIMITER << "+";
-    if (inviteOnly) {
-        info << "i";
-    }
-    if (topicRestricted) {
-        info << "t";
-    }
-    if (limit) {
-        info << "l" << DELIMITER << limit;
-    }
-    return info.str();
 }
