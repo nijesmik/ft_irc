@@ -36,9 +36,9 @@ void ChannelService::kick(Session &session, const Message &message) {
         if (!channel->hasParticipant(*user)) {
             NumericReply(ERR_USERNOTINCHANNEL) << session << *user << channelName >> session;
         }
-        Session participant = channel->getParticipant(*user);
+        Session *participant = channel->getParticipant(*user);
         *channel << RPL_CHANNELKICK(session, channelName, *user, comment);
-        channel->remove(participant);
+        channel->remove(*participant);
     }
 }
 

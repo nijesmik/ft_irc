@@ -40,7 +40,7 @@ void Channel::join(Session &session, const std::string &key) {
     // TODO: Channel에 session이 있는지 확인 (hasSession)
     //  MODE 설정 되어있는지 확인 (각 MODE에 따라 예외)
 
-    participants.insert(session);
+    participants.insert(&session);
 
     std::string userList;
     // TODO: Operator 인지 아닌지 구분하기

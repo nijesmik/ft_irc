@@ -8,10 +8,10 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-int Channel::remove(Session &session) {
+size_t Channel::remove(Session &session) {
     session.leaveChannel(name);
-    operators.erase(session);
-    participants.erase(session);
+    operators.erase(&session);
+    participants.erase(&session);
     return participants.size();
 }
 
@@ -26,16 +26,16 @@ void Channel::broadcast(std::string const &message) {
 }
 
 bool Channel::isOperator(Session &session) const {
-    return operators.find(session) != operators.end();
+    return operators.find(&session) != operators.end();
 }
 
 bool Channel::isParticipant(Session &session) const {
-    return participants.find(session) != participants.end();
+    return participants.find(&session) != participants.end();
 }
 
 bool Channel::hasParticipant(const std::string &nickname) const {
     for (Sessions::const_iterator it = participants.begin(); it != participants.end(); ++it) {
-        if (it->getNickname() == nickname) {
+        if ((*it)->getNickname() == nickname) {
             return true;
         }
     }
@@ -43,13 +43,14 @@ bool Channel::hasParticipant(const std::string &nickname) const {
 }
 
 // 무조건 있다고 가정 (has -> get)
-Session &Channel::getParticipant(std::string const &nickname) {
+Session *Channel::getParticipant(std::string const &nickname) {
     Sessions::const_iterator it;
     for (it = participants.begin(); it != participants.end(); ++it) {
-        if (it->getNickname() == nickname) {
-            return it;
+        if ((*it)->getNickname() == nickname) {
+            return *it;
         }
     }
+    return NULL;
 }
 
 void Channel::setTopic(std::string const &topicName) {
