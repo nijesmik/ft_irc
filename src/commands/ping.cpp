@@ -1,12 +1,18 @@
 #include "ChatService.hpp"
 
-#define RPL_PONG(params) ("PONG :" + params + CRLF)
+std::string RPL_PONG(std::string const &token);
 
 void ChatService::ping(Session &session, const Message &message) {
-    std::string token = message.getParam();
+    std::string const &token = message.getParamsAll(0);
     if (token.empty()) {
-        return session << NumericReply::get(ERR_NEEDMOREPARAMS, "PING");
-    } else {
-        session << RPL_PONG(token);
-     }
+        return NumericReply(ERR_NEEDMOREPARAMS) << session << "PING" >> session;
+    }
+    session << RPL_PONG(token);
+}
+
+std::string RPL_PONG(std::string const &token) {
+    std::stringstream ss;
+    ss << "PONG" << DELIMITER
+       << MESSAGE_PREFIX << token << CRLF;
+    return ss.str();
 }
