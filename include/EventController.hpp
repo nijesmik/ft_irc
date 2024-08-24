@@ -35,8 +35,8 @@ public:
     EventController(int port, std::string const &password);
     ~EventController();
 
-    void listen(Socket *socket);
-    void unlisten(Session &session);
+    void listen(const Socket &socket) const;
+    void unlisten(const Session &session) const;
     int pollEvents();
     void handleEvents(int nev);
 };
