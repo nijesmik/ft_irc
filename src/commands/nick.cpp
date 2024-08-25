@@ -5,7 +5,7 @@
 #include "ChatService.hpp"
 #include "SessionService.hpp"
 
-#define RPL_NICKNAMECHANGED_MESSAGE(oldNick, newNick) (":" + oldNick + " NICK " + newNick + CRLF)
+std::string RPL_NICK(std::string const &oldNick, std::string const &newNick);
 
 typedef std::string::const_iterator str_iter;
 bool isCharacterValid(char c);
@@ -14,24 +14,24 @@ bool isNicknameDuplicate(std::string const &nickname);
 
 void ChatService::nick(Session &session, const Message &message) {
     if (!session.isPassed()) {
-        return session << NumericReply::get(ERR_NOTREGISTERED);
+        return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::string nickname = message.getParam();
+    std::string const &nickname = message.getParam();
     if (nickname.empty()) {
-        return session << NumericReply::get(ERR_NONICKNAMEGIVEN);
+        return NumericReply(ERR_NONICKNAMEGIVEN) << session >> session;
     }
 
     if (!isNicknameValid(nickname)) {
-        return session << NumericReply::get(ERR_ERRONEUSNICKNAME, nickname);
+        return NumericReply(ERR_ERRONEUSNICKNAME) << session << nickname >> session;
     }
 
     if (isNicknameDuplicate(nickname)) {
-        return session << NumericReply::get(ERR_NICKNAMEINUSE, nickname);
+        return NumericReply(ERR_NICKNAMEINUSE) << session << nickname >> session;
     }
 
     if (!session.getNickname().empty()) {
-        session << RPL_NICKNAMECHANGED_MESSAGE(session.getNickname(), nickname);
+        session << RPL_NICK(session.getNickname(), nickname);
     }
 
     session.updateNickname(nickname);
@@ -68,4 +68,12 @@ bool isCharacterValid(char c) {
 
 bool isNicknameDuplicate(std::string const &nickname) {
     return SessionService::instance()->find(nickname) != NULL;
+}
+
+std::string RPL_NICK(std::string const &oldNick, std::string const &newNick) {
+    std::stringstream ss;
+    ss << MESSAGE_PREFIX << oldNick << DELIMITER
+       << "NICK" << DELIMITER
+       << newNick << CRLF;
+    return ss.str();
 }

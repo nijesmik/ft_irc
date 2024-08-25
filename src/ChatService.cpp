@@ -9,12 +9,12 @@ ChatService::ChatService(std::string const &password) : password(password) {}
 ChatService::~ChatService() {}
 
 void ChatService::unknown(Session &session, Message const &message) {
-    session << NumericReply::get(ERR_UNKNOWNCOMMAND, message.getParam(0));
+    NumericReply(ERR_UNKNOWNCOMMAND) << session << message.getParam() >> session;
 }
 
 void ChatService::_register(Session &session) {
-    session << NumericReply::get(RPL_WELCOME, session);
-    session << NumericReply::get(RPL_YOURHOST, session);
-    session << NumericReply::get(RPL_CREATED, session);
+    NumericReply(RPL_WELCOME, session.getAddress()) << session >> session;
+    NumericReply(RPL_YOURHOST, session.getServername()) << session >> session;
+    NumericReply(RPL_CREATED) << session >> session;
     session.setRegistered();
 }

@@ -4,8 +4,7 @@
 
 #include "ChannelService.hpp"
 
-#define RPL_JOIN_CHANNEL(nickname, channelName) (nickname + " JOIN " + channelName)
-
+std::string RPL_JOIN(Session const &session, std::string const &channelName);
 bool isValidChannel(const std::string &channel);
 
 void ChannelService::join(Session &session, const Message &message) {
@@ -13,12 +12,12 @@ void ChannelService::join(Session &session, const Message &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> channels = message.getSplitedParam(0, ',');
+    std::vector<std::string> channels = message.splitParam(0, ',');
     if (channels.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "JOIN" >> session;
     }
 
-    std::vector<std::string> keys = message.getSplitedParam(1, ',');
+    std::vector<std::string> keys = message.splitParam(1, ',');
     std::vector<std::string>::iterator keyIt = keys.begin();
     for (std::vector<std::string>::iterator channelIt = channels.begin(); channelIt != channels.end(); ++channelIt) {
         if (!isValidChannel(*channelIt)) {
@@ -46,12 +45,12 @@ void Channel::join(Session *session, const std::string &key) {
     //  Channel 이 UserList를 들고 display
 
     // TODO: 나중에 방의 옵션(#, &)을 달아줘야 함
-    *this << RPL_JOIN_CHANNEL(session->getNickname(), name);
+    *this << RPL_JOIN(*session, name);
     if (!topic.empty()) {
         NumericReply(RPL_TOPIC, this->topic) << session << name >> session;
     }
     NumericReply(RPL_NAMREPLY, userList) << session << name >> session;
-    NumericReply(RPL_ENDOFNAMES, "End of /NAMES list") << session << name >> session;
+    NumericReply(RPL_ENDOFNAMES) << session << name >> session;
 }
 
 bool isValidChannel(const std::string &channel) {
@@ -59,4 +58,12 @@ bool isValidChannel(const std::string &channel) {
         return false;
     }
     return (channel[0] == '#' || channel[0] == '&');
+}
+
+std::string RPL_JOIN(Session const &session, std::string const &channelName) {
+    std::stringstream ss;
+    ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
+       << "JOIN" << DELIMITER
+       << channelName << CRLF;
+    return ss.str();
 }

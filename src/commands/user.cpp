@@ -6,15 +6,15 @@
 
 void ChatService::user(Session &session, Message const &message) {
     if (!session.isPassed()) {
-        return session << NumericReply::get(ERR_NOTREGISTERED);
+        return NumericReply(ERR_NOTREGISTERED) >> session;
     }
     if (session.isRegistered()) {
-        return session << NumericReply::get(ERR_ALREADYREGISTRED);
+        return NumericReply(ERR_ALREADYREGISTRED) << session >> session;
     }
 
-    std::string realname = message.getParamsAll(3, ':');
+    std::string const &realname = message.joinParams(3, ':');
     if (realname.empty()) {
-        return session << NumericReply::get(ERR_NEEDMOREPARAMS, "USER");
+        return NumericReply(ERR_NEEDMOREPARAMS) << "USER" >> session;
     }
 
     session.updateUser(message.getParam(0), message.getParam(1), message.getParam(2), realname);

@@ -21,23 +21,14 @@
 #define RPL_NOTOPIC 331
 #define RPL_NOTOPIC_MESSAGE "No topic is set"
 
-#define RPL_TOPIC 332
+#define RPL_TOPIC 332 // "<client> <channel> :<topic>"
 #define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
 
-#define RPL_NAMREPLY 353
+#define RPL_NAMREPLY 353 // "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 #define RPL_NAMREPLY_MESSAGE(userList) (userList)
 
-#define RPL_ENDOFNAMES 366
-#define RPL_ENDOFNAMES_MESSAGE(param) (param)
-
-#define RPL_TOPIC 332
-#define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
-
-#define RPL_NAMREPLY 353
-#define RPL_NAMREPLY_MESSAGE(userList) (userList)
-
-#define RPL_ENDOFNAMES 366
-#define RPL_ENDOFNAMES_MESSAGE(param) (param)
+#define RPL_ENDOFNAMES 366 // "<client> <channel> :End of /NAMES list"
+#define RPL_ENDOFNAMES_MESSAGE "End of /NAMES list"
 
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
@@ -100,7 +91,7 @@
 class NumericReply {
 public:
     NumericReply(int code);
-    NumericReply(int code, std::string const  &param);
+    NumericReply(int code, std::string const &param);
 
     NumericReply &operator<<(char const *str);
     NumericReply &operator<<(std::string const &str);
@@ -111,21 +102,14 @@ public:
     void operator>>(Channel &channel);
     void operator>>(Channel *channel);
 
-    static std::string get(int code);
-    static std::string get(int code, std::string const &param);
-    static std::string get(int code, Session const &session);
-    static std::string channelReply(int code, std::string const &nickname, std::string const &channelName);
-
 private:
     const std::string _message;
     std::stringstream _ss;
 
-    static std::string message(int code);
-    static std::string message(int code, Session const &session);
+    std::string message(int code);
     std::string message(int code, std::string const &param);
-    static void append(std::stringstream &ss, int code);
-    static void append(std::stringstream &ss, std::string const &str);
-    static void appendMessage(std::stringstream &ss, std::string const &message);
+    void appendCode(int code);
+    void appendMessage();
 };
 
 #endif //FT_IRC_NUMERICREPLY_HPP

@@ -5,15 +5,15 @@
 #include "ChatService.hpp"
 
 void ChatService::pass(Session &session, const Message &message) {
-    std::string pw = message.getParam();
+    std::string const &pw = message.getParam();
     if (pw.empty()) {
-        return session << NumericReply::get(ERR_NEEDMOREPARAMS, "PASS");
+        return NumericReply(ERR_NEEDMOREPARAMS) << "PASS" >> session;
     }
     if (pw != this->password) {
-        return session << NumericReply::get(ERR_PASSWDMISMATCH);
+        return NumericReply(ERR_PASSWDMISMATCH) >> session;
     }
     if (session.isPassed()) {
-        return session << NumericReply::get(ERR_ALREADYREGISTRED);
+        return NumericReply(ERR_ALREADYREGISTRED) >> session;
     }
     session.setPassed();
 }

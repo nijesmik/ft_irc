@@ -4,19 +4,19 @@
 
 #include "ChannelService.hpp"
 
-#define RPL_CHANNELPART(clientAddress, channelName, reason) (":" + clientAddress + " PART " + channelName + " " + reason + CRLF)
+std::string RPL_PART(Session &session, const std::string &channelName, const std::string &reason);
 
 typedef std::vector<std::string>::const_iterator iterator;
 
 void ChannelService::part(Session &session, const Message &message) {
     if (!session.isRegistered()) {
-        return session << NumericReply::get(ERR_NOTREGISTERED);
+        return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> channels = message.getSplitedParam(0, ',');
-    std::string reason = message.getParamsAll(1);
+    std::vector<std::string> channels = message.splitParam(0, ',');
+    std::string const &reason = message.joinParams(1);
     if (channels.empty()) {
-        return session << NumericReply::get(ERR_NEEDMOREPARAMS, "PART");
+        return NumericReply(ERR_NEEDMOREPARAMS) << session << "PART" >> session;
     }
 
     for (iterator it = channels.begin(); it != channels.end(); it++) {
@@ -26,19 +26,28 @@ void ChannelService::part(Session &session, const Message &message) {
 
 void ChannelService::part(Session &session, std::string const &channelName, std::string const &reason) {
     if (!findChannel(channelName)) {
-        return session << NumericReply::channelReply(ERR_NOSUCHCHANNEL, session.getNickname(), channelName);
+        return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;
     }
 
     Channel *channel = session.findJoinedChannel(channelName);
     if (!channel) {
-        return session << NumericReply::channelReply(ERR_NOTONCHANNEL, session.getNickname(), channelName);
+        return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
     }
 
     int remain = channel->remove(&session);
-    std::string reply = RPL_CHANNELPART(session.getAddress(), channelName, reason);
+    std::string const &reply = RPL_PART(session, channelName, reason);
     session << reply;
     if (remain) {
         return channel->broadcast(reply);
     }
     deleteChannel(channelName);
+}
+
+std::string RPL_PART(Session &session, const std::string &channelName, const std::string &reason) {
+    std::stringstream ss;
+    ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
+       << "PART" << DELIMITER
+       << channelName << DELIMITER
+       << reason << CRLF;
+    return ss.str();
 }
