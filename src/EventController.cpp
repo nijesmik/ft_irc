@@ -5,39 +5,37 @@
 #include "EventController.hpp"
 
 EventController::EventController(int port, std::string const &password) :
-        connectionService(password),
-        sessionService(SessionRepository::init(port)),
+        connectionService(port, password, SessionRepository::init()),
         channelService(SessionRepository::instance()),
         kq(kqueue()),
         events(NULL) {
     if (kq < 0) {
         throw std::runtime_error("Error: kqueue creation failed");
     }
-    listen(sessionService);
+    listen(connectionService);
 }
 
 EventController::~EventController() {
     close(kq);
-    delete sessionService;
-    sessionService = NULL;
+    SessionRepository::destroy();
 }
 
-void EventController::listen(Socket *socket) {
+void EventController::listen(Socket const &socket) {
     struct kevent changelist[NCHANGES];
-    EV_SET(changelist, socket->getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
+    EV_SET(changelist, socket.getFd(), EVFILT_READ, EV_ADD | EV_ENABLE, 0, 0, NULL); // initialize changelist
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
         throw std::runtime_error("Error: event registration failed");
     }
 }
 
-void EventController::unlisten(Session &session) {
+void EventController::unlisten(Session const &session) {
     struct kevent changelist[NCHANGES];
     EV_SET(changelist, session.getFd(), EVFILT_READ, EV_DELETE, 0, 0, NULL);
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
         throw std::runtime_error("Error: event delete failed");
     }
 
-    sessionService->disconnect(session.getFd());
+    connectionService.disconnect(session.getFd());
 }
 
 int EventController::pollEvents() {
@@ -48,7 +46,7 @@ int EventController::pollEvents() {
 }
 
 bool EventController::isConnectionEvent(Socket::fd_t eventSocketFd) {
-    return eventSocketFd == sessionService->getFd();
+    return eventSocketFd == connectionService.getFd();
 }
 
 bool EventController::isReadableEvent(int index) {
@@ -66,12 +64,12 @@ void EventController::handleEvent(int index) {
     Socket::fd_t eventSocketFd = static_cast<int>(events[index].ident);
 
     if (isConnectionEvent(eventSocketFd)) {
-        Session *session = sessionService->connect();
-        return listen(session);
+        Session *session = connectionService.connect();
+        return listen(*session);
     }
 
     if (isReadableEvent(index)) {
-        Session *session = sessionService->find(eventSocketFd);
+        Session *session = connectionService.getSession(eventSocketFd);
         session->read() >> message;
         handleMessage(session, message);
     }

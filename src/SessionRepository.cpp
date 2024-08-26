@@ -6,12 +6,7 @@
 
 SessionRepository *SessionRepository::singleton = NULL;
 
-SessionRepository::SessionRepository(int port) {
-    setNonBlocking();
-    allowReusePort();
-    bind(port);
-    open();
-}
+SessionRepository::SessionRepository() {}
 
 SessionRepository::~SessionRepository() {
     for (SessionRepository::iterator it = sessions.begin(); it != sessions.end(); it++) {
@@ -19,9 +14,9 @@ SessionRepository::~SessionRepository() {
     }
 }
 
-SessionRepository *SessionRepository::init(int port) {
+SessionRepository *SessionRepository::init() {
     if (singleton == NULL) {
-        singleton = new SessionRepository(port);
+        singleton = new SessionRepository();
         return singleton;
     }
     return NULL;
@@ -31,25 +26,9 @@ SessionRepository *SessionRepository::instance() {
     return singleton;
 }
 
-Session *SessionRepository::connect() {
-    struct sockaddr_in address;
-    socklen_t addressLength = sizeof(address);
-
-    // accept new connection
-    fd_t socket = ::accept(fd, (struct sockaddr *) &address, &addressLength);
-    if (socket < 0) {
-        throw std::runtime_error("Error: connection accept failed");
-    }
-
-    // display new connection
-    std::string ip = std::string(inet_ntoa(address.sin_addr));
-    int port = ntohs(address.sin_port);
-    std::cout << "New connection from " << ip << ":" << port << std::endl;
-
-    // register new session
-    Session *session = new Session(socket);
-    sessions[socket] = session;
-    return session;
+void SessionRepository::destroy() {
+    delete singleton;
+    singleton = NULL;
 }
 
 Session *SessionRepository::find(Socket::fd_t sessionFd) {
@@ -65,17 +44,14 @@ Session *SessionRepository::find(std::string const &nickname) {
     return NULL;
 }
 
-void SessionRepository::disconnect(Socket::fd_t sessionFd) {
-    if (close(sessionFd) < 0) {
-        throw std::runtime_error("Error: session close failed");
-    }
+void SessionRepository::add(Session *session) {
+    sessions[session->getFd()] = session;
+}
 
-    std::map<Socket::fd_t, Session *>::iterator it = sessions.find(sessionFd);
+void SessionRepository::remove(Socket::fd_t sessionFd) {
+    SessionRepository::iterator it = sessions.find(sessionFd);
     if (it != sessions.end()) {
         sessions.erase(it);
-    } else {
-        throw std::runtime_error("Error: session close failed");
+        delete it->second;
     }
-
-    delete it->second;
 }

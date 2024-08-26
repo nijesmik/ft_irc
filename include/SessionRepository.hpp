@@ -6,24 +6,23 @@
 #define FT_IRC_SESSIONREPOSITORY_HPP
 
 #include <map>
-#include <arpa/inet.h> // inet_ntoa, htons
-#include "Socket.hpp"
 #include "Session.hpp"
 
-class SessionRepository : public Socket {
+class SessionRepository {
 public:
-    static SessionRepository *init(int port);
+    static SessionRepository *init();
     static SessionRepository *instance();
+    static void destroy();
 
     ~SessionRepository();
 
-    Session *connect();
+    void add(Session *session);
     Session *find(Socket::fd_t sessionFd);
     Session *find(std::string const &nickname);
-    void disconnect(Socket::fd_t sessionFd);
+    void remove(Socket::fd_t sessionFd);
 
 private:
-    SessionRepository(int port);
+    SessionRepository();
     SessionRepository(SessionRepository const &other);
     SessionRepository &operator=(SessionRepository const &other);
 

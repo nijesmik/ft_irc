@@ -20,7 +20,6 @@
 class EventController {
 private:
     ConnectionService connectionService;
-    SessionRepository *sessionService;
     ChannelService channelService;
 
     int kq;
@@ -35,8 +34,8 @@ public:
     EventController(int port, std::string const &password);
     ~EventController();
 
-    void listen(Socket *socket);
-    void unlisten(Session &session);
+    void listen(Socket const &socket);
+    void unlisten(Session const &session);
     int pollEvents();
     void handleEvents(int nev);
 };

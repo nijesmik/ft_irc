@@ -6,14 +6,21 @@
 #define FT_IRC_CONNECTIONSERVICE_HPP
 
 #include <string>
+#include <arpa/inet.h> // inet_ntoa, htons
+#include "Socket.hpp"
+#include "SessionRepository.hpp"
 #include "Session.hpp"
 #include "Message.hpp"
 #include "NumericReply.hpp"
 
-class ConnectionService {
+class ConnectionService : public Socket {
 public:
-    ConnectionService(std::string const &password);
+    ConnectionService(int port, std::string const &password, SessionRepository *repository);
     ~ConnectionService();
+
+    Session *connect();
+    void disconnect(Socket::fd_t sessionFd);
+    Session *getSession(Socket::fd_t sessionFd);
 
     void unknown(Session &session, Message const &message);
     void pass(Session &session, Message const &message);
@@ -23,6 +30,7 @@ public:
 
 private:
     std::string password;
+    SessionRepository *sessionRepository;
 
     void _register(Session &session);
 };
