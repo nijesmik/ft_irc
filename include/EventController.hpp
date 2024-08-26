@@ -9,7 +9,7 @@
 #include <sys/event.h> // kqueue
 #include <unistd.h> // kqueue close
 #include <cstddef> // NULL
-#include "SessionService.hpp"
+#include "SessionRepository.hpp"
 #include "ChatService.hpp"
 #include "ChannelService.hpp"
 #include "Message.hpp"
@@ -20,7 +20,7 @@
 class EventController {
 private:
     ChatService chatService;
-    SessionService *sessionService;
+    SessionRepository *sessionService;
     ChannelService channelService;
 
     int kq;

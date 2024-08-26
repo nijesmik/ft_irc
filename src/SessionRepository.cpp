@@ -2,36 +2,36 @@
 // Created by 김세진 on 8/14/24.
 //
 
-#include "SessionService.hpp"
+#include "SessionRepository.hpp"
 
-SessionService *SessionService::singleton = NULL;
+SessionRepository *SessionRepository::singleton = NULL;
 
-SessionService::SessionService(int port) {
+SessionRepository::SessionRepository(int port) {
     setNonBlocking();
     allowReusePort();
     bind(port);
     open();
 }
 
-SessionService::~SessionService() {
-    for (SessionService::iterator it = sessions.begin(); it != sessions.end(); it++) {
+SessionRepository::~SessionRepository() {
+    for (SessionRepository::iterator it = sessions.begin(); it != sessions.end(); it++) {
         delete it->second;
     }
 }
 
-SessionService *SessionService::init(int port) {
+SessionRepository *SessionRepository::init(int port) {
     if (singleton == NULL) {
-        singleton = new SessionService(port);
+        singleton = new SessionRepository(port);
         return singleton;
     }
     return NULL;
 }
 
-SessionService *SessionService::instance() {
+SessionRepository *SessionRepository::instance() {
     return singleton;
 }
 
-Session *SessionService::connect() {
+Session *SessionRepository::connect() {
     struct sockaddr_in address;
     socklen_t addressLength = sizeof(address);
 
@@ -52,12 +52,12 @@ Session *SessionService::connect() {
     return session;
 }
 
-Session *SessionService::find(Socket::fd_t sessionFd) {
+Session *SessionRepository::find(Socket::fd_t sessionFd) {
     return sessions[sessionFd];
 }
 
-Session *SessionService::find(std::string const &nickname) {
-    for (SessionService::iterator it = sessions.begin(); it != sessions.end(); it++) {
+Session *SessionRepository::find(std::string const &nickname) {
+    for (SessionRepository::iterator it = sessions.begin(); it != sessions.end(); it++) {
         if (it->second->getNickname() == nickname) {
             return it->second;
         }
@@ -65,12 +65,12 @@ Session *SessionService::find(std::string const &nickname) {
     return NULL;
 }
 
-void SessionService::disconnect(Socket::fd_t sessionFd) {
+void SessionRepository::disconnect(Socket::fd_t sessionFd) {
     if (close(sessionFd) < 0) {
-      throw std::runtime_error("Error: session close failed");
+        throw std::runtime_error("Error: session close failed");
     }
 
-    std::map<Socket::fd_t, Session*>::iterator it = sessions.find(sessionFd);
+    std::map<Socket::fd_t, Session *>::iterator it = sessions.find(sessionFd);
     if (it != sessions.end()) {
         sessions.erase(it);
     } else {

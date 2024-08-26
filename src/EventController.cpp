@@ -6,8 +6,8 @@
 
 EventController::EventController(int port, std::string const &password) :
         chatService(password),
-        sessionService(SessionService::init(port)),
-        channelService(SessionService::instance()),
+        sessionService(SessionRepository::init(port)),
+        channelService(SessionRepository::instance()),
         kq(kqueue()),
         events(NULL) {
     if (kq < 0) {

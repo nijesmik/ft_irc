@@ -3,7 +3,7 @@
 //
 
 #include "ChatService.hpp"
-#include "SessionService.hpp"
+#include "SessionRepository.hpp"
 
 std::string RPL_NICK(std::string const &oldNick, std::string const &newNick);
 
@@ -67,7 +67,7 @@ bool isCharacterValid(char c) {
 }
 
 bool isNicknameDuplicate(std::string const &nickname) {
-    return SessionService::instance()->find(nickname) != NULL;
+    return SessionRepository::instance()->find(nickname) != NULL;
 }
 
 std::string RPL_NICK(std::string const &oldNick, std::string const &newNick) {
