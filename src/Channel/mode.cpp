@@ -24,7 +24,7 @@ int Channel::mode(Channel::mode_t mode, char modeChar, const std::string &param,
     }
 }
 
-std::string Channel::getModeInfo() const {
+void Channel::displayMode(Session *session) const {
     std::stringstream info;
     info << name << DELIMITER << "+";
     if (inviteOnly) {
@@ -36,7 +36,7 @@ std::string Channel::getModeInfo() const {
     if (limit) {
         info << "l" << DELIMITER << limit;
     }
-    return info.str();
+    return NumericReply(RPL_CHANNELMODEIS) << session << info.str() >> session;
 }
 
 void Channel::setInviteOnly(Session *session, Channel::mode_t mode) {

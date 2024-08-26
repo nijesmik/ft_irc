@@ -21,7 +21,7 @@ void ChannelService::mode(Session *session, const Message &message) {
 
     std::string const &modestring = message.getParam(1);
     if (modestring.empty()) {
-        return NumericReply(RPL_CHANNELMODEIS) << session << channel->getModeInfo() >> session;
+        return channel->displayMode(session);
     }
     if (!channel->isOperator(session)) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;

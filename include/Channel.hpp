@@ -34,7 +34,7 @@ public:
 
     // src/Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
-    std::string getModeInfo() const;
+    void displayMode(Session *session) const;
 
     // src/Channel/topic.cpp
     void setTopic(Session *session, std::string const &topicName);
