@@ -30,7 +30,7 @@ public:
 
     void broadcast(std::string const &message);
     void join(Session *session, const std::string &key);
-    size_t remove(Session *session);
+    size_t removeParticipant(Session *session);
 
     // src/Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);

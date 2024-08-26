@@ -34,7 +34,7 @@ void ChannelService::part(Session &session, std::string const &channelName, std:
         return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
     }
 
-    int remain = channel->remove(&session);
+    int remain = channel->removeParticipant(&session);
     std::string const &reply = RPL_PART(session, channelName, reason);
     session << reply;
     if (remain) {

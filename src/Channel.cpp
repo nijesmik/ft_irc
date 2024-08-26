@@ -8,7 +8,7 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-size_t Channel::remove(Session *session) {
+size_t Channel::removeParticipant(Session *session) {
     session->leaveChannel(name);
     operators.erase(session);
     participants.erase(session);
