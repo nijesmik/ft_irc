@@ -1,8 +1,8 @@
-#include "ChatService.hpp"
+#include "ConnectionService.hpp"
 
 std::string RPL_PONG(std::string const &token);
 
-void ChatService::ping(Session &session, const Message &message) {
+void ConnectionService::ping(Session &session, const Message &message) {
     std::string const &token = message.joinParams();
     if (token.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "PING" >> session;

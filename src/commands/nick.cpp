@@ -2,7 +2,7 @@
 // Created by 김세진 on 8/18/24.
 //
 
-#include "ChatService.hpp"
+#include "ConnectionService.hpp"
 #include "SessionRepository.hpp"
 
 std::string RPL_NICK(std::string const &oldNick, std::string const &newNick);
@@ -12,7 +12,7 @@ bool isCharacterValid(char c);
 bool isNicknameValid(std::string const &nickname);
 bool isNicknameDuplicate(std::string const &nickname);
 
-void ChatService::nick(Session &session, const Message &message) {
+void ConnectionService::nick(Session &session, const Message &message) {
     if (!session.isPassed()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }

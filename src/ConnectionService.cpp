@@ -2,17 +2,17 @@
 // Created by 김세진 on 8/16/24.
 //
 
-#include "ChatService.hpp"
+#include "ConnectionService.hpp"
 
-ChatService::ChatService(std::string const &password) : password(password) {}
+ConnectionService::ConnectionService(std::string const &password) : password(password) {}
 
-ChatService::~ChatService() {}
+ConnectionService::~ConnectionService() {}
 
-void ChatService::unknown(Session &session, Message const &message) {
+void ConnectionService::unknown(Session &session, Message const &message) {
     NumericReply(ERR_UNKNOWNCOMMAND) << session << message.getParam() >> session;
 }
 
-void ChatService::_register(Session &session) {
+void ConnectionService::_register(Session &session) {
     NumericReply(RPL_WELCOME, session.getAddress()) << session >> session;
     NumericReply(RPL_YOURHOST, session.getServername()) << session >> session;
     NumericReply(RPL_CREATED) << session >> session;

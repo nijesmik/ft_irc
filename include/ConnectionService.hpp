@@ -2,18 +2,18 @@
 // Created by 김세진 on 8/16/24.
 //
 
-#ifndef FT_IRC_CHATSERVICE_HPP
-#define FT_IRC_CHATSERVICE_HPP
+#ifndef FT_IRC_CONNECTIONSERVICE_HPP
+#define FT_IRC_CONNECTIONSERVICE_HPP
 
 #include <string>
 #include "Session.hpp"
 #include "Message.hpp"
 #include "NumericReply.hpp"
 
-class ChatService {
+class ConnectionService {
 public:
-    ChatService(std::string const &password);
-    ~ChatService();
+    ConnectionService(std::string const &password);
+    ~ConnectionService();
 
     void unknown(Session &session, Message const &message);
     void pass(Session &session, Message const &message);
@@ -27,4 +27,4 @@ private:
     void _register(Session &session);
 };
 
-#endif //FT_IRC_CHATSERVICE_HPP
+#endif //FT_IRC_CONNECTIONSERVICE_HPP

@@ -2,9 +2,9 @@
 // Created by 김세진 on 8/21/24.
 //
 
-#include "ChatService.hpp"
+#include "ConnectionService.hpp"
 
-void ChatService::user(Session &session, Message const &message) {
+void ConnectionService::user(Session &session, Message const &message) {
     if (!session.isPassed()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }

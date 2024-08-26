@@ -5,7 +5,7 @@
 #include "EventController.hpp"
 
 EventController::EventController(int port, std::string const &password) :
-        chatService(password),
+        connectionService(password),
         sessionService(SessionRepository::init(port)),
         channelService(SessionRepository::instance()),
         kq(kqueue()),
@@ -80,15 +80,15 @@ void EventController::handleEvent(int index) {
 void EventController::handleMessage(Session *session, Message const &message) {
     switch (message.getCommand()) {
         case Message::UNKNOWN:
-            return chatService.unknown(*session, message);
+            return connectionService.unknown(*session, message);
         case Message::PASS:
-            return chatService.pass(*session, message);
+            return connectionService.pass(*session, message);
         case Message::NICK:
-            return chatService.nick(*session, message);
+            return connectionService.nick(*session, message);
         case Message::USER:
-            return chatService.user(*session, message);
+            return connectionService.user(*session, message);
         case Message::PING:
-            return chatService.ping(*session, message);
+            return connectionService.ping(*session, message);
         case Message::QUIT:
             channelService.quit(session, message);
             return unlisten(*session);

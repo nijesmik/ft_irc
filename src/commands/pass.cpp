@@ -2,9 +2,9 @@
 // Created by 김세진 on 8/16/24.
 //
 
-#include "ChatService.hpp"
+#include "ConnectionService.hpp"
 
-void ChatService::pass(Session &session, const Message &message) {
+void ConnectionService::pass(Session &session, const Message &message) {
     std::string const &pw = message.getParam();
     if (pw.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << "PASS" >> session;
