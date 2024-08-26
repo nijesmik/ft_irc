@@ -82,6 +82,16 @@ Channel *Session::findJoinedChannel(std::string const &name) const {
     return it->second;
 }
 
+std::vector<Channel *> Session::getAffiliatedChannel() const {
+    std::vector<Channel *> affiliatedChannels;
+    Channels::const_iterator it;
+    for (it = channels.begin(); it != channels.end(); it++) {
+        affiliatedChannels.push_back(it->second);
+    }
+
+    return affiliatedChannels;
+}
+
 void Session::leaveChannel(std::string const &name) {
     Channels::iterator it = channels.find(name);
     channels.erase(it);
