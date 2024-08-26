@@ -79,7 +79,7 @@ std::vector<Channel *> Session::getJoinedChannel() const {
     std::vector<Channel *> joinedChannels;
     Channels::const_iterator it;
     for (it = channels.begin(); it != channels.end(); ++it) {
-        Channel *channel = it->second;
+        Channel *channel = *it;
         // channel->remove(this);
         joinedChannels.push_back(channel);
     }
@@ -87,9 +87,8 @@ std::vector<Channel *> Session::getJoinedChannel() const {
     return joinedChannels;
 }
 
-void Session::leaveChannel(std::string const &name) {
-    Channels::iterator it = channels.find(name);
-    channels.erase(it);
+void Session::leaveChannel(Channel *channel) {
+    channels.erase(channel);
 }
 
 void Session::joinChannel(Channel *channel) {
