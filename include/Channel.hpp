@@ -45,8 +45,8 @@ private:
     Sessions participants;
     bool inviteOnly;
     bool topicRestricted;
-    std::string key;
-    int limit;
+    std::string channelKey;
+    size_t limit;
 
     // Channel/mode.cpp
     void setInviteOnly(Session *session, Channel::mode_t mode);
