@@ -35,6 +35,8 @@ std::string NumericReply::message(int code) {
             return ERR_PASSWDMISMATCH_MESSAGE;
         case ERR_CHANNELISFULL: // 471
             return ERR_CHANNELISFULL_MESSAGE;
+        case ERR_UNKNOWNMODE: // 472
+            return ERR_UNKNOWNMODE_MESSAGE;
         case ERR_INVITEONLYCHAN: // 473
             return ERR_INVITEONLYCHAN_MESSAGE;
         case ERR_BANNEDFROMCHAN: // 474
@@ -45,8 +47,10 @@ std::string NumericReply::message(int code) {
             return ERR_BADCHANMASK_MESSAGE;
         case ERR_CHANOPRIVSNEEDED: // 482
             return ERR_CHANOPRIVSNEEDED_MESSAGE;
+        case ERR_INVALIDMODEPARAM: // 696
+            return ERR_INVALIDMODEPARAM_MESSAGE;
         default:
-            return "";
+            return std::string();
     }
 }
 
@@ -70,7 +74,10 @@ void NumericReply::appendCode(int code) {
 }
 
 void NumericReply::appendMessage() {
-    _ss << MESSAGE_PREFIX << _message << CRLF;
+    if (!_message.empty()) {
+        _ss << MESSAGE_PREFIX << _message;
+    }
+    _ss << CRLF;
 }
 
 NumericReply::NumericReply(int code) : _message(message(code)) {

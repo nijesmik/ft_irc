@@ -42,6 +42,14 @@ Session *Channel::getParticipant(std::string const &nickname) const {
     return NULL;
 }
 
+std::string Channel::getOperatorList() const {
+    std::stringstream list;
+    for (Sessions::const_iterator it = operators.begin(); it != operators.end(); it++) {
+        list << OPERATOR_PREFIX << (*it)->getNickname() << DELIMITER;
+    }
+    return list.str();
+}
+
 void Channel::setTopic(std::string const &topicName) {
     // TODO: t 옵션일 시 operator 인지 확인하기
 

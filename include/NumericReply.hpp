@@ -7,6 +7,8 @@
 
 #define DELIMITER " "
 #define MESSAGE_PREFIX ":"
+#define OPERATOR_PREFIX "@"
+#define PUBLIC_CHANNEL_SYMBOL "="
 #define CRLF "\r\n"
 
 #define RPL_WELCOME 1
@@ -17,6 +19,8 @@
 
 #define RPL_CREATED 3
 #define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
+
+#define RPL_CHANNELMODEIS 324 // "<client> <channel> <modestring> <mode arguments>..."
 
 #define RPL_NOTOPIC 331
 #define RPL_NOTOPIC_MESSAGE "No topic is set"
@@ -69,6 +73,9 @@
 #define ERR_CHANNELISFULL 471
 #define ERR_CHANNELISFULL_MESSAGE "Cannot join channel (+l)"
 
+#define ERR_UNKNOWNMODE 472 // "<client> <modechar> :is unknown setMode char to me"
+#define ERR_UNKNOWNMODE_MESSAGE "is unknown setMode char to me"
+
 #define ERR_INVITEONLYCHAN 473
 #define ERR_INVITEONLYCHAN_MESSAGE "Cannot join channel (+i)"
 
@@ -83,6 +90,9 @@
 
 #define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"
 #define ERR_CHANOPRIVSNEEDED_MESSAGE "You're not channel operator"
+
+#define ERR_INVALIDMODEPARAM 696 // "<client> <target chan/user> <mode char> <parameter> :<description>"
+#define ERR_INVALIDMODEPARAM_MESSAGE "Invalid parameter for mode"
 
 #include <sstream>
 #include <iomanip>
