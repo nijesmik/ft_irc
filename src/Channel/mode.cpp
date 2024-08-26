@@ -7,7 +7,7 @@
 std::string RPL_MODE(Session *session, std::string const &channelName, std::string const &modestring,
                      std::string const &param);
 
-int Channel::mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session) {
+int Channel::setMode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session) {
     switch (modeChar) {
         case 'i':
             return (setInviteOnly(session, mode), 0);

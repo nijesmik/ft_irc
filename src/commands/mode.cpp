@@ -41,7 +41,7 @@ void ChannelService::mode(Session *session, const Message &message) {
                 mode = Channel::REMOVE;
                 break;
             default:
-                index += channel->mode(mode, *it, message.getParam(index), session);
+                index += channel->setMode(mode, *it, message.getParam(index), session);
         }
     }
 }

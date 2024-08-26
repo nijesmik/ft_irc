@@ -33,7 +33,7 @@ public:
     size_t removeParticipant(Session *session);
 
     // src/Channel/mode.cpp
-    int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
+    int setMode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
     void displayMode(Session *session) const;
 
     // src/Channel/topic.cpp
