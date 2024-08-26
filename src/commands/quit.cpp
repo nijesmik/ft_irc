@@ -2,17 +2,28 @@
 // Created by 이석규 on 2024. 8. 21..
 //
 
-#include "ChatService.hpp"
+#include "ChannelService.hpp"
 
 #define RPL_QUIT_REASON(nickname, reason) (":" + nickname + " QUIT : " + reason + CRLF)
 
-void ChatService::quit(Session &session, const Message &message) {
-    std::string params = message.getParam();
+void ChannelService::quit(Session *session, Message const &message) {
+    if (!session->isRegistered()) {
+        return NumericReply(ERR_NOTREGISTERED) >> session;
+    }
 
-    // TODO: Channel에 Client 저장되어 있는 방식 확인
-    //  session에서 Client 정보를 가져와 Channel들의 해당 Client 삭제
-    //  Channel의 다른 Client 에게 Quit-message 전송
-    //  만약 Channel에 속한 인원이 0명이면 Channel 삭제
-
-    (void) session;
+    std::string reason = message.getParam();
+    for (std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); ) {
+        if ((it->second)->isParticipant(session)) {
+            Channel *channel = it->second;
+            *channel << RPL_QUIT_REASON(session->getNickname(), reason);
+            if (channel->remove(session)) {
+                ++it;
+            } else {
+                delete channel;
+                it = channels.erase(it);
+            }
+        } else {
+            ++it;
+        }
+    }
 }

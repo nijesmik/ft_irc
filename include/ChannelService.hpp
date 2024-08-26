@@ -35,6 +35,7 @@ public:
     void kick(Session *session, Message const &message);
     void topic(Session &session, Message const &message);
     void mode(Session *session, Message const &message);
+    void quit(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP
