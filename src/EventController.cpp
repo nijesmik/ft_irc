@@ -95,7 +95,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
         case Message::JOIN:
             return channelService.join(*session, message);
         case Message::PART:
-            return channelService.part(*session, message);
+            return channelService.part(session, message);
         case Message::TOPIC:
             return channelService.topic(session, message);
     }

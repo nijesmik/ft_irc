@@ -4,12 +4,12 @@
 
 #include "ChannelService.hpp"
 
-std::string RPL_PART(Session &session, const std::string &channelName, const std::string &reason);
+std::string RPL_PART(Session const &session, const std::string &channelName, const std::string &reason);
 
 typedef std::vector<std::string>::const_iterator iterator;
 
-void ChannelService::part(Session &session, const Message &message) {
-    if (!session.isRegistered()) {
+void ChannelService::part(Session *session, const Message &message) {
+    if (!session->isRegistered()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
@@ -24,26 +24,26 @@ void ChannelService::part(Session &session, const Message &message) {
     }
 }
 
-void ChannelService::part(Session &session, std::string const &channelName, std::string const &reason) {
-    if (!findChannel(channelName)) {
+void ChannelService::part(Session *session, std::string const &channelName, std::string const &reason) {
+    Channel *channel = findChannel(channelName);
+    if (!channel) {
         return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;
     }
 
-    Channel *channel = session.findJoinedChannel(channelName);
-    if (!channel) {
+    if (!channel->isParticipant(session)) {
         return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
     }
 
-    int remain = channel->removeParticipant(&session);
-    std::string const &reply = RPL_PART(session, channelName, reason);
-    session << reply;
+    int remain = channel->removeParticipant(session);
+    std::string const &reply = RPL_PART(*session, channelName, reason);
+    *session << reply;
     if (remain) {
         return channel->broadcast(reply);
     }
     deleteChannel(channelName);
 }
 
-std::string RPL_PART(Session &session, const std::string &channelName, const std::string &reason) {
+std::string RPL_PART(Session const &session, const std::string &channelName, const std::string &reason) {
     std::stringstream ss;
     ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
        << "PART" << DELIMITER

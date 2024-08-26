@@ -26,14 +26,14 @@ private:
     Channel *getChannel(std::string const &name);
     void deleteChannel(std::string const &name);
 
-    void part(Session &session, std::string const &channelName, std::string const &reason);
+    void part(Session *session, std::string const &channelName, std::string const &reason);
 
 public:
     ChannelService(SessionService *sessionRepository);
     ~ChannelService();
 
     void join(Session &session, Message const &message);
-    void part(Session &session, Message const &message);
+    void part(Session *session, Message const &message);
     void kick(Session *session, Message const &message);
     void topic(Session *session, Message const &message);
     void mode(Session *session, Message const &message);
