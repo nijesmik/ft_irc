@@ -34,17 +34,34 @@ void ChannelService::join(Session &session, const Message &message) {
 }
 
 void Channel::join(Session *session, const std::string &key) {
-    (void) key;
-    // TODO: Channel에 session이 있는지 확인 (hasSession)
-    //  MODE 설정 되어있는지 확인 (각 MODE에 따라 예외)
+    if (!isParticipant(session)) {
+        return NumericReply(ERR_USERONCHANNEL) << session << name >> session;
+    }
+
+    if (limit && participants.size() >= limit) {
+        return NumericReply(ERR_CHANNELISFULL) << session << name >> session;
+    }
+    if (inviteOnly) {
+        return NumericReply(ERR_INVITEONLYCHAN) << session << name >> session;
+    }
+    if (!channelKey.empty() && channelKey != key) {
+        return NumericReply(ERR_BADCHANNELKEY) << session << name >> session;
+    }
 
     participants.insert(session);
+    if (participants.size() == 1) {
+        operators.insert(session);
+    }
 
     std::string userList;
-    // TODO: Operator 인지 아닌지 구분하기
-    //  Channel 이 UserList를 들고 display
+    for (std::set<Session *>::iterator it = participants.begin(); it != participants.end();) {
+        if (isOperator(*it)) {
+            userList += "@" + (*it)->getNickname() + " ";
+        } else {
+            userList += (*it)->getNickname() + " ";
+        }
+    }
 
-    // TODO: 나중에 방의 옵션(#, &)을 달아줘야 함
     *this << RPL_JOIN(*session, name);
     if (!topic.empty()) {
         NumericReply(RPL_TOPIC, this->topic) << session << name >> session;

@@ -66,12 +66,12 @@ int Channel::setKey(Session *session, Channel::mode_t mode, std::string const &k
         return 0;
     }
     if (mode == ADD) {
-        this->key = key;
+        this->channelKey = key;
         broadcast(RPL_MODE(session, name, "+k", key));
         return 1;
     }
-    if (!this->key.empty()) {
-        this->key.clear();
+    if (!this->channelKey.empty()) {
+        this->channelKey.clear();
         broadcast(RPL_MODE(session, name, "-k", ""));
     }
     return 0;

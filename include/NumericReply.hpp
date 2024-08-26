@@ -58,6 +58,9 @@
 #define ERR_NOTONCHANNEL 442
 #define ERR_NOTONCHANNEL_MESSAGE "You're not on that channel"
 
+#define ERR_USERONCHANNEL 443
+#define ERR_USERONCHANNEL_MESSAGE "is already on channel"
+
 #define ERR_NOTREGISTERED 451
 #define ERR_NOTREGISTERED_MESSAGE "You have not registered"
 
