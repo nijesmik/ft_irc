@@ -3,6 +3,7 @@
 //
 
 #include "Session.hpp"
+#include "Channel.hpp"
 
 Session::Session(Socket::fd_t fd) :
         Socket(fd),
@@ -85,4 +86,9 @@ Channel *Session::findJoinedChannel(std::string const &name) const {
 void Session::leaveChannel(std::string const &name) {
     Channels::iterator it = channels.find(name);
     channels.erase(it);
+}
+
+void Session::joinChannel(Channel *channel) {
+    // TODO : channel set에 추가
+    (void) channel;
 }

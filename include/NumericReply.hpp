@@ -28,6 +28,8 @@
 #define RPL_TOPIC 332 // "<client> <channel> :<topic>"
 #define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
 
+#define RPL_INVITING 341 // "<client> <nick> <channel>"
+
 #define RPL_NAMREPLY 353 // "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 #define RPL_NAMREPLY_MESSAGE(userList) (userList)
 
