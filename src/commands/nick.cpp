@@ -3,14 +3,12 @@
 //
 
 #include "ConnectionService.hpp"
-#include "SessionRepository.hpp"
 
 std::string RPL_NICK(std::string const &oldNick, std::string const &newNick);
 
 typedef std::string::const_iterator str_iter;
 bool isCharacterValid(char c);
 bool isNicknameValid(std::string const &nickname);
-bool isNicknameDuplicate(std::string const &nickname);
 
 void ConnectionService::nick(Session &session, const Message &message) {
     if (!session.isPassed()) {
@@ -26,7 +24,7 @@ void ConnectionService::nick(Session &session, const Message &message) {
         return NumericReply(ERR_ERRONEUSNICKNAME) << session << nickname >> session;
     }
 
-    if (isNicknameDuplicate(nickname)) {
+    if (sessionRepository->find(nickname)) {
         return NumericReply(ERR_NICKNAMEINUSE) << session << nickname >> session;
     }
 
@@ -64,10 +62,6 @@ bool isCharacterValid(char c) {
            c == '{' || c == '}' ||
            c == '\\' || c == '|' ||
            c == '-' || c == '_';
-}
-
-bool isNicknameDuplicate(std::string const &nickname) {
-    return SessionRepository::instance()->find(nickname) != NULL;
 }
 
 std::string RPL_NICK(std::string const &oldNick, std::string const &newNick) {
