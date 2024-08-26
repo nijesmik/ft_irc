@@ -34,6 +34,9 @@
 #define RPL_ENDOFNAMES 366 // "<client> <channel> :End of /NAMES list"
 #define RPL_ENDOFNAMES_MESSAGE "End of /NAMES list"
 
+#define ERR_NOSUCHNICK 401 // "<client> <nickname> :No such nick/channel"
+#define ERR_NOSUCHNICK_MESSAGE "No such nick/channel"
+
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
 

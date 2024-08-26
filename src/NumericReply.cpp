@@ -11,6 +11,8 @@ std::string NumericReply::message(int code) {
             return RPL_CREATED_MESSAGE(Server::CREATED_TIME);
         case RPL_ENDOFNAMES: // 366
             return RPL_ENDOFNAMES_MESSAGE;
+        case ERR_NOSUCHNICK: // 401
+            return ERR_NOSUCHNICK_MESSAGE;
         case ERR_NOSUCHCHANNEL: // 403
             return ERR_NOSUCHCHANNEL_MESSAGE;
         case ERR_UNKNOWNCOMMAND: // 421
