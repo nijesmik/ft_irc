@@ -27,6 +27,8 @@ std::string NumericReply::message(int code) {
             return ERR_USERNOTINCHANNEL_MESSAGE;
         case ERR_NOTONCHANNEL: // 442
             return ERR_NOTONCHANNEL_MESSAGE;
+        case ERR_USERONCHANNEL: // 443
+            return ERR_USERONCHANNEL_MESSAGE;
         case ERR_NOTREGISTERED: // 451
             return ERR_NOTREGISTERED_MESSAGE;
         case ERR_NEEDMOREPARAMS: // 461
