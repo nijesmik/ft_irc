@@ -73,30 +73,30 @@ void EventController::handleEvent(int index) {
     if (isReadableEvent(index)) {
         Session *session = sessionService->find(eventSocketFd);
         session->read() >> message;
-        handleMessages(*session, message);
+        handleMessage(session, message);
     }
 }
 
-void EventController::handleMessages(Session &session, Message const &message) {
+void EventController::handleMessage(Session *session, Message const &message) {
     switch (message.getCommand()) {
         case Message::UNKNOWN:
-            return chatService.unknown(session, message);
+            return chatService.unknown(*session, message);
         case Message::PASS:
-            return chatService.pass(session, message);
+            return chatService.pass(*session, message);
         case Message::NICK:
-            return chatService.nick(session, message);
+            return chatService.nick(*session, message);
         case Message::USER:
-            return chatService.user(session, message);
+            return chatService.user(*session, message);
         case Message::PING:
-            return chatService.ping(session, message);
+            return chatService.ping(*session, message);
         case Message::QUIT:
-            channelService.quit(&session, message);
-            return unlisten(session);
+            channelService.quit(session, message);
+            return unlisten(*session);
         case Message::JOIN:
-            return channelService.join(session, message);
+            return channelService.join(*session, message);
         case Message::PART:
-            return channelService.part(session, message);
+            return channelService.part(*session, message);
         case Message::TOPIC:
-            return channelService.topic(&session, message);
+            return channelService.topic(session, message);
     }
 }

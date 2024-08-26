@@ -29,7 +29,7 @@ private:
     bool isConnectionEvent(Socket::fd_t eventSocketFd);
     bool isReadableEvent(int index);
     void handleEvent(int index);
-    void handleMessages(Session &session, Message const &message);
+    void handleMessage(Session *session, Message const &message);
 
 public:
     EventController(int port, std::string const &password);
