@@ -11,19 +11,17 @@ void ChannelService::quit(Session *session, Message const &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::string reason = message.getParam();
-    for (std::map<std::string, Channel *>::iterator it = channels.begin(); it != channels.end(); ) {
-        if ((it->second)->isParticipant(session)) {
-            Channel *channel = it->second;
-            *channel << RPL_QUIT_REASON(session->getNickname(), reason);
-            if (channel->remove(session)) {
-                ++it;
-            } else {
-                delete channel;
-                it = channels.erase(it);
-            }
-        } else {
-            ++it;
-        }
+    std::string reason = message.joinParams();
+    std::vector<Channel *> affiliatedChannels = session->getAffiliatedChannel();
+    std::vector<Channel *>::iterator it;
+    for (it = affiliatedChannels.begin(); it != affiliatedChannels.end(); it++) {
+        (*it)->quit(session, reason);
+    }
+}
+
+void Channel::quit(Session *session, const std::string& reason) {
+    *this << RPL_QUIT_REASON(session->getNickname(), reason);
+    if (!this->remove(session)) {
+        delete this;
     }
 }

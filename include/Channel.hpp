@@ -31,6 +31,7 @@ public:
     size_t remove(Session *session);
     void setTopic(std::string const &topicName);
     void displayTopic(Session *session);
+    void quit(Session *session, const std::string& reason);
 
     // Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
