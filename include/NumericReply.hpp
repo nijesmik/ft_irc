@@ -93,7 +93,7 @@
 #define ERR_BADCHANNELKEY 475
 #define ERR_BADCHANNELKEY_MESSAGE "Cannot join channel (+k)"
 
-#define ERR_BADCHANMASK 476
+#define ERR_BADCHANMASK 476 // "<channel> :Bad Channel Mask"
 #define ERR_BADCHANMASK_MESSAGE "Bad Channel Mask"
 
 #define ERR_CHANOPRIVSNEEDED 482 // "<client> <channel> :You're not channel operator"

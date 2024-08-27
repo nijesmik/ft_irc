@@ -24,7 +24,7 @@ void ChannelService::join(Session &session, const Message &message) {
     for (size_t i = 0; i < channelNames.size(); i++) {
         std::string const &channelName = *(channelIt + i);
         if (!isValidChannel(channelName)) {
-            return NumericReply(ERR_BADCHANMASK) << session << "JOIN" >> session;
+            return NumericReply(ERR_BADCHANMASK) << channelName >> session;
         }
 
         Channel *channel = findChannel(channelName);
