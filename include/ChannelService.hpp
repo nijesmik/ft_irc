@@ -7,7 +7,7 @@
 
 #include <map>
 #include "Channel.hpp"
-#include "SessionService.hpp"
+#include "SessionRepository.hpp"
 #include "Session.hpp"
 #include "Message.hpp"
 #include "NumericReply.hpp"
@@ -19,7 +19,7 @@ private:
     typedef std::map<std::string, Channel *> Channels;
 
     Channels channels;
-    SessionService *sessionRepository;
+    SessionRepository *sessionRepository;
 
     Channel *createChannel(std::string const &name);
     Channel *findChannel(std::string const &name);
@@ -29,7 +29,7 @@ private:
     void part(Session *session, std::string const &channelName, std::string const &reason);
 
 public:
-    ChannelService(SessionService *sessionRepository);
+    ChannelService(SessionRepository *sessionRepository);
     ~ChannelService();
 
     void join(Session &session, Message const &message);
