@@ -19,8 +19,10 @@ public:
     Channel(std::string const &name);
     ~Channel();
 
+    bool isInviteOnly() const;
     bool isOperator(Session *session) const;
     bool isParticipant(Session *session) const;
+    void addParticipant(Session *session);
     Session *getParticipant(std::string const &nickname) const;
     std::string getOperatorList() const;
 

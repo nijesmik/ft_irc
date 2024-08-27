@@ -28,11 +28,16 @@
 #define RPL_TOPIC 332 // "<client> <channel> :<topic>"
 #define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
 
+#define RPL_INVITING 341 // "<client> <nick> <channel>"
+
 #define RPL_NAMREPLY 353 // "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 #define RPL_NAMREPLY_MESSAGE(userList) (userList)
 
 #define RPL_ENDOFNAMES 366 // "<client> <channel> :End of /NAMES list"
 #define RPL_ENDOFNAMES_MESSAGE "End of /NAMES list"
+
+#define ERR_NOSUCHNICK 401 // "<client> <nickname> :No such nick/channel"
+#define ERR_NOSUCHNICK_MESSAGE "No such nick/channel"
 
 #define ERR_NOSUCHCHANNEL 403
 #define ERR_NOSUCHCHANNEL_MESSAGE "No such channel"
@@ -58,7 +63,7 @@
 #define ERR_NOTONCHANNEL 442
 #define ERR_NOTONCHANNEL_MESSAGE "You're not on that channel"
 
-#define ERR_USERONCHANNEL 443
+#define ERR_USERONCHANNEL 443 // "<client> <nick> <channel> :is already on channel"
 #define ERR_USERONCHANNEL_MESSAGE "is already on channel"
 
 #define ERR_NOTREGISTERED 451

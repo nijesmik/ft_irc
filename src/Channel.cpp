@@ -25,12 +25,21 @@ void Channel::broadcast(std::string const &message) {
     }
 }
 
+bool Channel::isInviteOnly() const {
+    return inviteOnly;
+}
+
 bool Channel::isOperator(Session *session) const {
     return operators.find(session) != operators.end();
 }
 
 bool Channel::isParticipant(Session *session) const {
     return participants.find(session) != participants.end();
+}
+
+void Channel::addParticipant(Session *session) {
+    session->joinChannel(this);
+    participants.insert(session);
 }
 
 Session *Channel::getParticipant(std::string const &nickname) const {
