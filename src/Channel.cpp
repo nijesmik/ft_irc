@@ -33,6 +33,10 @@ bool Channel::isOperator(Session *session) const {
     return operators.find(session) != operators.end();
 }
 
+void Channel::setOperator(Session *session) {
+    operators.insert(session);
+}
+
 bool Channel::isParticipant(Session *session) const {
     return participants.find(session) != participants.end();
 }

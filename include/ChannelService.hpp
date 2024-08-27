@@ -21,9 +21,8 @@ private:
     Channels channels;
     SessionRepository *sessionRepository;
 
-    Channel *createChannel(std::string const &name);
+    Channel *createChannel(std::string const &name, Session *session);
     Channel *findChannel(std::string const &name);
-    Channel *getChannel(std::string const &name);
     void deleteChannel(std::string const &name);
 
     void part(Session *session, std::string const &channelName, std::string const &reason);

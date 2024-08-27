@@ -12,8 +12,9 @@ ChannelService::~ChannelService() {
     }
 }
 
-Channel *ChannelService::createChannel(const std::string &name) {
+Channel *ChannelService::createChannel(const std::string &name, Session *session) {
     Channel *channel = new Channel(name);
+    channel->setOperator(session);
     channels[name] = channel;
     return channel;
 }
@@ -24,14 +25,6 @@ Channel *ChannelService::findChannel(const std::string &name) {
         return NULL;
     }
     return it->second;
-}
-
-Channel *ChannelService::getChannel(const std::string &name) {
-    Channel *channel = findChannel(name);
-    if (channel) {
-        return channel;
-    }
-    return createChannel(name);
 }
 
 void ChannelService::deleteChannel(const std::string &name) {

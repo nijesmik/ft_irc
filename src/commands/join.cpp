@@ -4,6 +4,7 @@
 
 #include "ChannelService.hpp"
 
+typedef std::vector<std::string>::const_iterator str_iter;
 std::string RPL_JOIN(Session const &session, std::string const &channelName);
 bool isValidChannel(const std::string &channel);
 
@@ -12,24 +13,25 @@ void ChannelService::join(Session &session, const Message &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::vector<std::string> channels = message.splitParam(0, ',');
-    if (channels.empty()) {
+    std::vector<std::string> channelNames = message.splitParam(0, ',');
+    if (channelNames.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "JOIN" >> session;
     }
 
     std::vector<std::string> keys = message.splitParam(1, ',');
-    std::vector<std::string>::iterator keyIt = keys.begin();
-    for (std::vector<std::string>::iterator channelIt = channels.begin(); channelIt != channels.end(); ++channelIt) {
-        if (!isValidChannel(*channelIt)) {
+    str_iter keyIt = keys.begin();
+    str_iter channelIt = channelNames.begin();
+    for (size_t i = 0; i < channelNames.size(); i++) {
+        std::string const &channelName = *(channelIt + i);
+        if (!isValidChannel(channelName)) {
             return NumericReply(ERR_BADCHANMASK) << session << "JOIN" >> session;
         }
 
-        Channel *channel = getChannel(*channelIt);
-        channel->join(&session, keyIt != keys.end() ? *keyIt : std::string());
-
-        if (keyIt != keys.end()) {
-            ++keyIt;
+        Channel *channel = findChannel(channelName);
+        if (!channel) {
+            channel = createChannel(channelName, &session);
         }
+        channel->join(&session, i < keys.size() ? *(keyIt + i) : std::string());
     }
 }
 
@@ -48,10 +50,7 @@ void Channel::join(Session *session, const std::string &key) {
         return NumericReply(ERR_BADCHANNELKEY) << session << name >> session;
     }
 
-    participants.insert(session);
-    if (participants.size() == 1) {
-        operators.insert(session);
-    }
+    addParticipant(session);
 
     std::string userList;
     for (std::set<Session *>::iterator it = participants.begin(); it != participants.end();) {
