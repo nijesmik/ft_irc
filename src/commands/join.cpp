@@ -52,20 +52,11 @@ void Channel::join(Session *session, const std::string &key) {
 
     addParticipant(session);
 
-    std::string userList;
-    for (std::set<Session *>::iterator it = participants.begin(); it != participants.end();) {
-        if (isOperator(*it)) {
-            userList += "@" + (*it)->getNickname() + " ";
-        } else {
-            userList += (*it)->getNickname() + " ";
-        }
-    }
-
     *this << RPL_JOIN(*session, name);
     if (!channelTopic.empty()) {
         NumericReply(RPL_TOPIC, this->channelTopic) << session << name >> session;
     }
-    NumericReply(RPL_NAMREPLY, userList) << session << name >> session;
+    NumericReply(RPL_NAMREPLY, getParticipantList()) << session << PUBLIC_CHANNEL_SYMBOL << name >> session;
     NumericReply(RPL_ENDOFNAMES) << session << name >> session;
 }
 

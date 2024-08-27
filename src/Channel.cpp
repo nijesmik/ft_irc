@@ -55,6 +55,17 @@ Session *Channel::getParticipant(std::string const &nickname) const {
     return NULL;
 }
 
+std::string Channel::getParticipantList() const {
+    std::stringstream list;
+    for (Sessions::const_iterator it = participants.begin(); it != participants.end(); it++) {
+        if (isOperator(*it)) {
+            list << OPERATOR_PREFIX;
+        }
+        list << (*it)->getNickname() << DELIMITER;
+    }
+    return list.str();
+}
+
 std::string Channel::getOperatorList() const {
     std::stringstream list;
     for (Sessions::const_iterator it = operators.begin(); it != operators.end(); it++) {

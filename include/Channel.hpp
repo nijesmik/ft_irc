@@ -25,6 +25,7 @@ public:
     bool isParticipant(Session *session) const;
     void addParticipant(Session *session);
     Session *getParticipant(std::string const &nickname) const;
+    std::string getParticipantList() const;
     std::string getOperatorList() const;
 
     void operator<<(std::string const &message);
