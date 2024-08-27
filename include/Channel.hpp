@@ -20,19 +20,22 @@ public:
     ~Channel();
 
     bool isInviteOnly() const;
+
     bool isOperator(Session *session) const;
     void setOperator(Session *session);
-    bool isParticipant(Session *session) const;
-    void addParticipant(Session *session);
-    Session *getParticipant(std::string const &nickname) const;
-    std::string getParticipantList() const;
     std::string getOperatorList() const;
 
-    void operator<<(std::string const &message);
+    bool isParticipant(Session *session) const;
+    void addParticipant(Session *session);
+    size_t removeParticipant(Session *session);
+    Session *getParticipant(std::string const &nickname) const;
+    std::string getParticipantList() const;
 
     void broadcast(std::string const &message);
+    void operator<<(std::string const &message);
+
+    // join
     void join(Session *session, const std::string &key);
-    size_t removeParticipant(Session *session);
 
     // src/Channel/mode.cpp
     int setMode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
