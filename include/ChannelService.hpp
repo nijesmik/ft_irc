@@ -31,7 +31,7 @@ public:
     ChannelService(SessionRepository *sessionRepository);
     ~ChannelService();
 
-    void join(Session &session, Message const &message);
+    void join(Session *session, Message const &message);
     void part(Session *session, Message const &message);
     void kick(Session *session, Message const &message);
     void topic(Session *session, Message const &message);

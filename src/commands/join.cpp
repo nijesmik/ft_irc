@@ -8,8 +8,8 @@ typedef std::vector<std::string>::const_iterator str_iter;
 std::string RPL_JOIN(Session const &session, std::string const &channelName);
 bool isValidChannel(const std::string &channel);
 
-void ChannelService::join(Session &session, const Message &message) {
-    if (!session.isRegistered()) {
+void ChannelService::join(Session *session, const Message &message) {
+    if (!session->isRegistered()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
@@ -29,9 +29,9 @@ void ChannelService::join(Session &session, const Message &message) {
 
         Channel *channel = findChannel(channelName);
         if (!channel) {
-            channel = createChannel(channelName, &session);
+            channel = createChannel(channelName, session);
         }
-        channel->join(&session, i < keys.size() ? *(keyIt + i) : std::string());
+        channel->join(session, i < keys.size() ? *(keyIt + i) : std::string());
     }
 }
 
