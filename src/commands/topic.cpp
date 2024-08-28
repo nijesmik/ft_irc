@@ -14,14 +14,17 @@ void ChannelService::topic(Session *session, const Message &message) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "TOPIC" >> session;
     }
 
-    std::string topicName = message.joinParams(1, ':');
     Channel *channel = findChannel(channelName);
-
     if (!channel) {
         return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;
     }
     if (!channel->isParticipant(session)) {
         return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
+    }
+
+    std::string const &topicName = message.joinParams(1, ':');
+    if (topicName.empty()) {
+        return channel->displayTopic(session);
     }
     channel->topic(session, topicName);
 }
