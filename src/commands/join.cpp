@@ -63,8 +63,8 @@ void Channel::join(Session *session, const std::string &key) {
     }
 
     *this << RPL_JOIN(*session, name);
-    if (!topic.empty()) {
-        NumericReply(RPL_TOPIC, this->topic) << session << name >> session;
+    if (!channelTopic.empty()) {
+        NumericReply(RPL_TOPIC, this->channelTopic) << session << name >> session;
     }
     NumericReply(RPL_NAMREPLY, userList) << session << name >> session;
     NumericReply(RPL_ENDOFNAMES) << session << name >> session;
