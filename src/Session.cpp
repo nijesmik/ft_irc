@@ -3,6 +3,7 @@
 //
 
 #include "Session.hpp"
+#include "Channel.hpp"
 
 #include <Channel.hpp>
 
@@ -99,4 +100,9 @@ std::vector<Channel *> Session::getJoinedChannel() const {
 void Session::leaveChannel(std::string const &name) {
     Channels::iterator it = channels.find(name);
     channels.erase(it);
+}
+
+void Session::joinChannel(Channel *channel) {
+    // TODO : channel set에 추가
+    (void) channel;
 }

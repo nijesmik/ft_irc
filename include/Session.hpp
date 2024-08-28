@@ -38,6 +38,7 @@ public:
     Channel *findJoinedChannel(std::string const &name) const;
     std::vector<Channel *>getJoinedChannel() const;
     void leaveChannel(std::string const &name);
+    void joinChannel(Channel *channel);
 
 private:
     typedef std::map<std::string, Channel *> Channels;

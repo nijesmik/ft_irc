@@ -4,7 +4,7 @@
 
 #include "ChannelService.hpp"
 
-ChannelService::ChannelService() {}
+ChannelService::ChannelService(SessionService *sessionRepository) : sessionRepository(sessionRepository) {}
 
 ChannelService::~ChannelService() {
     for (Channels::iterator it = channels.begin(); it != channels.end(); it++) {

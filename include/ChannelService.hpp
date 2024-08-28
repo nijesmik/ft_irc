@@ -7,6 +7,7 @@
 
 #include <map>
 #include "Channel.hpp"
+#include "SessionService.hpp"
 #include "Session.hpp"
 #include "Message.hpp"
 #include "NumericReply.hpp"
@@ -18,6 +19,7 @@ private:
     typedef std::map<std::string, Channel *> Channels;
 
     Channels channels;
+    SessionService *sessionRepository;
 
     Channel *createChannel(std::string const &name);
     Channel *findChannel(std::string const &name);
@@ -27,7 +29,7 @@ private:
     void part(Session &session, std::string const &channelName, std::string const &reason);
 
 public:
-    ChannelService();
+    ChannelService(SessionService *sessionRepository);
     ~ChannelService();
 
     void join(Session &session, Message const &message);
@@ -36,6 +38,7 @@ public:
     void topic(Session &session, Message const &message);
     void mode(Session *session, Message const &message);
     void quit(Session *session, Message const &message);
+    void invite(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP
