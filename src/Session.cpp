@@ -84,6 +84,5 @@ void Session::leaveChannel(Channel *channel) {
 }
 
 void Session::joinChannel(Channel *channel) {
-    // TODO : channel set에 추가
-    (void) channel;
+    channels.insert(channel);
 }
