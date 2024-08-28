@@ -26,6 +26,8 @@ private:
     void deleteChannel(std::string const &name);
 
     void part(Session *session, std::string const &channelName, std::string const &reason);
+    void privmsgToChannel(Session *session, std::string const &target, std::string const &text);
+    void privmsgToUser(Session *session, std::string const &target, std::string const &text);
 
 public:
     ChannelService(SessionRepository *sessionRepository);
@@ -38,6 +40,7 @@ public:
     void mode(Session *session, Message const &message);
     void quit(Session *session, Message const &message);
     void invite(Session *session, Message const &message);
+    void privmsg(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP
