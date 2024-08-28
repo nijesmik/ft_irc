@@ -26,6 +26,6 @@ void ChannelService::topic(Session *session, const Message &message) {
     if (topicName.empty()) {
         return channel->displayTopic(session);
     }
-    channel->topic(session, topicName);
+    channel->setTopic(session, topicName);
 }
 
