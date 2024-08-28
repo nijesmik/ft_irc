@@ -20,6 +20,9 @@ void ChannelService::topic(Session *session, const Message &message) {
     if (!channel) {
         return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;
     }
+    if (!channel->isParticipant(session)) {
+        return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
+    }
     channel->topic(session, topicName);
 }
 

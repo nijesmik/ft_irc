@@ -17,10 +17,6 @@ void Channel::displayTopic(Session *session) {
 }
 
 void Channel::topic(Session *session, const std::string &topicName) {
-    if (!this->isParticipant(session)) {
-        return NumericReply(ERR_NOSUCHCHANNEL) << session << topicName >> session;
-    }
-
     if (!topicName.empty()) {
         if (this->topicRestricted && !this->isOperator(session)) {
             return NumericReply(ERR_CHANOPRIVSNEEDED) << session << this->name >> session;
