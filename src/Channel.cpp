@@ -58,18 +58,3 @@ std::string Channel::getOperatorList() const {
     }
     return list.str();
 }
-
-void Channel::setTopic(std::string const &topicName) {
-    // TODO: t 옵션일 시 operator 인지 확인하기
-
-    // TODO: Channel 전체 client에게 message 보낼 때, <바꾼 client> <channel> : <topic>
-    this->topic = topicName;
-    NumericReply(RPL_TOPIC, this->topic) >> this;
-}
-
-void Channel::displayTopic(Session *session) {
-    if (topic.empty()) {
-        return NumericReply(RPL_NOTOPIC) >> session;
-    }
-    return NumericReply(RPL_TOPIC, this->topic) >> session;
-}

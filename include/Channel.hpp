@@ -31,19 +31,20 @@ public:
     void broadcast(std::string const &message);
     void join(Session *session, const std::string &key);
     size_t remove(Session *session);
-    void setTopic(std::string const &topicName);
-    void displayTopic(Session *session);
 
-    // Channel/mode.cpp
+    // src/Channel/
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
     std::string getModeInfo() const;
+    void topic(Session *session, const std::string &topicName);
+    void setTopic(Session *session, std::string const &topicName);
+    void displayTopic(Session *session);
 
 private:
     typedef std::set<Session *> Sessions;
 
     const std::string name;
     Sessions operators;
-    std::string topic;
+    std::string channelTopic;
     Sessions participants;
     bool inviteOnly;
     bool topicRestricted;
