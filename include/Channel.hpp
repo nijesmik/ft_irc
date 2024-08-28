@@ -19,6 +19,8 @@ public:
     Channel(std::string const &name);
     ~Channel();
 
+    std::string const &getName() const;
+
     bool isInviteOnly() const;
 
     bool isOperator(Session *session) const;

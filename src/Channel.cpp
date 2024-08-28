@@ -25,6 +25,10 @@ void Channel::broadcast(std::string const &message) {
     }
 }
 
+std::string const &Channel::getName() const {
+    return name;
+}
+
 bool Channel::isInviteOnly() const {
     return inviteOnly;
 }
