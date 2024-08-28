@@ -90,7 +90,7 @@ void EventController::handleMessages(Session &session, Message const &message) {
         case Message::PING:
             return chatService.ping(session, message);
         case Message::QUIT:
-            chatService.quit(session, message);
+            channelService.quit(&session, message);
             return unlisten(session);
         case Message::JOIN:
             return channelService.join(session, message);
