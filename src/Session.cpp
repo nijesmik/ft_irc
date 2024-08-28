@@ -4,6 +4,8 @@
 
 #include "Session.hpp"
 
+#include <Channel.hpp>
+
 Session::Session(Socket::fd_t fd) :
         Socket(fd),
         passed(false),
@@ -82,14 +84,16 @@ Channel *Session::findJoinedChannel(std::string const &name) const {
     return it->second;
 }
 
-std::vector<Channel *> Session::getAffiliatedChannel() const {
-    std::vector<Channel *> affiliatedChannels;
+std::vector<Channel *> Session::getJoinedChannel() const {
+    std::vector<Channel *> joinedChannels;
     Channels::const_iterator it;
     for (it = channels.begin(); it != channels.end(); it++) {
-        affiliatedChannels.push_back(it->second);
+        Channel *channel = it->second;
+        channel->remove(this);
+        joinedChannels.push_back(it->second);
     }
 
-    return affiliatedChannels;
+    return joinedChannels;
 }
 
 void Session::leaveChannel(std::string const &name) {

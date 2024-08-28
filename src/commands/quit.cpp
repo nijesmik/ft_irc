@@ -12,9 +12,9 @@ void ChannelService::quit(Session *session, Message const &message) {
     }
 
     std::string reason = message.joinParams();
-    std::vector<Channel *> affiliatedChannels = session->getAffiliatedChannel();
+    std::vector<Channel *> joinedChannel = session->getJoinedChannel();
     std::vector<Channel *>::iterator it;
-    for (it = affiliatedChannels.begin(); it != affiliatedChannels.end(); it++) {
+    for (it = joinedChannel.begin(); it != joinedChannel.end(); it++) {
         (*it)->quit(session, reason);
     }
 }
