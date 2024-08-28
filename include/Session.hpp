@@ -15,6 +15,8 @@ class Channel;
 
 class Session : public Socket {
 public:
+    typedef std::set<Channel *> Channels;
+
     Session(Socket::fd_t fd);
     ~Session();
 
@@ -35,12 +37,11 @@ public:
     void updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
                     std::string const &realname);
 
-    std::vector<Channel *>getJoinedChannel() const;
+    Channels getJoinedChannels() const;
     void leaveChannel(Channel *channel);
     void joinChannel(Channel *channel);
 
 private:
-    typedef std::set<Channel *> Channels;
 
     bool passed;
     bool registered;

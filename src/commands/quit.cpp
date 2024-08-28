@@ -4,21 +4,32 @@
 
 #include "ChannelService.hpp"
 
-#define RPL_QUIT_REASON(nickname, reason) (":" + nickname + " QUIT : " + reason + CRLF)
+std::string RPL_QUIT(Session const &session, std::string const &reason);
+
+typedef Session::Channels::const_iterator channel_iter;
 
 void ChannelService::quit(Session *session, Message const &message) {
     if (!session->isRegistered()) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::string reason = message.joinParams();
-    std::vector<Channel *> joinedChannel = session->getJoinedChannel();
-    std::vector<Channel *>::iterator it;
-    for (it = joinedChannel.begin(); it != joinedChannel.end(); it++) {
+    std::string const &reason = message.joinParams();
+    Session::Channels joinedChannels = session->getJoinedChannels();
+    for (channel_iter it = joinedChannels.begin(); it != joinedChannels.end(); it++) {
         Channel *channel = *it;
-        *channel << RPL_QUIT_REASON(session->getNickname(), reason);
-        if (channel->remove(session)) {
-            delete this;
+        size_t remain = channel->removeParticipant(session);
+        if (!remain) {
+            deleteChannel(channel->getName());
+        } else {
+            *channel << RPL_QUIT(*session, reason);
         }
     }
+}
+
+std::string RPL_QUIT(Session const &session, std::string const &reason) {
+    std::stringstream ss;
+    ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
+       << "QUIT" << DELIMITER
+       << MESSAGE_PREFIX << reason << CRLF;
+    return ss.str();
 }

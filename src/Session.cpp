@@ -75,16 +75,8 @@ void Session::updateUser(std::string const &username, std::string const &hostnam
     this->realname = realname;
 }
 
-std::vector<Channel *> Session::getJoinedChannel() const {
-    std::vector<Channel *> joinedChannels;
-    Channels::const_iterator it;
-    for (it = channels.begin(); it != channels.end(); ++it) {
-        Channel *channel = *it;
-        // channel->remove(this);
-        joinedChannels.push_back(channel);
-    }
-
-    return joinedChannels;
+Session::Channels Session::getJoinedChannels() const {
+    return channels;
 }
 
 void Session::leaveChannel(Channel *channel) {
