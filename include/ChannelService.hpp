@@ -35,7 +35,7 @@ public:
     void join(Session &session, Message const &message);
     void part(Session &session, Message const &message);
     void kick(Session *session, Message const &message);
-    void topic(Session &session, Message const &message);
+    void topic(Session *session, Message const &message);
     void mode(Session *session, Message const &message);
     void invite(Session *session, Message const &message);
 };
