@@ -36,6 +36,7 @@ public:
                     std::string const &realname);
 
     Channel *findJoinedChannel(std::string const &name) const;
+    std::vector<Channel *>getJoinedChannel() const;
     void leaveChannel(std::string const &name);
     void joinChannel(Channel *channel);
 

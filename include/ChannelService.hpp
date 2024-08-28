@@ -37,6 +37,7 @@ public:
     void kick(Session *session, Message const &message);
     void topic(Session *session, Message const &message);
     void mode(Session *session, Message const &message);
+    void quit(Session *session, Message const &message);
     void invite(Session *session, Message const &message);
 };
 

@@ -20,7 +20,6 @@ public:
     void nick(Session &session, Message const &message);
     void user(Session &session, Message const &message);
     void ping(Session &session, Message const &message);
-    void quit(Session &session, Message const &message);
 
 private:
     std::string password;
