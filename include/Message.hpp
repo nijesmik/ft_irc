@@ -22,6 +22,8 @@ public:
         JOIN,
         PART,
         TOPIC,
+        // bonus part
+        BOT,
     } command_t;
 
     Message();

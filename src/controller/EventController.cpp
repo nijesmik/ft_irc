@@ -96,5 +96,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
             return channelService.part(session, message);
         case Message::TOPIC:
             return channelService.topic(session, message);
+        case Message::BOT:
+            return botService.makeLottery(session);
     }
 }
