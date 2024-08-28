@@ -15,13 +15,10 @@ void ChannelService::quit(Session *session, Message const &message) {
     std::vector<Channel *> joinedChannel = session->getJoinedChannel();
     std::vector<Channel *>::iterator it;
     for (it = joinedChannel.begin(); it != joinedChannel.end(); it++) {
-        (*it)->quit(session, reason);
-    }
-}
-
-void Channel::quit(Session *session, const std::string& reason) {
-    *this << RPL_QUIT_REASON(session->getNickname(), reason);
-    if (!this->remove(session)) {
-        delete this;
+        Channel *channel = *it;
+        *channel << RPL_QUIT_REASON(session->getNickname(), reason);
+        if (channel->remove(session)) {
+            delete this;
+        }
     }
 }

@@ -87,10 +87,10 @@ Channel *Session::findJoinedChannel(std::string const &name) const {
 std::vector<Channel *> Session::getJoinedChannel() const {
     std::vector<Channel *> joinedChannels;
     Channels::const_iterator it;
-    for (it = channels.begin(); it != channels.end(); it++) {
+    for (it = channels.begin(); it != channels.end(); ++it) {
         Channel *channel = it->second;
-        channel->remove(this);
-        joinedChannels.push_back(it->second);
+        // channel->remove(this);
+        joinedChannels.push_back(channel);
     }
 
     return joinedChannels;
