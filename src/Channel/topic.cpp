@@ -11,9 +11,9 @@ void Channel::setTopic(Session *session, std::string const &topicName) {
 
 void Channel::displayTopic(Session *session) {
     if (channelTopic.empty()) {
-        return NumericReply(RPL_NOTOPIC) >> session;
+        return NumericReply(RPL_NOTOPIC) << session << name >> session;
     }
-    return NumericReply(RPL_TOPIC, this->channelTopic) >> session;
+    return NumericReply(RPL_TOPIC, this->channelTopic) << session << name >> session;
 }
 
 void Channel::topic(Session *session, const std::string &topicName) {
