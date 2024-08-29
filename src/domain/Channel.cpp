@@ -25,6 +25,14 @@ void Channel::broadcast(std::string const &message) {
     }
 }
 
+void Channel::broadcast(std::string const &message, Session *except) {
+    for (Sessions::iterator it = participants.begin(); it != participants.end(); it++) {
+        if (*it != except) {
+            (*it)->operator<<(message);
+        }
+    }
+}
+
 std::string const &Channel::getName() const {
     return name;
 }

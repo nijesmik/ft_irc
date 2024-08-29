@@ -34,6 +34,7 @@ public:
     std::string getParticipantList() const;
 
     void broadcast(std::string const &message);
+    void broadcast(std::string const &message, Session *except);
     void operator<<(std::string const &message);
 
     // src/Channel/join.cpp

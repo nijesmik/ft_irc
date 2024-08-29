@@ -14,6 +14,19 @@ int Parser::parsePort(char *port) {
     return static_cast<int>(parsed);
 }
 
+std::string parseLongMessage(std::stringstream &stream, std::string const &front) {
+    std::stringstream ss;
+    ss << front;
+
+    std::string rest;
+    while (stream >> rest) {
+        ss << ' ' << rest;
+    }
+
+    ss.ignore(1, ':');
+    return ss.str();
+}
+
 Message Parser::parseMessage(std::stringstream &stream) {
     std::string param;
     std::vector<std::string> params;
@@ -26,6 +39,9 @@ Message Parser::parseMessage(std::stringstream &stream) {
     }
 
     while (stream >> param) {
+        if (param[0] == ':') {
+            param = parseLongMessage(stream, param);
+        }
         std::cout << "param: '" << param << "'" << std::endl;
         params.push_back(param);
     }
