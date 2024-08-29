@@ -13,6 +13,7 @@
 #include "ConnectionService.hpp"
 #include "ChannelService.hpp"
 #include "Message.hpp"
+#include "BotService.hpp"
 
 #define NCHANGES 1
 #define NEVENTS 64
@@ -21,6 +22,7 @@ class EventController {
 private:
     ConnectionService connectionService;
     ChannelService channelService;
+    BotService botService;
 
     int kq;
     struct kevent *events;
