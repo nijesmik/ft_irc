@@ -9,8 +9,8 @@
 #include <sys/event.h> // kqueue
 #include <unistd.h> // kqueue close
 #include <cstddef> // NULL
-#include "SessionService.hpp"
-#include "ChatService.hpp"
+#include "SessionRepository.hpp"
+#include "ConnectionService.hpp"
 #include "ChannelService.hpp"
 #include "Message.hpp"
 
@@ -19,8 +19,7 @@
 
 class EventController {
 private:
-    ChatService chatService;
-    SessionService *sessionService;
+    ConnectionService connectionService;
     ChannelService channelService;
 
     int kq;
@@ -29,14 +28,14 @@ private:
     bool isConnectionEvent(Socket::fd_t eventSocketFd);
     bool isReadableEvent(int index);
     void handleEvent(int index);
-    void handleMessages(Session &session, Message const &message);
+    void handleMessage(Session *session, Message const &message);
 
 public:
     EventController(int port, std::string const &password);
     ~EventController();
 
-    void listen(Socket *socket);
-    void unlisten(Session &session);
+    void listen(Socket const &socket);
+    void unlisten(Session const &session);
     int pollEvents();
     void handleEvents(int nev);
 };

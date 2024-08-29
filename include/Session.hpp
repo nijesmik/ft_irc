@@ -6,7 +6,7 @@
 #define FT_IRC_SESSION_HPP
 
 #include <iostream>
-#include <map>
+#include <set>
 #include "Socket.hpp"
 #include "Message.hpp"
 #include "Parser.hpp"
@@ -15,6 +15,8 @@ class Channel;
 
 class Session : public Socket {
 public:
+    typedef std::set<Channel *> Channels;
+
     Session(Socket::fd_t fd);
     ~Session();
 
@@ -35,13 +37,11 @@ public:
     void updateUser(std::string const &username, std::string const &hostname, std::string const &servername,
                     std::string const &realname);
 
-    Channel *findJoinedChannel(std::string const &name) const;
-    std::vector<Channel *>getJoinedChannel() const;
-    void leaveChannel(std::string const &name);
+    Channels getJoinedChannels() const;
+    void leaveChannel(Channel *channel);
     void joinChannel(Channel *channel);
 
 private:
-    typedef std::map<std::string, Channel *> Channels;
 
     bool passed;
     bool registered;

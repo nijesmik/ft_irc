@@ -38,7 +38,7 @@ void ChannelService::kick(Session *session, const Message &message) {
             NumericReply(ERR_USERNOTINCHANNEL) << session << *user << channelName >> session;
         } else {
             *channel << RPL_KICK(session, channelName, *user, comment);
-            channel->remove(participant);
+            channel->removeParticipant(participant);
         }
     }
 }

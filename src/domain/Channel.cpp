@@ -8,8 +8,8 @@ Channel::Channel(std::string const &name) : name(name) {}
 
 Channel::~Channel() {}
 
-size_t Channel::remove(Session *session) {
-    session->leaveChannel(name);
+size_t Channel::removeParticipant(Session *session) {
+    session->leaveChannel(this);
     operators.erase(session);
     participants.erase(session);
     return participants.size();
@@ -25,12 +25,20 @@ void Channel::broadcast(std::string const &message) {
     }
 }
 
+std::string const &Channel::getName() const {
+    return name;
+}
+
 bool Channel::isInviteOnly() const {
     return inviteOnly;
 }
 
 bool Channel::isOperator(Session *session) const {
     return operators.find(session) != operators.end();
+}
+
+void Channel::setOperator(Session *session) {
+    operators.insert(session);
 }
 
 bool Channel::isParticipant(Session *session) const {
@@ -49,6 +57,17 @@ Session *Channel::getParticipant(std::string const &nickname) const {
         }
     }
     return NULL;
+}
+
+std::string Channel::getParticipantList() const {
+    std::stringstream list;
+    for (Sessions::const_iterator it = participants.begin(); it != participants.end(); it++) {
+        if (isOperator(*it)) {
+            list << OPERATOR_PREFIX;
+        }
+        list << (*it)->getNickname() << DELIMITER;
+    }
+    return list.str();
 }
 
 std::string Channel::getOperatorList() const {
