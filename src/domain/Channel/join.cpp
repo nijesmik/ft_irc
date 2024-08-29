@@ -7,7 +7,7 @@
 std::string RPL_JOIN(Session const &session, std::string const &channelName);
 
 void Channel::join(Session *session, const std::string &key) {
-    if (!isParticipant(session)) {
+    if (isParticipant(session)) {
         return NumericReply(ERR_USERONCHANNEL) << session << name >> session;
     }
 
