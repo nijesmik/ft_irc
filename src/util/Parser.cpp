@@ -77,6 +77,18 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "TOPIC") {
         return Message::TOPIC;
     }
+    if (command == "PRIVMSG") {
+        return Message::PRIVMSG;
+    }
+    if (command == "INVITE") {
+        return Message::INVITE;
+    }
+    if (command == "KICK") {
+       return Message::KICK;
+    }
+    if (command == "MODE") {
+        return Message::MODE;
+    }
     if (command == "BOT") {
         return Message::BOT;
     }

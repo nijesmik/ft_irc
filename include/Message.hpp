@@ -17,11 +17,15 @@ public:
         NICK,
         USER,
         PING,
-        QUIT,
         // channel operation
         JOIN,
+        QUIT,
+        INVITE,
+        KICK,
         PART,
         TOPIC,
+        PRIVMSG,
+        MODE,
         // bonus part
         BOT,
     } command_t;

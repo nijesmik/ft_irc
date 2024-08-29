@@ -98,6 +98,14 @@ void EventController::handleMessage(Session *session, Message const &message) {
             return channelService.part(session, message);
         case Message::TOPIC:
             return channelService.topic(session, message);
+        case Message::PRIVMSG:
+            return channelService.privmsg(session, message);
+        case Message::KICK:
+            return channelService.kick(session, message);
+        case Message::INVITE:
+            return channelService.invite(session, message);
+        case Message::MODE:
+            return channelService.mode(session, message);
         case Message::BOT:
             return botService.makeLottery(session);
     }
