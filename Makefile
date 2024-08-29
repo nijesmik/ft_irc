@@ -7,7 +7,18 @@ INCLUDE = ./include
 
 HEADER = $(wildcard $(INCLUDE)/*.hpp)
 
-SRC = $(wildcard ./src/*.cpp ./src/commands/*.cpp ./src/Channel/*.cpp)
+SRC = $(wildcard \
+	./src/*.cpp \
+	./src/controller/*.cpp \
+	./src/domain/*.cpp \
+	./src/domain/Channel/*.cpp \
+	./src/repository/*.cpp \
+	./src/service/*.cpp \
+	./src/service/ChannelService/*.cpp \
+	./src/service/ConnectionService/*.cpp \
+	./src/util/*.cpp \
+ 	./src/Channel/*.cpp \
+)
 
 OBJ = $(SRC:%.cpp=%.o)
 
