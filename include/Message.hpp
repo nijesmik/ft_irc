@@ -31,6 +31,7 @@ public:
     ~Message();
     Message &operator=(Message const &other);
 
+    bool isEmpty() const;
     command_t getCommand() const;
     size_t getParamSize() const;
     std::string getParam(size_t index) const;

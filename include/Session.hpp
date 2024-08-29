@@ -21,7 +21,7 @@ public:
     ~Session();
 
     Session &read();
-    void operator>>(Message &message);
+    bool operator>>(Message &message);
     bool operator==(Session const &other);
 
     bool isPassed() const;

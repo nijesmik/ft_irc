@@ -70,8 +70,10 @@ void EventController::handleEvent(int index) {
 
     if (isReadableEvent(index)) {
         Session *session = connectionService.getSession(eventSocketFd);
-        session->read() >> message;
-        handleMessage(session, message);
+        session->read();
+        while (*session >> message) {
+            handleMessage(session, message);
+        }
     }
 }
 

@@ -32,6 +32,10 @@ Message Parser::parseMessage(std::stringstream &stream) {
     std::vector<std::string> params;
 
     stream >> param;
+    if (param.empty()) {
+        return Message();
+    }
+
     std::cout << "command: '" << param << "'" << std::endl;
     Message::command_t command = parseCommand(param);
     if (command == Message::UNKNOWN) {
