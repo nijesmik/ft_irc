@@ -36,7 +36,7 @@ public:
     void broadcast(std::string const &message);
     void operator<<(std::string const &message);
 
-    // join
+    // src/Channel/join.cpp
     void join(Session *session, const std::string &key);
 
     // src/Channel/mode.cpp
