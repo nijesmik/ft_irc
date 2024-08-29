@@ -32,10 +32,11 @@ public:
     void join(Session *session, const std::string &key);
     size_t remove(Session *session);
 
-    // src/Channel/
+    // src/Channel/mode.cpp
     int mode(Channel::mode_t mode, char modeChar, const std::string &param, Session *session);
     std::string getModeInfo() const;
-    void topic(Session *session, const std::string &topicName);
+
+    // src/Channel/topic.cpp
     void setTopic(Session *session, std::string const &topicName);
     void displayTopic(Session *session);
 
