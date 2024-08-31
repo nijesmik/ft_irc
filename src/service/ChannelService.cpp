@@ -12,10 +12,13 @@ ChannelService::~ChannelService() {
     }
 }
 
-Channel *ChannelService::createChannel(const std::string &name, Session *session) {
+Channel *ChannelService::createChannel(const std::string &name, Session *session, const std::string &key) {
     Channel *channel = new Channel(name);
     channel->setOperator(session);
     channels[name] = channel;
+    if (!key.empty()) {
+        channel->setMode(Channel::ADD, 'k', key, session);
+    }
     return channel;
 }
 
