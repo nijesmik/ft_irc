@@ -41,6 +41,7 @@ public:
     void quit(Session *session, Message const &message);
     void invite(Session *session, Message const &message);
     void privmsg(Session *session, Message const &message);
+    void who(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP

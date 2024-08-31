@@ -26,6 +26,7 @@ public:
         TOPIC,
         PRIVMSG,
         MODE,
+        WHO,
         // bonus part
         BOT,
     } command_t;
