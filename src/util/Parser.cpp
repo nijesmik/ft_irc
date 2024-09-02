@@ -16,14 +16,12 @@ int Parser::parsePort(char *port) {
 
 std::string parseLongMessage(std::stringstream &stream, std::string const &front) {
     std::stringstream ss;
-    ss << front;
+    ss << front.substr(1);
 
     std::string rest;
     while (stream >> rest) {
         ss << ' ' << rest;
     }
-
-    ss.ignore(1, ':');
     return ss.str();
 }
 
@@ -84,7 +82,7 @@ Message::command_t Parser::parseCommand(std::string const &command) {
         return Message::INVITE;
     }
     if (command == "KICK") {
-       return Message::KICK;
+        return Message::KICK;
     }
     if (command == "MODE") {
         return Message::MODE;
