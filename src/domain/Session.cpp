@@ -12,11 +12,6 @@ Session::Session(Socket::fd_t fd) :
 
 Session::~Session() {}
 
-Session &Session::read() {
-    Socket::read();
-    return *this;
-}
-
 bool Session::operator>>(Message &message) {
     std::stringstream sstream;
     try {

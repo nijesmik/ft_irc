@@ -20,7 +20,6 @@ public:
     Session(Socket::fd_t fd);
     ~Session();
 
-    Session &read();
     bool operator>>(Message &message);
     bool operator==(Session const &other);
 
