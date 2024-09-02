@@ -70,9 +70,14 @@ void EventController::handleEvent(int index) {
 
     if (isReadableEvent(index)) {
         Session *session = connectionService.getSession(eventSocketFd);
-        session->read();
-        while (*session >> message) {
-            handleMessage(session, message);
+        try {
+            session->read();
+            while (*session >> message) {
+                handleMessage(session, message);
+            }
+        } catch (std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            unlisten(*session);
         }
     }
 }

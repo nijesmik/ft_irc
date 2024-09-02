@@ -3,6 +3,7 @@
 //
 
 #include "Socket.hpp"
+#include <iostream>
 
 Socket::Socket() : fd(socket(AF_INET, SOCK_STREAM, 0)) {
     if (fd < 0) {
@@ -56,27 +57,32 @@ Socket &Socket::read() {
     while ((n = recv(fd, buffer, BUFSIZ, 0)) > 0) {
         readData.write(buffer, n);
     }
+    if (n == 0) {
+        throw std::runtime_error("Error: socket closed");
+    }
     if (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN) {
         throw std::runtime_error("Error: socket read failed");
     }
     return *this;
 }
 
-void Socket::operator>>(std::stringstream &stream) {
+bool Socket::operator>>(std::stringstream &stream) {
     std::string buffer;
     while (std::getline(readData, buffer, CR)) {
+        if (readData.eof()) {
+            readData.clear();
+            readData << stream.str() << buffer;
+            return false;
+        }
         stream << buffer;
         if (readData.peek() == LF) {
             readData.ignore(1, LF);
-            return;
+            return true;
         }
         stream << CR;
     }
-    if (readData.eof()) {
-        readData.clear();
-        return;
-    }
-    throw std::runtime_error("Error: stream extraction failed");
+    readData.clear();
+    return false;
 }
 
 void Socket::operator<<(std::string const &message) {
