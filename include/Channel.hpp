@@ -19,6 +19,8 @@ public:
     Channel(std::string const &name);
     ~Channel();
 
+    static bool hasChannelMask(const std::string &channelName);
+
     std::string const &getName() const;
 
     bool isInviteOnly() const;
