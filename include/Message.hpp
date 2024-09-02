@@ -40,8 +40,6 @@ public:
     size_t getParamSize() const;
     std::string getParam(size_t index) const;
     std::string getParam() const;
-    std::string joinParams(size_t startIndex, char ignore = 0) const;
-    std::string joinParams() const;
     std::vector<std::string> splitParam(int index, char delimiter) const;
 
 private:

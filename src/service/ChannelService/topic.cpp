@@ -22,8 +22,8 @@ void ChannelService::topic(Session *session, const Message &message) {
         return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
     }
 
-    std::string const &topicName = message.joinParams(1, ':');
-    if (topicName.empty()) {
+    std::string const &topicName = message.getParam(1);
+    if (message.getParamSize() == 1) {
         return channel->displayTopic(session);
     }
     channel->setTopic(session, topicName);

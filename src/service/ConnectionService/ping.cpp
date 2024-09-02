@@ -3,7 +3,7 @@
 std::string RPL_PONG(std::string const &token);
 
 void ConnectionService::ping(Session &session, const Message &message) {
-    std::string const &token = message.joinParams();
+    std::string const &token = message.getParam();
     if (token.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "PING" >> session;
     }

@@ -12,7 +12,7 @@ void ConnectionService::user(Session &session, Message const &message) {
         return NumericReply(ERR_ALREADYREGISTRED) << session >> session;
     }
 
-    std::string const &realname = message.joinParams(3, ':');
+    std::string const &realname = message.getParam(3);
     if (realname.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << "USER" >> session;
     }

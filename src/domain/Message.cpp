@@ -45,29 +45,6 @@ std::string Message::getParam() const {
     return this->getParam(0);
 }
 
-std::string Message::joinParams(size_t startIndex, char ignore) const {
-    if (startIndex >= params.size()) {
-        return std::string();
-    }
-
-    std::stringstream ss;
-    std::string param;
-
-    for (size_t i = startIndex; i < params.size(); i++) {
-        ss << params[i];
-    }
-
-    if (ignore && ss.peek() == ignore) {
-        ss.ignore(1);
-    }
-
-    return ss.str();
-}
-
-std::string Message::joinParams() const {
-    return joinParams(0, 0);
-}
-
 std::vector<std::string> Message::splitParam(int index, char delimiter) const {
     std::vector<std::string> splited;
     std::stringstream ss(getParam(index));
