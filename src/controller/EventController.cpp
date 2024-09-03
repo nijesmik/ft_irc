@@ -78,6 +78,9 @@ void EventController::handleEvent(int index) {
         }
         while (*session >> message) {
             handleMessage(session, message);
+            if (message.getCommand() == Message::QUIT) {
+                return unlisten(*session);
+            }
         }
     }
 }
@@ -95,8 +98,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
         case Message::PING:
             return connectionService.ping(*session, message);
         case Message::QUIT:
-            channelService.quit(session, message);
-            return unlisten(*session);
+            return channelService.quit(session, message);
         case Message::JOIN:
             return channelService.join(session, message);
         case Message::PART:
