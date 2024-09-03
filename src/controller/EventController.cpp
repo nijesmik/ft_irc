@@ -34,8 +34,12 @@ void EventController::unlisten(Session const &session) {
     if (kevent(kq, changelist, NCHANGES, NULL, 0, NULL) < 0) {
         throw std::runtime_error("Error: event delete failed");
     }
+}
 
-    connectionService.disconnect(session.getFd());
+void EventController::remove(Session *session, const std::string &reason) {
+    channelService.quit(session, reason);
+    unlisten(*session);
+    connectionService.disconnect(session->getFd());
 }
 
 int EventController::pollEvents() {
@@ -71,12 +75,12 @@ void EventController::handleEvent(int index) {
     if (isReadableEvent(index)) {
         Session *session = connectionService.getSession(eventSocketFd);
         if (!session->read()) {
-            return unlisten(*session);
+            return remove(session);
         }
         while (*session >> message) {
             handleMessage(session, message);
             if (message.getCommand() == Message::QUIT) {
-                return unlisten(*session);
+                return;
             }
         }
     }
@@ -95,7 +99,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
         case Message::PING:
             return connectionService.ping(*session, message);
         case Message::QUIT:
-            return channelService.quit(session, message.getParam());
+            return remove(session, message.getParam());
         case Message::JOIN:
             return channelService.join(session, message);
         case Message::PART:
