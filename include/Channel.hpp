@@ -53,12 +53,12 @@ private:
     typedef std::set<Session *> Sessions;
 
     const std::string name;
+    std::string channelKey;
     Sessions operators;
-    std::string channelTopic;
     Sessions participants;
+    std::string channelTopic;
     bool inviteOnly;
     bool topicRestricted;
-    std::string channelKey;
     size_t limit;
 
     // Channel/mode.cpp

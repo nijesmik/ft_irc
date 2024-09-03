@@ -5,8 +5,11 @@
 #include "Channel.hpp"
 
 Channel::Channel(std::string const &name, Session *session, std::string const &key)
-    : name(name),
-      channelKey(key) {
+        : name(name),
+          channelKey(key),
+          inviteOnly(false),
+          topicRestricted(false),
+          limit(0) {
     operators.insert(session);
 }
 
