@@ -4,9 +4,14 @@
 
 #include "Channel.hpp"
 
-Channel::Channel(std::string const &name) : name(name) {}
+Channel::Channel(std::string const &name, Session *session, std::string const &key)
+    : name(name),
+      channelKey(key) {
+    operators.insert(session);
+}
 
-Channel::~Channel() {}
+Channel::~Channel() {
+}
 
 size_t Channel::removeParticipant(Session *session) {
     session->leaveChannel(this);
@@ -43,10 +48,6 @@ bool Channel::isInviteOnly() const {
 
 bool Channel::isOperator(Session *session) const {
     return operators.find(session) != operators.end();
-}
-
-void Channel::setOperator(Session *session) {
-    operators.insert(session);
 }
 
 bool Channel::isParticipant(Session *session) const {
