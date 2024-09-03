@@ -8,12 +8,7 @@ std::string RPL_QUIT(Session const &session, std::string const &reason);
 
 typedef Session::Channels::const_iterator channel_iter;
 
-void ChannelService::quit(Session *session, Message const &message) {
-    if (!session->isRegistered()) {
-        return NumericReply(ERR_NOTREGISTERED) >> session;
-    }
-
-    std::string const &reason = message.getParam();
+void ChannelService::quit(Session *session, std::string const &reason) {
     Session::Channels joinedChannels = session->getJoinedChannels();
     for (channel_iter it = joinedChannels.begin(); it != joinedChannels.end(); it++) {
         Channel *channel = *it;

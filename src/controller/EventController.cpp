@@ -95,7 +95,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
         case Message::PING:
             return connectionService.ping(*session, message);
         case Message::QUIT:
-            return channelService.quit(session, message);
+            return channelService.quit(session, message.getParam());
         case Message::JOIN:
             return channelService.join(session, message);
         case Message::PART:
