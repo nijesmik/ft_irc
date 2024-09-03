@@ -27,6 +27,9 @@ private:
     int kq;
     struct kevent *events;
 
+    void listen(Socket const &socket);
+    void unlisten(Session const &session);
+    
     bool isConnectionEvent(Socket::fd_t eventSocketFd);
     bool isReadableEvent(int index);
     void handleEvent(int index);
@@ -36,8 +39,6 @@ public:
     EventController(int port, std::string const &password);
     ~EventController();
 
-    void listen(Socket const &socket);
-    void unlisten(Session const &session);
     int pollEvents();
     void handleEvents(int nev);
 };
