@@ -51,7 +51,8 @@ void SessionRepository::add(Session *session) {
 void SessionRepository::remove(Socket::fd_t sessionFd) {
     SessionRepository::iterator it = sessions.find(sessionFd);
     if (it != sessions.end()) {
+        Session *session = it->second;
         sessions.erase(it);
-        delete it->second;
+        delete session;
     }
 }
