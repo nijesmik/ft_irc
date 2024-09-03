@@ -9,6 +9,8 @@ std::string NumericReply::message(int code) {
     switch (code) {
         case RPL_CREATED: // 003
             return RPL_CREATED_MESSAGE(Server::CREATED_TIME);
+        case RPL_ENDOFWHO: // 315
+            return RPL_ENDOFWHO_MESSAGE;
         case RPL_ENDOFNAMES: // 366
             return RPL_ENDOFNAMES_MESSAGE;
         case ERR_NOSUCHNICK: // 401
@@ -66,6 +68,8 @@ std::string NumericReply::message(int code, std::string const &param) {
             return RPL_YOURHOST_MESSAGE(param, Server::VERSION);
         case RPL_TOPIC: // 331
             return RPL_TOPIC_MESSAGE(param);
+        case RPL_WHOREPLY: // 352
+            return RPL_WHOREPLY_MESSAGE(param);
         case RPL_NAMREPLY: // 353
             return RPL_NAMREPLY_MESSAGE(param);
         default:
