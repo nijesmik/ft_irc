@@ -34,7 +34,6 @@ Message Parser::parseMessage(std::stringstream &stream) {
         return Message();
     }
 
-    std::cout << "command: '" << param << "'" << std::endl;
     Message::command_t command = parseCommand(param);
     if (command == Message::UNKNOWN) {
         params.push_back(param);
@@ -44,7 +43,6 @@ Message Parser::parseMessage(std::stringstream &stream) {
         if (param[0] == ':') {
             param = parseLongMessage(stream, param);
         }
-        std::cout << "param: '" << param << "'" << std::endl;
         params.push_back(param);
     }
     return Message(command, params);

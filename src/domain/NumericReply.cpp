@@ -119,9 +119,7 @@ NumericReply &NumericReply::operator<<(Session *session) {
 
 void NumericReply::operator>>(Socket &socket) {
     appendMessage();
-    // TODO: 제출 시 지우자
     std::string output = _ss.str();
-    std::cout << output << std::endl;
     socket << output;
 }
 
