@@ -17,7 +17,7 @@ class Session : public Socket {
 public:
     typedef std::set<Channel *> Channels;
 
-    Session(Socket::fd_t fd);
+    Session(Socket::fd_t fd, std::string const &address);
     ~Session();
 
     bool operator>>(Message &message);
@@ -41,7 +41,7 @@ public:
     void joinChannel(Channel *channel);
 
 private:
-
+    const std::string address;
     bool passed;
     bool registered;
     std::string nickname;

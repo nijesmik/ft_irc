@@ -36,13 +36,10 @@ Session *ConnectionService::connect() {
         throw std::runtime_error("Error: connection accept failed");
     }
 
-    // display new connection
-    std::string ip = std::string(inet_ntoa(address.sin_addr));
-    int port = ntohs(address.sin_port);
-    std::cout << "New connection from " << ip << ":" << port << std::endl;
-
     // register new session
-    Session *session = new Session(socket);
+    std::stringstream ip;
+    ip << inet_ntoa(address.sin_addr) << ":" << ntohs(address.sin_port);
+    Session *session = new Session(socket, ip.str());
     sessionRepository->add(session);
     return session;
 }

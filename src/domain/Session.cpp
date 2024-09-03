@@ -5,12 +5,17 @@
 #include "Session.hpp"
 #include "Channel.hpp"
 
-Session::Session(Socket::fd_t fd) :
+Session::Session(Socket::fd_t fd, std::string const &address) :
         Socket(fd),
+        address(address),
         passed(false),
-        registered(false) {}
+        registered(false) {
+    std::cout << "New connection from " << address << std::endl;
+}
 
-Session::~Session() {}
+Session::~Session() {
+    std::cout << "Connection closed from " << address << std::endl;
+}
 
 bool Session::operator>>(Message &message) {
     std::stringstream sstream;
