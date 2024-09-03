@@ -31,6 +31,9 @@ void ChannelService::mode(Session *session, const Message &message) {
     if (modestring.empty()) {
         return channel->displayMode(session);
     }
+    if (modestring == "b") {
+        return;
+    }
     if (!channel->isOperator(session)) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;
     }
