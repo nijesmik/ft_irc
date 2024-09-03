@@ -30,7 +30,7 @@ public:
     void allowReusePort();
     void bind(int port);
     void open();
-    virtual Socket &read();
+    bool read();
     bool operator>>(std::stringstream &stream);
     void operator<<(std::string const &message);
 
