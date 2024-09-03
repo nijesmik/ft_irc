@@ -21,7 +21,7 @@ private:
     Channels channels;
     SessionRepository *sessionRepository;
 
-    Channel *createChannel(std::string const &name, Session *session);
+    Channel *createChannel(std::string const &name, Session *session, const std::string &key);
     Channel *findChannel(std::string const &name);
     void deleteChannel(std::string const &name);
 
@@ -41,6 +41,7 @@ public:
     void quit(Session *session, Message const &message);
     void invite(Session *session, Message const &message);
     void privmsg(Session *session, Message const &message);
+    void who(Session *session, Message const &message);
 };
 
 #endif //FT_IRC_CHANNELSERVICE_HPP

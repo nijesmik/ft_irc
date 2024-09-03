@@ -89,6 +89,9 @@ Message::command_t Parser::parseCommand(std::string const &command) {
     if (command == "MODE") {
         return Message::MODE;
     }
+    if (command == "WHO") {
+        return Message::WHO;
+    }
     if (command == "BOT") {
         return Message::BOT;
     }

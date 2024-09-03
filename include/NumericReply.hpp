@@ -20,6 +20,9 @@
 #define RPL_CREATED 3
 #define RPL_CREATED_MESSAGE(createdTime) ("This server was created " + createdTime)
 
+#define RPL_ENDOFWHO 315 // "<client> <channel> :End of WHO list"
+#define RPL_ENDOFWHO_MESSAGE "End of WHO list"
+
 #define RPL_CHANNELMODEIS 324 // "<client> <channel> <modestring> <mode arguments>..."
 
 #define RPL_NOTOPIC 331
@@ -29,6 +32,9 @@
 #define RPL_TOPIC_MESSAGE(channelTopic) (channelTopic)
 
 #define RPL_INVITING 341 // "<client> <nick> <channel>"
+
+#define RPL_WHOREPLY 352 // "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
+#define RPL_WHOREPLY_MESSAGE(userList) (userList)
 
 #define RPL_NAMREPLY 353 // "<client> <symbol> <channel> :[prefix]<nick>{ [prefix]<nick>}"
 #define RPL_NAMREPLY_MESSAGE(userList) (userList)

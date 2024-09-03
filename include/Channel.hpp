@@ -16,7 +16,7 @@ public:
         REMOVE, // -
     } mode_t;
 
-    Channel(std::string const &name);
+    Channel(std::string const &name, Session *session, std::string const &key);
     ~Channel();
 
     std::string const &getName() const;
@@ -24,7 +24,6 @@ public:
     bool isInviteOnly() const;
 
     bool isOperator(Session *session) const;
-    void setOperator(Session *session);
     std::string getOperatorList() const;
 
     bool isParticipant(Session *session) const;

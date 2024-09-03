@@ -106,6 +106,8 @@ void EventController::handleMessage(Session *session, Message const &message) {
             return channelService.invite(session, message);
         case Message::MODE:
             return channelService.mode(session, message);
+        case Message::WHO:
+            return channelService.who(session, message);
         case Message::BOT:
             return botService.makeLottery(session);
     }
