@@ -16,7 +16,7 @@ bool Session::operator>>(Message &message) {
     std::stringstream sstream;
     if (Socket::operator>>(sstream)) {
         message = Parser::parseMessage(sstream);
-        return !message.isEmpty();
+        return true;
     }
     return false;
 }

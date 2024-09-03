@@ -22,10 +22,6 @@ Message &Message::operator=(Message const &other) {
     return *this;
 }
 
-bool Message::isEmpty() const {
-    return params.empty();
-}
-
 size_t Message::getParamSize() const {
     return this->params.size();
 }
