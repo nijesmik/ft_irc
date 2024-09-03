@@ -29,7 +29,8 @@ Channel *ChannelService::findChannel(const std::string &name) {
 void ChannelService::deleteChannel(const std::string &name) {
     Channels::iterator it = channels.find(name);
     if (it != channels.end()) {
+        Channel *channel = it->second;
         channels.erase(it);
-        delete it->second;
+        delete channel;
     }
 }
