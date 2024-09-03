@@ -31,7 +31,7 @@ public:
     void bind(int port);
     void open();
     virtual Socket &read();
-    void operator>>(std::stringstream &stream);
+    bool operator>>(std::stringstream &stream);
     void operator<<(std::string const &message);
 
 protected:

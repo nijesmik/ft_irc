@@ -6,7 +6,6 @@
 
 typedef std::vector<std::string>::const_iterator str_iter;
 
-bool hasChannelMask(std::string const &target);
 std::string RPL_PRIVMSG(Session const &session, std::string const &target, std::string const &text);
 
 void ChannelService::privmsg(Session *session, const Message &message) {
@@ -20,7 +19,7 @@ void ChannelService::privmsg(Session *session, const Message &message) {
     std::vector<std::string> const &targets = message.splitParam(0, ',');
     std::string const &text = message.getParam(1);
     for (str_iter it = targets.begin(); it != targets.end(); it++) {
-        if (hasChannelMask(*it)) {
+        if (Channel::hasChannelMask(*it)) {
             privmsgToChannel(session, *it, text);
         } else {
             privmsgToUser(session, *it, text);
@@ -45,10 +44,6 @@ void ChannelService::privmsgToUser(Session *session, std::string const &target, 
         return NumericReply(ERR_NOSUCHNICK) << session << target >> session;
     }
     *user << RPL_PRIVMSG(*session, target, text);
-}
-
-bool hasChannelMask(std::string const &target) {
-    return target[0] == '#' || target[0] == '&';
 }
 
 std::string RPL_PRIVMSG(Session const &session, std::string const &target, std::string const &text) {

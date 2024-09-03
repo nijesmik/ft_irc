@@ -19,7 +19,7 @@ void ChannelService::invite(Session *session, const Message &message) {
         return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;
     }
 
-    if (channel->isParticipant(session)) {
+    if (!channel->isParticipant(session)) {
         return NumericReply(ERR_NOTONCHANNEL) << session << channelName >> session;
     }
 

@@ -12,21 +12,13 @@ Session::Session(Socket::fd_t fd) :
 
 Session::~Session() {}
 
-Session &Session::read() {
-    Socket::read();
-    return *this;
-}
-
 bool Session::operator>>(Message &message) {
     std::stringstream sstream;
-    try {
-        Socket::operator>>(sstream);
+    if (Socket::operator>>(sstream)) {
         message = Parser::parseMessage(sstream);
         return !message.isEmpty();
-    } catch (std::exception &e) {
-        std::cerr << e.what() << std::endl;
-        return false;
     }
+    return false;
 }
 
 bool Session::operator==(Session const &other) {

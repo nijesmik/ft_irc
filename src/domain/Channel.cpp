@@ -13,6 +13,10 @@ Channel::Channel(std::string const &name, Session *session, std::string const &k
 Channel::~Channel() {
 }
 
+bool Channel::hasChannelMask(const std::string &channelName) {
+    return channelName[0] == '#' || channelName[0] == '&';
+}
+
 size_t Channel::removeParticipant(Session *session) {
     session->leaveChannel(this);
     operators.erase(session);

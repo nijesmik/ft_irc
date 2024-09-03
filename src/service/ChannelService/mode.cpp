@@ -14,6 +14,14 @@ void ChannelService::mode(Session *session, const Message &message) {
     }
 
     std::string const &channelName = message.getParam(0);
+    if (channelName.empty()) {
+        return NumericReply(ERR_NEEDMOREPARAMS) << session << "MODE" >> session;
+    }
+
+    if (Channel::hasChannelMask(channelName)) {
+        return; // user mode인 경우 무시
+    }
+
     Channel *channel = findChannel(channelName);
     if (!channel) {
         return NumericReply(ERR_NOSUCHCHANNEL) << session << channelName >> session;

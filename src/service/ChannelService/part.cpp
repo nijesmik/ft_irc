@@ -14,7 +14,7 @@ void ChannelService::part(Session *session, const Message &message) {
     }
 
     std::vector<std::string> channels = message.splitParam(0, ',');
-    std::string const &reason = message.joinParams(1);
+    std::string const &reason = message.getParam(1);
     if (channels.empty()) {
         return NumericReply(ERR_NEEDMOREPARAMS) << session << "PART" >> session;
     }
@@ -47,7 +47,10 @@ std::string RPL_PART(Session const &session, const std::string &channelName, con
     std::stringstream ss;
     ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
        << "PART" << DELIMITER
-       << channelName << DELIMITER
-       << reason << CRLF;
+       << channelName;
+    if (!reason.empty()) {
+        ss << DELIMITER << MESSAGE_PREFIX << reason;
+    }
+    ss << CRLF;
     return ss.str();
 }

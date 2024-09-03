@@ -13,7 +13,7 @@ void ChannelService::quit(Session *session, Message const &message) {
         return NumericReply(ERR_NOTREGISTERED) >> session;
     }
 
-    std::string const &reason = message.joinParams();
+    std::string const &reason = message.getParam();
     Session::Channels joinedChannels = session->getJoinedChannels();
     for (channel_iter it = joinedChannels.begin(); it != joinedChannels.end(); it++) {
         Channel *channel = *it;
@@ -29,7 +29,10 @@ void ChannelService::quit(Session *session, Message const &message) {
 std::string RPL_QUIT(Session const &session, std::string const &reason) {
     std::stringstream ss;
     ss << MESSAGE_PREFIX << session.getAddress() << DELIMITER
-       << "QUIT" << DELIMITER
-       << MESSAGE_PREFIX << reason << CRLF;
+       << "QUIT";
+    if (!reason.empty()) {
+        ss << DELIMITER << MESSAGE_PREFIX << reason;
+    }
+    ss << CRLF;
     return ss.str();
 }

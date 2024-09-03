@@ -31,7 +31,7 @@ void ChannelService::kick(Session *session, const Message &message) {
         return NumericReply(ERR_CHANOPRIVSNEEDED) << session << channelName >> session;
     }
 
-    std::string const &comment = message.joinParams(2);
+    std::string const &comment = message.getParam(2);
     for (str_iter user = users.begin(); user != users.end(); user++) {
         Session *participant = channel->getParticipant(*user);
         if (!participant) {
@@ -49,7 +49,10 @@ std::string RPL_KICK(Session *_operator, std::string const &channel, std::string
     ss << MESSAGE_PREFIX << _operator->getAddress() << DELIMITER
        << "KICK" << DELIMITER
        << channel << DELIMITER
-       << user << DELIMITER
-       << comment << CRLF;
+       << user;
+    if (!comment.empty()) {
+        ss << DELIMITER << MESSAGE_PREFIX << comment;
+    }
+    ss << CRLF;
     return ss.str();
 }
