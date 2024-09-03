@@ -114,7 +114,7 @@ void EventController::handleMessage(Session *session, Message const &message) {
         case Message::MODE:
             return channelService.mode(session, message);
         case Message::WHO:
-            return channelService.who(session, message);
+            return;
         case Message::BOT:
             return botService.makeLottery(session);
     }
