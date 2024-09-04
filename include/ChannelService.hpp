@@ -38,7 +38,7 @@ public:
     void kick(Session *session, Message const &message);
     void topic(Session *session, Message const &message);
     void mode(Session *session, Message const &message);
-    void quit(Session *session, Message const &message);
+    void quit(Session *session, std::string const &reason);
     void invite(Session *session, Message const &message);
     void privmsg(Session *session, Message const &message);
     void who(Session *session, Message const &message);

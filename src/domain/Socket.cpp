@@ -51,19 +51,19 @@ void Socket::open() {
     }
 }
 
-Socket &Socket::read() {
+bool Socket::read() {
     char buffer[BUFSIZ];
-    ssize_t n;
-    while ((n = recv(fd, buffer, BUFSIZ, 0)) > 0) {
+    ssize_t n = recv(fd, buffer, BUFSIZ, 0);
+    if (n > 0) {
         readData.write(buffer, n);
+        return true;
     }
     if (n == 0) {
-        throw std::runtime_error("Error: socket closed");
+        std::cout << "Client disconnected" << std::endl;
+    } else if (n < 0) {
+        std::cerr << "Error: socket read failed" << std::endl;
     }
-    if (n < 0 && errno != EWOULDBLOCK && errno != EAGAIN) {
-        throw std::runtime_error("Error: socket read failed");
-    }
-    return *this;
+    return false;
 }
 
 bool Socket::operator>>(std::stringstream &stream) {
